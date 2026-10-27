@@ -3,56 +3,73 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WordPress 網站作品集</title>
-<meta name="description" content="WordPress 企業官網、購物網站與預約網站的作品展示，包含可實際瀏覽的 Demo、手機版畫面與後台操作教學。">
+<title>劉顓賢（CL）作品集｜網站製作・PCB 設計・射頻電路</title>
+<meta name="description" content="WordPress 網站、KiCad 電路板設計與 2.4 GHz 射頻電路的作品展示，包含可實際瀏覽的網站 Demo、電路板圖、原理圖與量測結果。">
 <link rel="canonical" href="https://cooper35211-max.github.io/">
 <link rel="icon" href="favicon.png" type="image/png">
-<style>
-	:root { --navy: #0b2238; --primary: #0d4c8c; --action: #b9520f; --text: #2f3337; --muted: #5b636b; --line: #dde2e7; --surface: #f3f5f7; }
-	* { box-sizing: border-box; }
-	body { margin: 0; font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif; color: var(--text); background: var(--surface); line-height: 1.75; }
-	header { background: var(--navy); color: #fff; padding: 64px 20px 56px; }
-	.wrap { max-width: 1040px; margin: 0 auto; }
-	.bar { width: 40px; height: 3px; background: #e8792b; margin-bottom: 16px; }
-	h1 { margin: 0 0 8px; font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.3; }
-	header p { margin: 0; color: #dce8f5; }
-	main { padding: 48px 20px 64px; }
-	.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-	.card { background: #fff; border-top: 3px solid var(--primary); display: flex; flex-direction: column; }
-	.card img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; display: block; border-bottom: 1px solid var(--line); }
-	.card .body { padding: 20px 22px 24px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-	.tag { font-size: .8rem; color: var(--muted); }
-	.card h2 { margin: 0; font-size: 1.15rem; color: var(--navy); }
-	.card p { margin: 0; font-size: .92rem; color: var(--muted); }
-	.card a.btn { margin-top: auto; align-self: flex-start; background: var(--action); color: #fff; text-decoration: none; padding: 8px 18px; font-weight: 700; font-size: .9rem; border-radius: 2px; }
-	.card a.btn:hover, .card a.btn:focus-visible { background: var(--navy); }
-	.soon { border-top-color: var(--line); justify-content: center; align-items: center; min-height: 200px; color: var(--muted); }
-	footer { text-align: center; font-size: .8rem; color: var(--muted); padding: 0 20px 40px; }
-</style>
+<link rel="stylesheet" href="portfolio.css">
 </head>
 <body>
 <header>
 	<div class="wrap">
 		<div class="bar"></div>
-		<h1>WordPress 網站作品集</h1>
-		<p>企業官網、購物網站、預約網站。每個作品都可以實際瀏覽電腦版與手機版。</p>
+		<h1>劉顓賢（CL）作品集</h1>
+		<p>網站製作、PCB 電路板設計、射頻電路。每個作品都附實際畫面與做法說明。</p>
 	</div>
 </header>
 <main>
-	<div class="wrap grid">
-		<article class="card">
-			<img src="chengze/wp-content/uploads/2026/10/hero-768x512.webp" alt="承澤自動化官網首頁主視覺：產線上的機械手臂" width="768" height="512">
-			<div class="body">
-				<span class="tag">企業形象官網｜製造業</span>
-				<h2>承澤自動化設備（示意作品）</h2>
-				<p>7 個頁面、案例自動列表、預約表單。手機版 Lighthouse 效能 85–93、無障礙與 SEO 100。</p>
-				<a class="btn" href="chengze/">瀏覽網站</a>
+	<div class="wrap">
+		<section>
+			<h2 class="section-title">網站製作</h2>
+			<p class="section-desc">WordPress 區塊佈景主題，電腦版與手機版都可以實際瀏覽。</p>
+			<div class="grid">
+				<article class="card">
+					<img src="chengze/wp-content/uploads/2026/10/hero-768x512.webp" alt="承澤自動化官網首頁主視覺：產線上的機械手臂" width="768" height="512">
+					<div class="body">
+						<span class="tag">企業形象官網｜製造業</span>
+						<h3>承澤自動化設備（示意作品）</h3>
+						<p>7 個頁面、案例自動列表、預約表單。手機版 Lighthouse 效能 85–93、無障礙與 SEO 100。</p>
+						<a class="btn" href="chengze/">瀏覽網站</a>
+					</div>
+				</article>
+				<div class="card soon">購物網站 製作中</div>
+				<div class="card soon">預約網站 製作中</div>
 			</div>
-		</article>
-		<div class="card soon">購物網站 製作中</div>
-		<div class="card soon">預約網站 製作中</div>
+		</section>
+
+		<section>
+			<h2 class="section-title">PCB 電路板設計</h2>
+			<p class="section-desc">KiCad 原理圖、Layout 到出檔。</p>
+			<div class="grid">
+				<article class="card">
+					<img src="pcb-weather-station/card.webp" alt="ESP32 微氣象站控制板正面絲印圖" width="768" height="847" loading="lazy">
+					<div class="body">
+						<span class="tag">雙層板｜ESP32・感測器・NB-IoT</span>
+						<h3>ESP32 微氣象站控制板</h3>
+						<p>整合 5 種感測器、NB-IoT、microSD 與 RTC，由飛線原型改成正式電路板，韌體也自己寫。ERC、DRC、一致性檢查皆為 0。</p>
+						<a class="btn" href="pcb-weather-station/">看設計內容</a>
+					</div>
+				</article>
+			</div>
+		</section>
+
+		<section>
+			<h2 class="section-title">2.4 GHz 微波電路</h2>
+			<p class="section-desc">HFSS 模擬、自己蝕刻製板、VNA 量測。共 4 個作品。</p>
+			<div class="grid">
+				<article class="card">
+					<img src="rf/card.webp" alt="2.4 GHz Wilkinson 功率分配器實體電路板，接上三個 SMA 接頭" width="768" height="480" loading="lazy">
+					<div class="body">
+						<span class="tag">微帶線電路｜2.4 GHz</span>
+						<h3>Wilkinson 功率分配器等 4 件</h3>
+						<p>實測隔離度 27.5 dB、功率不平衡 0.02 dB、相位不平衡 4.11°，皆符合規格。另有分支線耦合器、環形諧振器、Butler Matrix。</p>
+						<a class="btn" href="rf/">看設計與量測</a>
+					</div>
+				</article>
+			</div>
+		</section>
 	</div>
 </main>
-<footer>作品中的公司、案例與數字皆為虛構，用於展示網站製作能力。</footer>
+<footer>網站作品中的公司、案例與數字皆為虛構，用於展示網站製作能力。</footer>
 </body>
 </html>

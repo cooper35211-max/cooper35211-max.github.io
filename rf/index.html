@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.4 GHz 微波電路｜劉顓賢（CL）作品集</title>
+<meta name="description" content="2.4 GHz 微波電路作品：Wilkinson 功率分配器、分支線耦合器、環形諧振器與 4×4 Butler Matrix。Wilkinson 的 HFSS 模擬、FR4 製板與 VNA 量測，實測回波損耗 18.2 dB、隔離度 27.5 dB、相位不平衡 4.11°，皆符合設計規格。">
+<link rel="canonical" href="https://cooper35211-max.github.io/rf/">
+<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="stylesheet" href="../portfolio.css">
+</head>
+<body>
+<header>
+	<div class="wrap">
+		<a class="back" href="../">← 回作品集</a>
+		<div class="bar"></div>
+		<h1>2.4 GHz 微波電路</h1>
+		<p>射頻電路｜HFSS 模擬、自己蝕刻製板、VNA 量測（微波電路課程）</p>
+	</div>
+</header>
+<main>
+	<div class="wrap doc">
+		<h2>製作流程</h2>
+		<p>每個作品都完整走過「設計模擬 → 自己製板 → 儀器量測 → 比對分析」。</p>
+		<div class="pair three">
+			<figure>
+				<img src="step-hfss.webp" alt="HFSS 中的電路立體模型" width="967" height="716">
+				<figcaption>1. HFSS 建模、調整尺寸。</figcaption>
+			</figure>
+			<figure>
+				<img src="step-etch.webp" alt="蝕刻槽中的電路板" width="960" height="701">
+				<figcaption>2. 蝕刻製板、焊接 SMA 接頭。</figcaption>
+			</figure>
+			<figure>
+				<img src="step-vna.webp" alt="向量網路分析儀量測畫面" width="1000" height="578">
+				<figcaption>3. VNA 量測 S 參數，與模擬比對。</figcaption>
+			</figure>
+		</div>
+
+		<h2>主要作品：Wilkinson 功率分配器</h2>
+		<dl class="facts">
+			<div><dt>操作頻率</dt><dd>2.4 GHz</dd></div>
+			<div><dt>基板</dt><dd>FR4，0.8 mm</dd></div>
+			<div><dt>板子尺寸</dt><dd>30 × 40 mm</dd></div>
+			<div><dt>工具</dt><dd>HFSS、VNA</dd></div>
+		</dl>
+		<p>把 2.4 GHz 訊號平均分成兩路，並讓兩個輸出埠彼此隔離。兩條 70.7 Ω 的四分之一波長轉換線做成環形，輸出端跨接 100 Ω 隔離電阻，吸收奇模狀態下的反射能量。</p>
+		<div class="pair">
+			<figure>
+				<img src="photo.webp" alt="完成的 Wilkinson 功率分配器：FR4 板上的環形微帶線，接上三個 SMA 接頭" width="700" height="560">
+				<figcaption>實體電路板，接上 SMA 接頭後量測。</figcaption>
+			</figure>
+			<figure>
+				<img src="hfss.webp" alt="HFSS 中的電路模型俯視圖" width="466" height="456">
+				<figcaption>HFSS 模型（設計 2）。</figcaption>
+			</figure>
+		</div>
+
+		<h3>設計參數</h3>
+		<div class="table-wrap">
+			<table>
+				<thead><tr><th>項目</th><th>數值</th></tr></thead>
+				<tbody>
+					<tr><td>50 Ω 微帶線寬度</td><td>1.53 mm</td></tr>
+					<tr><td>四分之一波長轉換線寬度（約 70 Ω）</td><td>0.8 mm</td></tr>
+					<tr><td>四分之一波長轉換線長度</td><td>19 mm</td></tr>
+					<tr><td>隔離電阻銲接缺口</td><td>1.5 mm</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<p>第一版（22 × 40 mm）印出來後發現兩個輸出埠距離太近，SMA 接頭裝不下，所以第二版把兩條輸出線往上下拉開，板寬加到 30 mm，再重新模擬調整轉換線長度。</p>
+
+		<h3>規格、模擬與實測</h3>
+		<div class="table-wrap">
+			<table class="wide">
+				<thead><tr><th>項目（2.4 GHz）</th><th>規格</th><th>模擬</th><th>實測</th><th>結果</th></tr></thead>
+				<tbody>
+					<tr><td>輸入回波損耗 S11</td><td>&gt; 10 dB</td><td>29.6 dB</td><td>18.2 dB</td><td class="ok">符合</td></tr>
+					<tr><td>隔離度 S23</td><td>&gt; 20 dB</td><td>31.4 dB</td><td>27.5 dB</td><td class="ok">符合</td></tr>
+					<tr><td>功率不平衡（S21 與 S31 差）</td><td>≤ 0.5 dB</td><td>0.1 dB</td><td>0.02 dB</td><td class="ok">符合</td></tr>
+					<tr><td>相位不平衡</td><td>≤ 5°</td><td>約 0°</td><td>4.11°</td><td class="ok">符合</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<p>實測 S21／S31 為 −3.49 dB／−3.47 dB。</p>
+
+		<h3>量測圖</h3>
+		<div class="pair">
+			<figure>
+				<a href="s11-sim.webp"><img src="s11-sim.webp" alt="HFSS 模擬的 S11 曲線，2.4 GHz 約 -29.6 dB" width="1533" height="517" loading="lazy"></a>
+				<figcaption>S11 模擬：2.4 GHz 約 −29.6 dB。</figcaption>
+			</figure>
+			<figure>
+				<a href="s11-meas.webp"><img src="s11-meas.webp" alt="VNA 實測的 S11 曲線，2.4 GHz 為 -18.2 dB" width="809" height="596" loading="lazy"></a>
+				<figcaption>S11 實測：2.4 GHz 為 −18.2 dB。</figcaption>
+			</figure>
+			<figure>
+				<a href="s21-meas.webp"><img src="s21-meas.webp" alt="VNA 實測的 S21 曲線" width="804" height="564" loading="lazy"></a>
+				<figcaption>S21 實測：−3.49 dB。</figcaption>
+			</figure>
+			<figure>
+				<a href="s31-meas.webp"><img src="s31-meas.webp" alt="VNA 實測的 S31 曲線" width="804" height="564" loading="lazy"></a>
+				<figcaption>S31 實測：−3.47 dB。</figcaption>
+			</figure>
+			<figure>
+				<a href="s23-meas.webp"><img src="s23-meas.webp" alt="VNA 實測的 S23 隔離度曲線" width="807" height="572" loading="lazy"></a>
+				<figcaption>S23 實測：−27.5 dB。</figcaption>
+			</figure>
+			<figure>
+				<a href="ph21-meas.webp"><img src="ph21-meas.webp" alt="VNA 實測的 S21 相位" width="807" height="566" loading="lazy"></a>
+				<figcaption>S21 相位實測（與 S31 相差 4.11°）。</figcaption>
+			</figure>
+		</div>
+
+		<h3>模擬與實測的差異</h3>
+		<ul>
+			<li><strong>S11 從 29.6 dB 降到 18.2 dB：</strong>模擬沒有包含 SMA 接頭到微帶線的轉接與銲點的寄生電感，訊號從同軸線進到微帶線時會產生阻抗不連續與反射。</li>
+			<li><strong>隔離度少了約 3.8 dB：</strong>手工銲接的隔離電阻本身帶有寄生電容與封裝電感。</li>
+			<li><strong>匹配最好的頻率往下偏：</strong>模擬時 S11 最低點在 2.3 GHz 多，實測約在 2.1 GHz 多。推測是模擬用理想的介電常數，實際 FR4 在 2.4 GHz 的介電常數可能浮動到 4.5～4.7；下一版可以用量到的頻偏回推實際介電常數，再修正轉換線長度。</li>
+		</ul>
+
+		<h2>其他微波電路</h2>
+		<div class="grid">
+			<figure>
+				<img src="coupler.webp" alt="分支線耦合器實體電路板，四個 SMA 接頭" width="885" height="518" loading="lazy">
+				<figcaption><strong>分支線耦合器</strong>：實體製作與 VNA 量測，並分析模擬與實測的誤差。</figcaption>
+			</figure>
+			<figure>
+				<img src="ring.webp" alt="環形諧振器實體電路板" width="711" height="465" loading="lazy">
+				<figcaption><strong>環形諧振器</strong>：製作、量測諧振頻率，分析頻偏原因。</figcaption>
+			</figure>
+			<figure>
+				<img src="butler.webp" alt="4×4 Butler Matrix 的 HFSS 版圖" width="577" height="504" loading="lazy">
+				<figcaption><strong>4×4 Butler Matrix</strong>：HFSS 模擬設計（未製作實體）。</figcaption>
+			</figure>
+		</div>
+	</div>
+</main>
+<footer>© 劉顓賢（CL）</footer>
+</body>
+</html>

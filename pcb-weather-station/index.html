@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ESP32 微氣象站控制板｜劉顓賢（CL）作品集</title>
+<meta name="description" content="以 KiCad 10 設計的 ESP32 微氣象站雙層控制板，整合光照、溫溼度、雨量、土壤濕度與土溫感測器，加上 NB-IoT、microSD 與 RTC。ERC、DRC、一致性檢查皆為 0。">
+<link rel="canonical" href="https://cooper35211-max.github.io/pcb-weather-station/">
+<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="stylesheet" href="../portfolio.css">
+</head>
+<body>
+<header>
+	<div class="wrap">
+		<a class="back" href="../">← 回作品集</a>
+		<div class="bar"></div>
+		<h1>ESP32 微氣象站控制板</h1>
+		<p>PCB 設計＋韌體｜KiCad 10｜雙層板｜新版已完成設計，打樣中</p>
+	</div>
+</header>
+<main>
+	<div class="wrap doc">
+		<h2>專案概要</h2>
+		<dl class="facts">
+			<div><dt>板層／板材</dt><dd>雙層 FR-4，1.6 mm</dd></div>
+			<div><dt>尺寸</dt><dd>64 × 71 mm</dd></div>
+			<div><dt>主控</dt><dd>ESP32-S NodeMCU</dd></div>
+			<div><dt>通訊</dt><dd>NB-IoT・MQTT</dd></div>
+			<div><dt>最小線寬／間距</dt><dd>0.25／0.20 mm</dd></div>
+			<div><dt>檢查</dt><dd>ERC 0・DRC 0・一致性 0</dd></div>
+		</dl>
+		<p>實驗室的微氣象站原本以飛線與杜邦線拼接，容易鬆脫、不好維護，斷網時也會遺失資料。我把它整理成正式的雙層電路板：保留原有感測器與 NB-IoT 模組、沿用原板型與原有走線，並加上 microSD 本機記錄、DS3231 時鐘、DS18B20 土壤溫度與兩顆寫入狀態燈。背面整片鋪 GND，讓訊號回流路徑完整。</p>
+		<p>板上的韌體也由我撰寫：讀取各感測器、透過 NB-IoT 以 MQTT 上傳，同時寫一份到 SD 卡，每天自動建立一個記錄檔。因為電路和韌體都是自己做的，畫板時可以直接核對每支腳位與韌體設定是否一致。</p>
+
+		<h2>電路板</h2>
+		<div class="pair">
+			<figure>
+				<img src="front.webp" alt="電路板正面絲印：ESP32 模組位置、各感測器排針與腳位標示" width="1308" height="1443">
+				<figcaption>正面絲印：每組排針都標上腳位名稱，組裝與接線時不用再對照文件。</figcaption>
+			</figure>
+			<figure>
+				<img src="copper.webp" alt="電路板背面銅箔與 GND 鋪銅，標示 MICRO WEATHER STATION PCBTEST v2.0" width="1308" height="1443" loading="lazy">
+				<figcaption>背面：整片 GND 鋪銅（v2.0）。</figcaption>
+			</figure>
+		</div>
+
+		<h2>原理圖</h2>
+		<figure>
+			<a href="schematic.webp"><img src="schematic.webp" alt="KiCad 原理圖：左側為既有感測器排針，中間為 ESP32，右側為新增的土溫、SD 卡、RTC 與燈號" width="1432" height="861" loading="lazy"></a>
+			<figcaption>左側是照原本銅箔連線整理出的既有電路，右側是這次新增的功能。既有電路保留原設計的元件名稱，例如 J3 沿用「RAINSENSOR」，實際接的是土壤濕度感測器。點圖可看原尺寸。</figcaption>
+		</figure>
+
+		<h2>模組與介面</h2>
+		<div class="table-wrap">
+			<table>
+				<thead><tr><th>模組</th><th>用途</th><th>介面</th></tr></thead>
+				<tbody>
+					<tr><td>AM7020</td><td>NB-IoT 上傳資料</td><td>UART</td></tr>
+					<tr><td>BH1750</td><td>光照度</td><td>I²C</td></tr>
+					<tr><td>SHT30</td><td>空氣溫溼度</td><td>I²C</td></tr>
+					<tr><td>雨量計</td><td>雨量</td><td>I²C</td></tr>
+					<tr><td>土壤濕度感測器</td><td>土壤濕度</td><td>類比（ADC）</td></tr>
+					<tr><td>DS18B20</td><td>土壤溫度（新增）</td><td>1-Wire，4.7 kΩ 上拉</td></tr>
+					<tr><td>microSD</td><td>本機資料記錄，每天自動建立一個檔案（新增）</td><td>SPI</td></tr>
+					<tr><td>DS3231</td><td>即時時鐘（新增）</td><td>I²C</td></tr>
+					<tr><td>綠／紅 LED</td><td>運作狀態燈號（新增）</td><td>GPIO，330 Ω 限流</td></tr>
+				</tbody>
+			</table>
+		</div>
+
+		<h2>交件前驗證</h2>
+		<p>接線表是唯一依據，檢查沒過就不出檔。</p>
+		<ol>
+			<li><strong>寫接線表：</strong>每條連線逐一列出，沒有可靠來源的腳位不畫。</li>
+			<li><strong>產生電路板：</strong>以 KiCad 腳本放置元件與走線，座標可重現。</li>
+			<li><strong>自動比對連線：</strong>原理圖與每個焊盤的網路都對照接線表，並核對韌體腳位。</li>
+			<li><strong>三項檢查歸零：</strong>ERC、DRC、原理圖與電路板一致性皆為 0，無未連接線路。</li>
+			<li><strong>輸出 Gerber：</strong>只輸出工廠需要的層與鑽孔檔。</li>
+		</ol>
+
+		<h2>原型實測</h2>
+		<div class="pair">
+			<figure class="tall">
+				<img src="prototype.webp" alt="改版前的飛線原型：控制箱內的 ESP32 與感測器接線" width="326" height="507" loading="lazy">
+				<figcaption>改版前的飛線原型。</figcaption>
+			</figure>
+			<div>
+				<dl class="facts">
+					<div><dt>連續運轉</dt><dd>22 小時（跨夜）</dd></div>
+					<div><dt>MQTT 上傳</dt><dd>44／44 筆成功</dd></div>
+					<div><dt>記錄間隔</dt><dd>30 分鐘，沒有漏筆</dd></div>
+				</dl>
+				<p>上傳的資料與 SD 卡記錄一致。先在原型上確認功能穩定，才把接線畫進新版電路板，避免把沒驗證過的設計直接送去打樣。</p>
+				<p>新版電路板已完成設計、正在打樣，到板後會再做同樣的測試。</p>
+			</div>
+		</div>
+	</div>
+</main>
+<footer>© 劉顓賢（CL）</footer>
+</body>
+</html>
