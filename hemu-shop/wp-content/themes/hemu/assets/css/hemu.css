@@ -12,8 +12,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 /* 英文小標：01 — CONCEPT */
 .hemu-label {
 	font-family: var(--wp--preset--font-family--en);
-	font-size: var(--wp--preset--font-size--x-small);
-	letter-spacing: 0.3em;
+	font-size: 0.875rem;
+	letter-spacing: 0.24em;
 	text-transform: uppercase;
 	color: var(--wp--preset--color--accent-1);
 	margin: 0 0 1.25rem;
@@ -77,7 +77,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .hemu-notice { border-bottom: 1px solid var(--wp--preset--color--accent-6); }
 header .wp-block-site-title { white-space: nowrap; }
 header .wp-block-site-title a { text-decoration: none; }
-header .wp-block-navigation { letter-spacing: 0.14em; }
+header .wp-block-navigation { letter-spacing: 0.12em; font-size: 0.875rem; }
 header .wp-block-navigation a { text-decoration: none; }
 header .wp-block-search__button { background: transparent; color: var(--wp--preset--color--contrast); padding: 0.5rem; }
 header .wp-block-search__button:hover { background: transparent; color: var(--wp--preset--color--accent-1); }
@@ -86,7 +86,7 @@ header .hemu-main-nav { margin-right: var(--wp--preset--spacing--30); }
 .wp-block-navigation__responsive-container.is-menu-open .hemu-nav-search { display: block; width: 100%; margin-top: 1rem; }
 
 @media (max-width: 599px) {
-	header .wp-block-site-title { font-size: 0.875rem !important; letter-spacing: 0.12em; }
+	header .wp-block-site-title { font-size: 1rem !important; letter-spacing: 0.1em; }
 	header .alignwide > .wp-block-group { gap: 0.5rem; }
 	header .wp-block-search { display: none; }
 	header .hemu-main-nav { order: 9; margin-right: 0; }
@@ -127,7 +127,7 @@ footer a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
 .hemu-scroll {
 	position: absolute; left: var(--wp--preset--spacing--50); bottom: 0; margin: 0;
 	writing-mode: vertical-rl; font-family: var(--wp--preset--font-family--en);
-	font-size: 0.6875rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--wp--preset--color--accent-4);
+	font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--wp--preset--color--accent-4);
 	padding-bottom: 5.5rem;
 }
 .hemu-scroll::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 1px; height: 4.5rem; background: currentColor; animation: hemu-scroll 2.2s cubic-bezier(0.77, 0, 0.18, 1) infinite; transform-origin: top; }
@@ -137,6 +137,8 @@ footer a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
 	.hemu-hero__photo img { aspect-ratio: 4 / 5; height: auto; }
 	.hemu-hero__panel { padding: var(--wp--preset--spacing--50) var(--wp--preset--spacing--50) var(--wp--preset--spacing--60); justify-content: flex-start; }
 	.hemu-hero__copy { padding-top: 3.5rem; }
+	/* 字級加大後，電腦版的手動換行在手機窄欄會斷在奇怪的地方：手機改成自然換行 */
+	.hemu-hero__copy br { display: none; }
 	.hemu-scroll { display: none; }
 }
 
@@ -180,7 +182,7 @@ footer a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
 .hemu-news .wp-block-post-template { border-top: 1px solid var(--wp--preset--color--accent-6); }
 .hemu-news .wp-block-post-template > li { margin: 0; border-bottom: 1px solid var(--wp--preset--color--accent-6); }
 .hemu-news__row { display: grid; grid-template-columns: 9rem 1fr 9rem; gap: 2rem; align-items: start; padding: 1.75rem 0; }
-.hemu-news__date { font-family: var(--wp--preset--font-family--en); font-variant-numeric: lining-nums; letter-spacing: 0.1em; color: var(--wp--preset--color--accent-4); font-size: 0.9375rem; }
+.hemu-news__date { font-family: var(--wp--preset--font-family--en); font-variant-numeric: lining-nums; letter-spacing: 0.1em; color: var(--wp--preset--color--accent-4); font-size: 1rem; }
 .hemu-news__body .wp-block-post-title { margin: 0 0 0.5rem; letter-spacing: 0.08em; }
 .hemu-news__body .wp-block-post-title a { text-decoration: none; }
 .hemu-news__thumb { margin: 0 !important; }
@@ -209,7 +211,7 @@ footer a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
 }
 .hemu-index a { text-decoration: none; display: flex; justify-content: space-between; width: 100%; transition: color 0.3s, padding-left 0.3s; }
 .hemu-index a:hover { color: var(--wp--preset--color--accent-1); padding-left: 0.5rem; }
-.hemu-index .en { font-family: var(--wp--preset--font-family--en); font-size: 0.8125rem; letter-spacing: 0.2em; color: var(--wp--preset--color--accent-4); }
+.hemu-index .en { font-family: var(--wp--preset--font-family--en); font-size: 0.9375rem; letter-spacing: 0.2em; color: var(--wp--preset--color--accent-4); }
 
 /* 顧客評價：細線分隔、不加框 */
 .hemu-voice > .wp-block-column { border-top: 1px solid var(--wp--preset--color--accent-6); padding-top: 1.75rem; }
@@ -234,7 +236,7 @@ footer a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
 .wc-block-product-template .wc-block-components-product-button__button {
 	background: transparent !important; color: var(--wp--preset--color--contrast) !important;
 	border: 1px solid var(--wp--preset--color--accent-6) !important;
-	font-size: 0.75rem !important; letter-spacing: 0.16em; padding: 0.6rem 1.25rem !important;
+	font-size: 0.8125rem !important; letter-spacing: 0.14em; padding: 0.65rem 1.25rem !important;
 }
 .wc-block-product-template .wp-block-button__link:hover,
 .wc-block-product-template .wc-block-components-product-button__button:hover { border-color: var(--wp--preset--color--contrast) !important; }
@@ -247,7 +249,7 @@ footer a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
 /* 商店篩選：文字連結，選中時陶土色＋底線（不用框框） */
 .hemu-filters { display: grid; gap: 0.5rem; margin-block: var(--wp--preset--spacing--30) var(--wp--preset--spacing--50); }
 .hemu-filters__row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1.25rem; }
-.hemu-filters__label { font-family: var(--wp--preset--font-family--en); font-size: 0.75rem; letter-spacing: 0.25em; color: var(--wp--preset--color--accent-4); min-width: 4.5em; text-transform: uppercase; }
+.hemu-filters__label { font-family: var(--wp--preset--font-family--en); font-size: 0.8125rem; letter-spacing: 0.25em; color: var(--wp--preset--color--accent-4); min-width: 4.5em; text-transform: uppercase; }
 .hemu-chip { font-size: var(--wp--preset--font-size--small); color: var(--wp--preset--color--accent-4); text-decoration: none; padding: 0.15rem 0; border-bottom: 1px solid transparent; transition: color 0.3s, border-color 0.3s; }
 .hemu-chip:hover { color: var(--wp--preset--color--contrast); }
 .hemu-chip.is-active { color: var(--wp--preset--color--accent-1); border-bottom-color: var(--wp--preset--color--accent-1); }
@@ -258,7 +260,7 @@ footer a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
 .onsale, .wc-block-components-product-sale-badge {
 	background: var(--wp--preset--color--accent-1) !important; color: var(--wp--preset--color--white) !important;
 	border-color: var(--wp--preset--color--accent-1) !important; border-radius: 0 !important;
-	font-size: 0.6875rem !important; letter-spacing: 0.2em;
+	font-size: 0.75rem !important; letter-spacing: 0.16em;
 }
 .wp-block-woocommerce-product-details ul.tabs li { opacity: 1 !important; }
 .wp-block-woocommerce-product-details ul.tabs li:not(.active) a { color: var(--wp--preset--color--accent-4); }
@@ -297,3 +299,8 @@ html.hemu-js .hemu-reveal-img.is-in img { clip-path: inset(0 0 0 0); transform: 
 
 /* 成分故事的錯位色塊會超出畫面右緣：主內容區裁掉橫向溢出（clip 不會影響 sticky） */
 main { overflow-x: clip; }
+
+/* 字級（2026-11-07 使用者回饋「字太小」）：商品名稱、文章摘要、頁尾清單不要再用 13px 以下 */
+.wc-block-product-template .wp-block-post-title { font-size: 0.9375rem !important; }
+.hemu-news .wp-block-post-excerpt { font-size: 0.875rem !important; }
+footer .wp-block-list { font-size: 0.875rem; }
