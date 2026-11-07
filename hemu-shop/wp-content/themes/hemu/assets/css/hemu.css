@@ -283,17 +283,25 @@ html.hemu-js .hemu-reveal {
 	transition: opacity 1s cubic-bezier(0.22, 0.61, 0.36, 1) var(--hemu-delay, 0s), transform 1s cubic-bezier(0.22, 0.61, 0.36, 1) var(--hemu-delay, 0s);
 }
 html.hemu-js .hemu-reveal.is-in { opacity: 1; transform: none; }
-/* 圖片：由下往上揭開，同時從 1.08 倍縮回。
- * clip-path 放在 img 上、不放在被觀察的 figure 上：被觀察的元素自己被裁掉時，IntersectionObserver 會判斷成看不到、永遠不觸發 */
+/* 照片：慢慢淡入，同時從 1.06 倍緩緩縮回（2026-11-07 使用者：「像滑到一個地方突然蹦出來」）。
+ * 原本的「由下往上刷開」速度曲線先慢後快，最後一下像彈出來；改成日本網站常見的柔和淡入。
+ * JS 會等圖片下載並解碼完才加 .is-in，所以不會動畫跑完圖片才出現。 */
 html.hemu-js .hemu-reveal-img { overflow: hidden; }
 html.hemu-js .hemu-reveal-img img {
-	clip-path: inset(100% 0 0 0); transform: scale(1.08);
-	transition: clip-path 1.3s cubic-bezier(0.77, 0, 0.18, 1) var(--hemu-delay, 0s), transform 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) var(--hemu-delay, 0s);
+	opacity: 0; transform: scale(1.06);
+	transition: opacity 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--hemu-delay, 0s), transform 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) var(--hemu-delay, 0s);
 }
-html.hemu-js .hemu-reveal-img.is-in img { clip-path: inset(0 0 0 0); transform: none; }
+html.hemu-js .hemu-reveal-img.is-in img { opacity: 1; transform: none; }
+/* 照片後面的錯位色塊：跟照片一起淡入（原本色塊先出現，更顯得照片是後來冒出來的） */
+html.hemu-js .hemu-band--reveal::before { opacity: 0; transform: translate(-10px, -10px); transition: opacity 1.4s ease, transform 1.8s cubic-bezier(0.22, 0.61, 0.36, 1); }
+html.hemu-js .hemu-band--reveal.is-in::before { opacity: 1; transform: none; }
+/* 其他延遲載入的圖片：下載完淡入 */
+html.hemu-js img.hemu-fade { opacity: 0; transition: opacity 0.9s ease; }
+html.hemu-js img.hemu-fade.is-loaded { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
 	html.hemu-js .hemu-reveal { opacity: 1; transform: none; transition: none; }
-	html.hemu-js .hemu-reveal-img img { clip-path: none; transform: none; transition: none; }
+	html.hemu-js .hemu-reveal-img img, html.hemu-js img.hemu-fade { opacity: 1; transform: none; transition: none; }
+	html.hemu-js .hemu-band--reveal::before { opacity: 1; transform: none; transition: none; }
 	.hemu-marquee__track { animation: none !important; }
 }
 

@@ -1,6 +1,6 @@
 /**
  * 捲動進場動畫與文字逐字動畫（不使用套件）。
- * 參考日本網站實測：淡入＋上移、約 1 秒、同一組依序延遲 0.12 秒；圖片由下往上揭開。
+ * 參考日本網站實測：淡入＋上移、約 1 秒、同一組依序延遲 0.12 秒；照片慢慢淡入並從稍大縮回（等圖片下載完才開始）。
  * 文字：大英文字逐字由下往上滑入（遮罩）；主視覺直排標語、中文小標逐字淡入。
  * - 主視覺等進站動畫結束（hemu:ready）才播
  * - 使用者系統設定「減少動態」時全部略過；沒有 JavaScript 時內容照常顯示
@@ -82,13 +82,46 @@
 	document.querySelectorAll( TEXT ).forEach( function ( el ) { mark( el, 'hemu-reveal' ); } );
 	document.querySelectorAll( IMAGES ).forEach( function ( el ) { mark( el, 'hemu-reveal-img' ); } );
 
+	// 照片：等圖片下載並解碼完才開始進場（實測慢速網路下，動畫開始時圖片常常還沒到，2 秒後才突然冒出來）
+	var whenReady = function ( el, cb ) {
+		var imgs = el.tagName === 'IMG' ? [ el ] : Array.prototype.slice.call( el.querySelectorAll( 'img' ) );
+		if ( ! imgs.length ) { cb(); return; }
+		var called = false, fire = function () { if ( ! called ) { called = true; cb(); } };
+		Promise.all( imgs.map( function ( img ) {
+			img.loading = 'eager';
+			return img.decode ? img.decode().catch( function () {} ) : Promise.resolve();
+		} ) ).then( fire );
+		setTimeout( fire, 2000 ); // 最多等 2 秒
+	};
 	var io = new IntersectionObserver( function ( entries ) {
 		entries.forEach( function ( e ) {
-			if ( e.isIntersecting ) { e.target.classList.add( 'is-in' ); io.unobserve( e.target ); }
+			if ( ! e.isIntersecting ) { return; }
+			var el = e.target;
+			io.unobserve( el );
+			if ( el.classList.contains( 'hemu-reveal-img' ) || el.classList.contains( 'hemu-band' ) ) {
+				whenReady( el, function () { el.classList.add( 'is-in' ); } );
+			} else {
+				el.classList.add( 'is-in' );
+			}
 		} );
 	}, { rootMargin: '0px 0px -8% 0px', threshold: 0.01 } );
+	// 提早下載：照片離畫面還有一個半螢幕遠時，就把延遲載入改成立即下載
+	var prefetch = new IntersectionObserver( function ( entries ) {
+		entries.forEach( function ( e ) {
+			if ( e.isIntersecting ) { e.target.loading = 'eager'; prefetch.unobserve( e.target ); }
+		} );
+	}, { rootMargin: '150% 0px 150% 0px' } );
+	document.querySelectorAll( 'img[loading="lazy"]' ).forEach( function ( img ) { prefetch.observe( img ); } );
+	// 其他延遲載入的圖片（商品、文章縮圖）：下載完才淡入，不會突然出現
+	document.querySelectorAll( 'main img[loading="lazy"]' ).forEach( function ( img ) {
+		if ( img.closest( '.hemu-reveal-img' ) || img.complete ) { return; }
+		img.classList.add( 'hemu-fade' );
+		img.addEventListener( 'load', function () { img.classList.add( 'is-loaded' ); }, { once: true } );
+		img.addEventListener( 'error', function () { img.classList.add( 'is-loaded' ); }, { once: true } );
+	} );
 	var observe = function () {
-		document.querySelectorAll( '.hemu-reveal, .hemu-reveal-img, .hemu-split' ).forEach( function ( el ) {
+		document.querySelectorAll( 'main .hemu-band' ).forEach( function ( el ) { el.classList.add( 'hemu-band--reveal' ); } );
+		document.querySelectorAll( '.hemu-reveal, .hemu-reveal-img, .hemu-split, .hemu-band--reveal' ).forEach( function ( el ) {
 			if ( el.closest( '.hemu-hero' ) ) { return; }
 			io.observe( el );
 		} );
