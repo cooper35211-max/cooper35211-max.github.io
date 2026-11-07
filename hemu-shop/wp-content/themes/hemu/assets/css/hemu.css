@@ -337,3 +337,76 @@ footer .wp-block-list { font-size: 0.875rem; }
 }
 .hemu-stagger .hemu-band::before { top: 14%; bottom: -8%; left: -10%; right: 18%; }
 .hemu-stagger .wp-block-image { margin: 0; }
+
+/* ---------- 一段一屏（2026-11-07 第四輪）：電腦版每段至少一個螢幕高、內容垂直置中，停下來看到的就是一個完整畫面 ---------- */
+@media (min-width: 782px) {
+	.hemu-section {
+		min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
+		padding-top: clamp(4rem, 8vh, 7rem); padding-bottom: clamp(4rem, 8vh, 7rem);
+	}
+	.hemu-section--last { padding-bottom: clamp(4rem, 8vh, 7rem); }
+	.hemu-section-gap { margin-top: 0 !important; }
+	.wp-block-image.hemu-band-photo img { height: 88svh; }
+	.hemu-hero__photo { min-height: calc(100svh - 128px); }
+}
+.hemu-section--flush > .wp-block-group { width: 100%; }
+.hemu-section--flush .hemu-grid-full { width: 100%; }
+
+/* ---------- 品牌插圖（植物線稿） ---------- */
+.hemu-illust { display: block; height: auto; pointer-events: none; user-select: none; }
+/* 主視覺：大枝山茶花疊在左欄與照片交界，像畫在紙上 */
+.hemu-hero__panel { overflow: visible; }
+.hemu-hero .wp-block-columns { position: relative; }
+.hemu-illust--hero {
+	position: absolute; z-index: 2; width: clamp(180px, 19vw, 300px);
+	right: calc(-1 * clamp(80px, 9vw, 140px)); bottom: clamp(1.5rem, 6vh, 4rem); opacity: 0.85;
+}
+/* 成分卡片：線稿壓在照片右下角 */
+.hemu-band { overflow: visible; }
+.hemu-illust--card { position: absolute; z-index: 1; width: 46%; right: -10%; bottom: -14%; }
+.hemu-illust--sprig { width: 120px; margin: 1.25rem 0 0; opacity: 0.9; }
+.hemu-wordmark-row { gap: clamp(1rem, 3vw, 2.5rem); }
+.hemu-illust--footer { width: clamp(90px, 12vw, 180px); flex-shrink: 0; }
+@media (max-width: 781px) {
+	.hemu-illust--hero { width: 34vw; right: 1rem; bottom: auto; top: calc(-1 * 20vw); }
+	.hemu-hero__panel { position: relative; }
+	.hemu-illust--card { width: 38%; right: -4%; bottom: -10%; }
+}
+/* 英文字帶併進主視覺那一屏：照片高度扣掉頁首與字帶，捲一屏剛好接到下一段 */
+@media (min-width: 782px) {
+	.hemu-marquee { padding: 1.25rem 0; height: 120px; box-sizing: border-box; display: flex; align-items: center; }
+	.hemu-marquee span { font-size: 4.25rem; }
+	.hemu-hero__photo { min-height: calc(100svh - 128px - 120px); }
+}
+@media (min-width: 782px) {
+	/* 頁首實測 141px（公告列 40＋頁首 101）；主視覺那一列固定高度，頁首＋主視覺＋字帶＝一屏 */
+	:root { --hemu-header: 141px; }
+	.hemu-hero__photo { min-height: 0; }
+	.hemu-hero > .wp-block-columns { height: calc(100svh - var(--hemu-header) - 120px); min-height: 520px; }
+	.hemu-hero__photo .wp-block-image, .hemu-hero__photo img { height: 100% !important; }
+}
+/* 首頁各段之間不要 WordPress 自動加的 1.2rem 上邊距（會讓每屏的邊界錯開 19px） */
+main.wp-block-group > * + *, .hemu-hero > * + *, .hemu-section--flush > * + * { margin-block-start: 0; }
+@media (min-width: 782px) {
+	.wp-block-image.hemu-band-photo img { height: 100svh; }
+	/* 成分：電腦版改正方形照片、錯落位移縮小，讓整段放得進一屏 */
+	.hemu-stagger .wp-block-image img { aspect-ratio: 1 / 1 !important; }
+	.hemu-stagger > .wp-block-column:nth-child(2) { margin-top: clamp(2.5rem, 5vw, 4.5rem); }
+	.hemu-stagger > .wp-block-column:nth-child(3) { margin-top: clamp(1.25rem, 2.5vw, 2.25rem); }
+	.hemu-stagger .hemu-en-display--s { font-size: clamp(2rem, 3.4vw, 3rem); }
+	.hemu-head { margin-bottom: clamp(2rem, 6vh, 4.5rem) !important; }
+}
+/* 段落改成 flex 直向置中後，裡面的區塊會縮成內容寬度：明確撐滿（寬度上限仍由 alignwide 控制） */
+.hemu-section > * { width: 100%; box-sizing: border-box; }
+@media (min-width: 782px) {
+	/* 網頁字型載入後成分段落多出約 20px：錯落再收一點 */
+	.hemu-stagger > .wp-block-column:nth-child(2) { margin-top: clamp(2rem, 3.5vw, 3rem); }
+	.hemu-stagger > .wp-block-column:nth-child(3) { margin-top: clamp(1rem, 1.75vw, 1.5rem); }
+	.hemu-stagger .hemu-en-display--s { margin-top: 1.25rem !important; }
+}
+@media (max-width: 781px) {
+	/* 手機：頁尾小葉子會把大字擠出畫面；主視覺線稿移到照片下緣，不壓到文字 */
+	.hemu-illust--footer { display: none; }
+	.hemu-wordmark { font-size: 12.5vw; }
+	.hemu-illust--hero { width: 26vw; right: 0.75rem; top: -24vw; }
+}
