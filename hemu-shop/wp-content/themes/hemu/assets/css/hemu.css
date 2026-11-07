@@ -410,3 +410,83 @@ main.wp-block-group > * + *, .hemu-hero > * + *, .hemu-section--flush > * + * { 
 	.hemu-wordmark { font-size: 12.5vw; }
 	.hemu-illust--hero { width: 26vw; right: 0.75rem; top: -24vw; }
 }
+
+/* 插圖不能遮到文字、照片遮擋控制在 10% 以內（2026-11-07 使用者回饋「有些被遮擋」） */
+@media (min-width: 782px) {
+	/* 主視覺：放在左欄上方的空白處，只稍微跨進照片左上角 */
+	.hemu-illust--hero { top: clamp(1.5rem, 4vh, 3rem); bottom: auto; right: calc(-1 * clamp(48px, 5vw, 80px)); width: clamp(130px, 11vw, 180px); }
+}
+/* 成分卡片：移到照片右上角外側，下方的名稱與說明不受影響 */
+.hemu-illust--card { top: -16%; bottom: auto; right: -9%; width: 30%; }
+@media (max-width: 781px) { .hemu-illust--card { top: -10%; right: -2%; width: 26%; } }
+.hemu-illust--card { width: 25%; top: -14%; right: -8%; }
+@media (min-width: 782px) and (max-width: 1180px) {
+	/* 平板與小筆電：左欄比較窄，主視覺線稿縮小並貼近照片，避免壓到英文小標 */
+	.hemu-illust--hero { width: 96px; top: 1rem; right: -40px; }
+}
+
+/* ---------- 文字逐字動畫（assets/js/hemu-motion.js 切字） ---------- */
+html.hemu-js .hemu-split .hemu-word { display: inline-block; white-space: nowrap; }
+/* rise：大英文字，字母從遮罩下方滑上來 */
+html.hemu-js .hemu-split--rise .hemu-word { overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; vertical-align: top; }
+html.hemu-js .hemu-split--rise .hemu-char {
+	display: inline-block; transform: translateY(108%);
+	transition: transform 1s cubic-bezier(0.2, 0.75, 0.2, 1) calc(var(--i) * 0.035s);
+}
+html.hemu-js .hemu-split--rise.is-in .hemu-char { transform: none; }
+/* fade：中文，逐字淡入並稍微移動 */
+html.hemu-js .hemu-split--fade .hemu-char {
+	display: inline-block; opacity: 0; transform: translateY(0.45em);
+	transition: opacity 0.9s ease calc(var(--i) * 0.06s), transform 0.9s cubic-bezier(0.2, 0.75, 0.2, 1) calc(var(--i) * 0.06s);
+}
+html.hemu-js .hemu-hero .hemu-split--fade .hemu-char { transform: translateY(-0.6em); transition-duration: 1.2s; transition-delay: calc(0.15s + var(--i) * 0.09s); }
+html.hemu-js .hemu-split--fade.is-in .hemu-char { opacity: 1; transform: none; }
+/* 主視覺其他元素：標語出現後再淡入 */
+html.hemu-js .hemu-hero__copy { transform: translateY(18px); transition: transform 1.4s cubic-bezier(0.2, 0.75, 0.2, 1) 0.6s; }
+html.hemu-js .hemu-hero__photo img, html.hemu-js .hemu-illust--hero { opacity: 0; transition: opacity 1.4s ease 0.9s, transform 2.2s cubic-bezier(0.2, 0.75, 0.2, 1) 0.2s; }
+html.hemu-js .hemu-hero__photo img { opacity: 1; transform: scale(1.06); transition-delay: 0s; }
+html.hemu-js.hemu-hero-in .hemu-hero__copy { transform: none; }
+html.hemu-js.hemu-hero-in .hemu-illust--hero { opacity: 1; }
+html.hemu-js.hemu-hero-in .hemu-illust--hero { opacity: 0.85; }
+html.hemu-js.hemu-hero-in .hemu-hero__photo img { transform: none; }
+
+/* ---------- 進站與換頁簾幕（<head> 的小程式決定模式，assets/js/hemu-loader.js 控制） ---------- */
+/* 預設不顯示：只有 html.hemu-loading（首頁第一次進站或站內換頁）時才蓋住畫面，直接打開的頁面完全不受影響 */
+.hemu-loader { display: none; }
+html.hemu-loading .hemu-loader, .hemu-loader.is-leaving {
+	display: flex; position: fixed; inset: 0; z-index: 100001; align-items: center; justify-content: center;
+	background: var(--wp--preset--color--base); clip-path: inset(0 0 0 0);
+	transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.18, 1);
+}
+/* 保險：程式沒有接手時 3 秒後自動消失 */
+html.hemu-loading .hemu-loader:not(.is-leaving) { animation: hemu-loader-failsafe 0.01s linear 3s forwards; }
+@keyframes hemu-loader-failsafe { to { visibility: hidden; } }
+.hemu-loader__inner { display: none; flex-direction: column; align-items: center; gap: 1.25rem; }
+html.hemu-loading--intro .hemu-loader__inner { display: flex; }
+.hemu-loader__illust { display: block; width: 96px; aspect-ratio: 586 / 900; background: center / contain no-repeat; opacity: 0; }
+.hemu-loader__name { margin: 0; font-family: var(--wp--preset--font-family--en); font-size: 1.5rem; letter-spacing: 0.3em; color: var(--wp--preset--color--contrast); }
+.hemu-loader__name span { display: inline-block; opacity: 0; transform: translateY(0.4em); }
+.hemu-loader__line { display: block; width: 160px; height: 1px; background: var(--wp--preset--color--accent-1); transform: scaleX(0); transform-origin: left; }
+html.hemu-loading--intro .hemu-loader__illust { animation: hemu-fade-in 0.8s ease 0.05s forwards; }
+html.hemu-loading--intro .hemu-loader__name span { animation: hemu-char-in 0.6s cubic-bezier(0.2, 0.75, 0.2, 1) forwards; animation-delay: calc(0.25s + var(--i) * 0.045s); }
+html.hemu-loading--intro .hemu-loader__line { animation: hemu-line 1s cubic-bezier(0.77, 0, 0.18, 1) 0.3s forwards; }
+/* 掀開（往上） */
+.hemu-loader.is-out { clip-path: inset(0 0 100% 0) !important; }
+/* 換頁蓋上：由下往上 */
+.hemu-loader.is-leaving { animation: hemu-curtain-in 0.5s cubic-bezier(0.77, 0, 0.18, 1) forwards; }
+.hemu-loader.is-leaving .hemu-loader__inner { display: none; }
+@keyframes hemu-curtain-in { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes hemu-fade-in { to { opacity: 1; } }
+@keyframes hemu-char-in { to { opacity: 1; transform: none; } }
+@keyframes hemu-line { to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+	.hemu-loader, html.hemu-loading .hemu-loader { display: none !important; }
+	html.hemu-js .hemu-split .hemu-char { opacity: 1 !important; transform: none !important; transition: none !important; }
+	html.hemu-js .hemu-hero__copy, html.hemu-js .hemu-hero__photo img, html.hemu-js .hemu-illust--hero { opacity: 1; transform: none; transition: none; }
+}
+/* 直排標語切字後：外層單字包裝改成一般行內，避免直排字距被 inline-block 壓縮而疊字 */
+html.hemu-js .hemu-vertical .hemu-word { display: inline; white-space: normal; }
+html.hemu-js .hemu-vertical .hemu-char { display: inline-block; inline-size: 1em; text-align: center; }
+html.hemu-js .hemu-vertical .hemu-char { margin-inline-end: 0.32em; }
+/* 只給螢幕報讀的文字（逐字動畫的完整原文） */
+.screen-reader-text { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }

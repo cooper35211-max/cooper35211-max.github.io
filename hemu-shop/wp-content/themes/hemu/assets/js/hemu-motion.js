@@ -1,9 +1,10 @@
 /**
- * 捲動進場動畫（不使用套件）。
+ * 捲動進場動畫與文字逐字動畫（不使用套件）。
  * 參考日本網站實測：淡入＋上移、約 1 秒、同一組依序延遲 0.12 秒；圖片由下往上揭開。
- * - 主視覺（.hemu-hero）不做，避免拖慢首次顯示
- * - 使用者系統設定「減少動態」時全部略過
- * - 沒有 JavaScript 時內容照常顯示（隱藏樣式只在 html.hemu-js 底下生效）
+ * 文字：大英文字逐字由下往上滑入（遮罩）；主視覺直排標語、中文小標逐字淡入。
+ * - 主視覺等進站動畫結束（hemu:ready）才播
+ * - 使用者系統設定「減少動態」時全部略過；沒有 JavaScript 時內容照常顯示
+ * - 逐字切開時另外放一份原文給螢幕報讀（.screen-reader-text），切開的字只給視覺用（aria-hidden）
  */
 ( function () {
 	var root = document.documentElement;
@@ -11,25 +12,69 @@
 		root.classList.remove( 'hemu-js' );
 		return;
 	}
+
+	// ---- 逐字切開 ----
+	var split = function ( el, mode ) {
+		if ( el.dataset.hemuSplit ) { return; }
+		var label = el.textContent.replace( /\s+/g, ' ' ).trim();
+		var i = 0;
+		var walk = function ( node ) {
+			Array.prototype.slice.call( node.childNodes ).forEach( function ( n ) {
+				if ( n.nodeType === 3 ) {
+					var frag = document.createDocumentFragment();
+					// 英文以單字為單位包一層（避免單字被拆到兩行），字母再各自包一層
+					n.textContent.split( /(\s+)/ ).forEach( function ( word ) {
+						if ( ! word ) { return; }
+						if ( /^\s+$/.test( word ) ) { frag.appendChild( document.createTextNode( word ) ); return; }
+						var w = document.createElement( 'span' );
+						w.className = 'hemu-word';
+						Array.from( word ).forEach( function ( ch ) {
+							var c = document.createElement( 'span' );
+							c.className = 'hemu-char';
+							c.textContent = ch;
+							c.style.setProperty( '--i', i++ );
+							w.appendChild( c );
+						} );
+						frag.appendChild( w );
+					} );
+					node.replaceChild( frag, n );
+				} else if ( n.nodeType === 1 && n.tagName !== 'BR' ) {
+					walk( n );
+				}
+			} );
+		};
+		walk( el );
+		// 螢幕報讀讀這份完整原文；切開的字只給視覺用（span 不能用 aria-label，Lighthouse 會扣分）
+		Array.prototype.forEach.call( el.querySelectorAll( '.hemu-word' ), function ( w ) { w.setAttribute( 'aria-hidden', 'true' ); } );
+		var sr = document.createElement( 'span' );
+		sr.className = 'screen-reader-text';
+		sr.textContent = label;
+		el.insertBefore( sr, el.firstChild );
+		el.dataset.hemuSplit = mode;
+		el.classList.add( 'hemu-split', 'hemu-split--' + mode );
+	};
+	document.querySelectorAll( '.hemu-en-display' ).forEach( function ( el ) {
+		split( el.querySelector( 'span[lang="en"]' ) || el, 'rise' );
+	} );
+	document.querySelectorAll( '.hemu-hero h1' ).forEach( function ( el ) { split( el, 'fade' ); } );
+	document.querySelectorAll( 'main .hemu-indent > h3, main .hemu-stagger h3' ).forEach( function ( el ) { split( el, 'fade' ); } );
+
+	// ---- 區塊進場 ----
 	var TEXT = [
-		'main .hemu-label', 'main h2', 'main h3', 'main .hemu-more', 'main .hemu-en-display',
+		'main .hemu-label', 'main h3', 'main .hemu-more',
 		'main .wp-block-columns > .wp-block-column > p', 'main .wp-block-group > p',
 		'.hemu-index > a', '.hemu-voice > .wp-block-column',
 		'main .wc-block-product-template > li', 'main .wp-block-post-template > li'
 	].join( ',' );
 	var IMAGES = 'main .wp-block-image:not(.hemu-arch), main .wp-block-cover';
-
 	var mark = function ( el, cls ) {
-		if ( el.closest( '.hemu-hero, .hemu-no-reveal' ) || el.classList.contains( 'hemu-reveal' ) ) {
+		if ( el.closest( '.hemu-hero, .hemu-no-reveal' ) || el.classList.contains( 'hemu-split' ) || el.classList.contains( 'hemu-reveal' ) ) {
 			return;
 		}
 		el.classList.add( cls );
-		// 同一個父元素底下的兄弟依序延遲，最多 0.6 秒
 		var i = 0, s = el.previousElementSibling;
 		while ( s && i < 5 ) {
-			if ( s.classList.contains( 'hemu-reveal' ) || s.classList.contains( 'hemu-reveal-img' ) ) {
-				i++;
-			}
+			if ( s.classList.contains( 'hemu-reveal' ) || s.classList.contains( 'hemu-reveal-img' ) ) { i++; }
 			s = s.previousElementSibling;
 		}
 		el.style.setProperty( '--hemu-delay', ( i * 0.12 ) + 's' );
@@ -39,11 +84,22 @@
 
 	var io = new IntersectionObserver( function ( entries ) {
 		entries.forEach( function ( e ) {
-			if ( e.isIntersecting ) {
-				e.target.classList.add( 'is-in' );
-				io.unobserve( e.target );
-			}
+			if ( e.isIntersecting ) { e.target.classList.add( 'is-in' ); io.unobserve( e.target ); }
 		} );
 	}, { rootMargin: '0px 0px -8% 0px', threshold: 0.01 } );
-	document.querySelectorAll( '.hemu-reveal, .hemu-reveal-img' ).forEach( function ( el ) { io.observe( el ); } );
+	var observe = function () {
+		document.querySelectorAll( '.hemu-reveal, .hemu-reveal-img, .hemu-split' ).forEach( function ( el ) {
+			if ( el.closest( '.hemu-hero' ) ) { return; }
+			io.observe( el );
+		} );
+	};
+	observe();
+	// 主視覺：進站動畫掀開後才播
+	var heroIn = function () {
+		document.querySelectorAll( '.hemu-hero .hemu-split' ).forEach( function ( el ) { el.classList.add( 'is-in' ); } );
+		root.classList.add( 'hemu-hero-in' );
+	};
+	if ( root.classList.contains( 'hemu-ready' ) ) { heroIn(); } else { document.addEventListener( 'hemu:ready', heroIn, { once: true } ); }
+	// 沒有進站動畫的頁面（或 loader 被移除）保險：0.3 秒後直接播
+	setTimeout( function () { if ( ! root.classList.contains( 'hemu-loading' ) ) { heroIn(); } }, 300 );
 } )();
