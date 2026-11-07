@@ -490,3 +490,74 @@ html.hemu-js .hemu-vertical .hemu-char { display: inline-block; inline-size: 1em
 html.hemu-js .hemu-vertical .hemu-char { margin-inline-end: 0.32em; }
 /* 只給螢幕報讀的文字（逐字動畫的完整原文） */
 .screen-reader-text { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* ---------- 成分段落改版（2026-11-07 使用者：「字被遮擋」「空白太多、有點隨便」） ---------- */
+/* 三欄頂端對齊，不再錯落（錯落讓下方文字高低不齊，看起來像沒對好） */
+.hemu-stagger > .wp-block-column:nth-child(n) { margin-top: 0 !important; }
+.hemu-stagger .wp-block-image img { aspect-ratio: 4 / 5 !important; }
+@media (min-width: 782px) { .hemu-stagger .wp-block-image img { aspect-ratio: 4 / 5 !important; } }
+/* 色塊只從照片左上角露出，不往下延伸，碰不到名稱與說明 */
+.hemu-stagger .hemu-band::before { top: -1.25rem; left: -1.25rem; right: 35%; bottom: 40%; }
+.hemu-zigzag:nth-of-type(even) .hemu-stagger .hemu-band::before { left: -1.25rem; right: 35%; }
+/* 文字一律在色塊之上（色塊所在的區塊有定位，會畫在一般文字上面） */
+.hemu-stagger .wp-block-column > :not(.hemu-band) { position: relative; z-index: 1; }
+/* 編號：細線＋數字，和標題列的小標同一種語言 */
+.hemu-ingr-no {
+	display: flex; align-items: center; gap: 0.75rem; margin: 1.75rem 0 0.25rem !important;
+	font-family: var(--wp--preset--font-family--en); font-variant-numeric: lining-nums;
+	font-size: 0.875rem; letter-spacing: 0.2em; color: var(--wp--preset--color--accent-1);
+}
+.hemu-ingr-no::after { content: ""; flex: 0 0 2.5rem; height: 1px; background: currentColor; opacity: 0.6; }
+.hemu-stagger .hemu-en-display--s { margin-top: 0 !important; }
+.hemu-stagger h3 { margin-top: 0.75rem !important; }
+/* 線稿移到照片右上角外側（照片變高後仍不碰文字） */
+.hemu-illust--card { top: -9%; right: -7%; width: 24%; }
+
+/* ---------- 字體分工（2026-11-07）：內容用明體，操作介面用黑體 ---------- */
+/* 表單、購物車、結帳、會員中心、商店排序與數量欄位：用無襯線，輸入與數字比較好讀 */
+input, select, textarea, button,
+.wp-block-woocommerce-cart, .wp-block-woocommerce-checkout, .woocommerce-account .woocommerce,
+.wc-block-components-form, .wc-block-components-totals-wrapper, .woocommerce-ordering, .quantity,
+.wpforms-container, .wc-block-mini-cart__drawer, .hemu-notice {
+	font-family: var(--wp--preset--font-family--ui);
+}
+/* 按鈕文字跟著內容走（明體），只有表單裡的輸入元件用黑體 */
+.wp-element-button, .wp-block-button__link { font-family: var(--wp--preset--font-family--body); }
+
+/* ---------- 左 1/4 欄放內容（2026-11-07 使用者：「空白有點太多，有點隨便」）：標題下方原本空著的欄位放照片或入門商品 ---------- */
+.hemu-split-cols__aside { padding-right: clamp(1.5rem, 3.5vw, 3.5rem); }
+.hemu-split-cols__aside .wp-block-image { margin: 0; }
+.hemu-split-cols__aside .hemu-band::before { top: -1.25rem; left: -1.25rem; right: 35%; bottom: 40%; }
+.hemu-split-cols__aside > :not(.hemu-band) { position: relative; z-index: 1; }
+.hemu-voice-item { border-top: 1px solid var(--wp--preset--color--accent-6); padding: 1.5rem 0 1.75rem; }
+.hemu-voice-item:last-child { border-bottom: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-voice-item p { margin: 0; }
+.hemu-voice-item p + p { margin-top: 0.75rem; }
+.hemu-index > a { padding: 1.15rem 0 !important; }
+@media (max-width: 781px) { .hemu-split-cols__aside { padding-right: 0; max-width: 70%; } }
+/* 段落間距縮小一級：避免上一段下邊距＋下一段上邊距疊出 300px 的空洞（品牌故事、文章頁） */
+:root { --wp--preset--spacing--60: clamp(3.5rem, 7vw, 6rem); --wp--preset--spacing--70: clamp(4.5rem, 9vw, 8rem); }
+/* 一屏放得下：電腦版照片高度跟著螢幕高度走（固定比例的直式照片在 1440×900 會讓段落超過一屏，後面每段都錯開） */
+@media (min-width: 782px) {
+	.hemu-stagger .wp-block-image img { aspect-ratio: auto !important; width: 100%; height: clamp(240px, 40svh, 420px) !important; object-fit: cover; }
+	.hemu-split-cols__aside .wp-block-image img { aspect-ratio: auto !important; width: 100%; height: clamp(220px, 34svh, 360px) !important; object-fit: cover; }
+	.hemu-index > a { padding: 0.95rem 0 !important; }
+}
+@media (min-width: 782px) {
+	.hemu-stagger .wp-block-image img { height: clamp(210px, 33svh, 380px) !important; }
+	.hemu-section:has(.hemu-stagger) { padding-top: clamp(2.5rem, 5vh, 4.5rem); padding-bottom: clamp(2.5rem, 5vh, 4.5rem); }
+	/* 品牌理念那一屏太空：標語與內文放大，讓畫面飽滿 */
+	.hemu-section:has(.hemu-illust--sprig) .hemu-head .hemu-en-display { font-size: clamp(3.75rem, 8.5vw, 8rem); line-height: 1; }
+	.hemu-section:has(.hemu-illust--sprig) .hemu-indent h3 { font-size: 1.75rem !important; margin-top: 0.5rem; }
+	.hemu-section:has(.hemu-illust--sprig) .hemu-indent p { font-size: 1.0625rem !important; line-height: 2.1; }
+	.hemu-section:has(.hemu-illust--sprig) .hemu-illust--sprig { width: 150px; margin: 1.75rem 0 0.5rem; }
+	/* 顧客評價：引言再大一點 */
+	.hemu-voice-item p.has-large-font-size { font-size: 1.375rem !important; }
+}
+/* 內頁的段落不強制一屏（文字少時會變成一屏只有幾行字），用一致的上方間距 */
+@media (min-width: 782px) {
+	.hemu-section--auto { min-height: 0; display: block; padding-top: var(--wp--preset--spacing--70); padding-bottom: 0; }
+	.hemu-section--auto.hemu-section--last { padding-bottom: var(--wp--preset--spacing--70); }
+}
+.hemu-section--auto { padding-top: var(--wp--preset--spacing--70); }
+.hemu-section--auto.hemu-section--last { padding-bottom: var(--wp--preset--spacing--70); }
