@@ -100,12 +100,96 @@ footer a { text-decoration: none; }
 footer a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
 
 /* ---------- 首頁 ---------- */
-.hemu-hero { min-height: min(88vh, 820px); }
-.hemu-hero__text { display: flex; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: flex-start; }
-.hemu-hero__photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+
+/* 大英文字：每段的視覺重心（中文標題反而小） */
+.hemu-en-display {
+	font-family: var(--wp--preset--font-family--en);
+	font-size: clamp(3rem, 7.5vw, 6rem);
+	font-weight: 400;
+	line-height: 1.02;
+	letter-spacing: 0.01em;
+	color: var(--wp--preset--color--contrast);
+	margin: 0;
+}
+.hemu-en-display--s { font-size: clamp(2.25rem, 4.5vw, 3.75rem); }
+/* 小標旁的細線：CONCEPT ——— */
+.hemu-label--line { display: flex; align-items: center; gap: 1rem; }
+.hemu-label--line::after { content: ""; width: 3rem; height: 1px; background: currentColor; opacity: 0.6; }
+
+/* 主視覺：左窄欄、右照片貼邊滿高（參考 opera） */
+.hemu-hero .wp-block-columns { margin: 0; }
+.hemu-hero__panel { position: relative; display: flex; align-items: center; justify-content: center; padding: var(--wp--preset--spacing--50); }
+.hemu-hero__text { display: flex; gap: clamp(1.75rem, 3.5vw, 3.5rem); align-items: flex-start; }
+.hemu-hero__copy { padding-top: clamp(3rem, 9vw, 8rem); }
+.hemu-hero__photo { min-height: calc(100svh - 120px); }
+.hemu-hero__photo .wp-block-image, .hemu-hero__photo .wp-block-image img { height: 100% !important; margin: 0; }
+.hemu-hero__photo img { width: 100%; object-fit: cover; display: block; }
+.hemu-scroll {
+	position: absolute; left: var(--wp--preset--spacing--50); bottom: 0; margin: 0;
+	writing-mode: vertical-rl; font-family: var(--wp--preset--font-family--en);
+	font-size: 0.6875rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--wp--preset--color--accent-4);
+	padding-bottom: 5.5rem;
+}
+.hemu-scroll::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 1px; height: 4.5rem; background: currentColor; animation: hemu-scroll 2.2s cubic-bezier(0.77, 0, 0.18, 1) infinite; transform-origin: top; }
+@keyframes hemu-scroll { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
 @media (max-width: 781px) {
-	.hemu-hero__photo { order: -1; }
-	.hemu-hero__photo img { aspect-ratio: 1 / 1.05; }
+	.hemu-hero__photo { order: -1; min-height: 0; }
+	.hemu-hero__photo img { aspect-ratio: 4 / 5; height: auto; }
+	.hemu-hero__panel { padding: var(--wp--preset--spacing--50) var(--wp--preset--spacing--50) var(--wp--preset--spacing--60); justify-content: flex-start; }
+	.hemu-hero__copy { padding-top: 3.5rem; }
+	.hemu-scroll { display: none; }
+}
+
+/* 英文字帶：無限橫向捲動 */
+.hemu-marquee { overflow: hidden; padding: var(--wp--preset--spacing--40) 0; border-bottom: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-marquee__track { display: flex; width: max-content; animation: hemu-marquee 60s linear infinite; }
+.hemu-marquee span::before { content: attr(data-text); }
+.hemu-marquee span {
+	font-family: var(--wp--preset--font-family--en); font-style: italic; font-size: clamp(2.5rem, 7vw, 5.5rem);
+	line-height: 1.2; white-space: nowrap; color: rgb(58 48 43 / 0.16); padding-right: 0.3em;
+}
+@keyframes hemu-marquee { to { transform: translateX(-50%); } }
+
+/* 滿版照片帶 */
+.hemu-band-photo { margin: 0 !important; }
+.wp-block-image.hemu-band-photo img { width: 100%; height: clamp(320px, 62vh, 720px); object-fit: cover; display: block; }
+
+/* 商品格子：滿版、無間距、1px 細線分格（參考 NOMAD） */
+.hemu-grid-full { margin-top: var(--wp--preset--spacing--50) !important; border-top: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-grid-full .wc-block-product-template { gap: 0 !important; margin: 0 !important; }
+.hemu-grid-full .wc-block-product-template > li {
+	margin: 0 !important; padding: clamp(1rem, 2.5vw, 2rem) clamp(1rem, 2.5vw, 2rem) clamp(1.5rem, 3vw, 2.5rem);
+	border-right: 1px solid var(--wp--preset--color--accent-6); border-bottom: 1px solid var(--wp--preset--color--accent-6);
+}
+.hemu-grid-full .wc-block-product-template > li:last-child { border-right: 0; }
+@media (max-width: 599px) {
+	.hemu-grid-full .wc-block-product-template { gap: 0 !important; }
+	.hemu-grid-full .wc-block-product-template > li:nth-child(2n) { border-right: 0; }
+}
+
+/* 照片後面的錯位色塊（參考 opera），只用在成分故事 */
+.hemu-band { position: relative; isolation: isolate; }
+.hemu-band::before {
+	content: ""; position: absolute; z-index: -1; background: var(--wp--preset--color--accent-2);
+	top: 18%; bottom: -12%; left: -18%; right: 22%;
+}
+.hemu-zigzag:nth-of-type(even) .hemu-band::before { left: 22%; right: -18%; }
+@media (max-width: 781px) { .hemu-band::before { left: -1.5rem; right: 30%; } .hemu-zigzag:nth-of-type(even) .hemu-band::before { left: 30%; right: -1.5rem; } }
+
+/* 文章列表：一行一則（參考 NOMAD 消息） */
+.hemu-news .wp-block-post-template { border-top: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-news .wp-block-post-template > li { margin: 0; border-bottom: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-news__row { display: grid; grid-template-columns: 9rem 1fr 9rem; gap: 2rem; align-items: start; padding: 1.75rem 0; }
+.hemu-news__date { font-family: var(--wp--preset--font-family--en); font-variant-numeric: lining-nums; letter-spacing: 0.1em; color: var(--wp--preset--color--accent-4); font-size: 0.9375rem; }
+.hemu-news__body .wp-block-post-title { margin: 0 0 0.5rem; letter-spacing: 0.08em; }
+.hemu-news__body .wp-block-post-title a { text-decoration: none; }
+.hemu-news__thumb { margin: 0 !important; }
+@media (max-width: 599px) { .hemu-news__row { grid-template-columns: 1fr 6.5rem; gap: 0.25rem 1rem; } .hemu-news__date { grid-column: 1 / -1; } }
+
+/* 頁尾大字 */
+.hemu-wordmark {
+	font-family: var(--wp--preset--font-family--en); font-size: clamp(3rem, 11vw, 9.5rem); line-height: 1;
+	letter-spacing: 0.01em; margin: 0; color: var(--wp--preset--color--contrast); white-space: nowrap; overflow: hidden;
 }
 
 /* 成分故事：左右交錯、圖片錯位 */
@@ -189,3 +273,27 @@ footer a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
 
 /* Cormorant 預設是舊式數字（高低不齊），價格與編號改用等高數字 */
 .hemu-label, .wc-block-components-product-price, .price, .hemu-index .en { font-variant-numeric: lining-nums; }
+
+/* ---------- 捲動進場動畫（assets/js/hemu-motion.js 加上 class） ---------- */
+html.hemu-js .hemu-reveal {
+	opacity: 0;
+	transform: translateY(28px);
+	transition: opacity 1s cubic-bezier(0.22, 0.61, 0.36, 1) var(--hemu-delay, 0s), transform 1s cubic-bezier(0.22, 0.61, 0.36, 1) var(--hemu-delay, 0s);
+}
+html.hemu-js .hemu-reveal.is-in { opacity: 1; transform: none; }
+/* 圖片：由下往上揭開，同時從 1.08 倍縮回。
+ * clip-path 放在 img 上、不放在被觀察的 figure 上：被觀察的元素自己被裁掉時，IntersectionObserver 會判斷成看不到、永遠不觸發 */
+html.hemu-js .hemu-reveal-img { overflow: hidden; }
+html.hemu-js .hemu-reveal-img img {
+	clip-path: inset(100% 0 0 0); transform: scale(1.08);
+	transition: clip-path 1.3s cubic-bezier(0.77, 0, 0.18, 1) var(--hemu-delay, 0s), transform 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) var(--hemu-delay, 0s);
+}
+html.hemu-js .hemu-reveal-img.is-in img { clip-path: inset(0 0 0 0); transform: none; }
+@media (prefers-reduced-motion: reduce) {
+	html.hemu-js .hemu-reveal { opacity: 1; transform: none; transition: none; }
+	html.hemu-js .hemu-reveal-img img { clip-path: none; transform: none; transition: none; }
+	.hemu-marquee__track { animation: none !important; }
+}
+
+/* 成分故事的錯位色塊會超出畫面右緣：主內容區裁掉橫向溢出（clip 不會影響 sticky） */
+main { overflow-x: clip; }

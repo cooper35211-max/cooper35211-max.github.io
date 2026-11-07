@@ -2,7 +2,8 @@
 <html lang="zh-TW">
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<script>document.documentElement.classList.add('hemu-js')</script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name='robots' content='max-image-preview:large' />
 <script id="wc-dependency-detection">(()=>{"use strict";const e=["client/","assets/","build/","vendor/"],n=/\/plugins\/woocommerce\/(client|assets|build|vendor)\//;function t(t,r=""){if(!t)return!1;if(!r)return n.test(t);if(!t.startsWith(r))return!1;const s=t.substring(r.length);for(let n=0;n<e.length;n++)if(s.startsWith(e[n]))return!0;return!1}function r(e){if(!e)return"unknown";const n=e.split("/").pop();if(!n)return"unknown";return n.split("?")[0].split("#")[0]||"unknown"}function s(e,n){return!!e.includes(n+":")||!!e.includes("webpack://")}function i(e){if(!e||"string"!=typeof e)return"v8";const n=e.split("\n");for(let e=0;e<n.length;e++){const t=n[e];if(/@https?:\/\//.test(t))return"spidermonkey";if(/^\s*at\s/.test(t))return"v8"}return"v8"}function c(e=""){if("string"!=typeof e)return null;const n=e.match(/(https?:\/\/[^\s)]+?\.js)(?:[?:#]|$)/);if(n)return n[1];const t=e.match(/\(([^()\s]+\.js)(?:[?:#]|$)/);return t?t[1]:null}function o(e=""){if("string"!=typeof e)return null;const n=e.match(/@(https?:\/\/[^\s]+?\.js)(?:[?:#]|$)/);return n?n[1]:null}function u(e="",n="v8"){return"string"!=typeof e?null:"spidermonkey"===n?o(e):c(e)}function l(e,n){if(!e||"string"!=typeof e)return null;const t=i(e),r=e.split("\n");for(let e="v8"===t?1:0;e<r.length;e++){const i=r[e];if(s(i,n))continue;const c=u(i,t);if(c)return c}return null}function d(e,n,t,s,i=r){if(!e)return{type:"inline",message:`[WooCommerce] An inline or unknown script accessed wc.${n} without proper dependency declaration. This script should declare "${t}" as a dependency.`};const c=s&&"object"==typeof s?s[e]:void 0;return c&&c.handle&&Array.isArray(c.deps)?-1===c.deps.indexOf(t)?{type:"missing-dependency",message:`[WooCommerce] Script "${c.handle}" accessed wc.${n} without declaring "${t}" as a dependency. Add "${t}" to the script's dependencies array.`}:null:{type:"unregistered",message:`[WooCommerce] Unregistered script "${i(e)}" accessed wc.${n}. This script should be registered with wp_enqueue_script() and declare "${t}" as a dependency.`}}function p(e,n,t,r){let s=!1;function i(e,i){if(s)return e[i];if((e=>e in n)(i)){s=!0;try{const s=t();return r(s,i,n[i]),e[i]}finally{s=!1}}return e[i]}return new Proxy(e,{get:i})}!function(){let e=window.wc||{},n={},s=!1;const i={};let c=[];const WC_GLOBAL_EXPORTS={"wcBlocksRegistry":"wc-blocks-registry","wcSettings":"wc-settings","wcBlocksData":"wc-blocks-data-store","data":"wc-store-data","wcBlocksSharedContext":"wc-blocks-shared-context","wcBlocksSharedHocs":"wc-blocks-shared-hocs","priceFormat":"wc-price-format","blocksCheckout":"wc-blocks-checkout","blocksCheckoutEvents":"wc-blocks-checkout-events","blocksComponents":"wc-blocks-components","wcTypes":"wc-types","sanitize":"wc-sanitize","wcEntities":"wc-entities"},WC_PLUGIN_URL="https://cooper35211-max.github.io/hemu-shop/wp-content/plugins/woocommerce/";function o(){const e=document.currentScript?.src;if(e&&"string"==typeof e)return e.replace(/\?.*$/,"");return l((new Error).stack??null,window.location.pathname)}function u(e,t,s){const c=(e||"inline")+":"+t;if(i[c])return;const o=d(e,t,s,n,r);o&&(console.warn(o.message),i[c]=!0)}function a(e,n,r){e?t(e,WC_PLUGIN_URL)||(s?u(e,n,r):c.push({callerUrl:e,wcGlobalKey:n,requiredDependencyHandle:r})):u(e,n,r)}let f=p(e,WC_GLOBAL_EXPORTS,o,a);Object.defineProperty(window,"wc",{get:()=>f,set(n){e=n||{},f=p(e,WC_GLOBAL_EXPORTS,o,a)},configurable:!0,enumerable:!0}),window.wc.wcUpdateDependencyRegistry=function(e){n=e||{},s=!0;for(let e=0;e<c.length;e++){const n=c[e];u(n.callerUrl,n.wcGlobalKey,n.requiredDependencyHandle)}c=[]},console.info("[WooCommerce] Dependency detection enabled. Warnings will be shown for scripts that access wc.* globals without proper dependencies.")}()})();</script>
 <meta name="description" content="禾沐植萃：台灣在地植物萃取的溫和保養，給敏感肌的日常選擇。滿 NT$1,200 免運、7-11 與全家取貨。" />
@@ -114,13 +115,17 @@ h1:where(.wp-block-heading).has-background,h2:where(.wp-block-heading).has-backg
 			}
 /*# sourceURL=wp-interactivity-router-animations-inline-css */
 </style>
-<style id="wp-block-post-featured-image-inline-css">
-.wp-block-post-featured-image{margin-left:0;margin-right:0}.wp-block-post-featured-image a{display:block;height:100%}.wp-block-post-featured-image :where(img){box-sizing:border-box;height:auto;max-width:100%;vertical-align:bottom;width:100%}.wp-block-post-featured-image.alignfull img,.wp-block-post-featured-image.alignwide img{width:100%}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim{background-color:#000;inset:0;position:absolute}.wp-block-post-featured-image{position:relative}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-gradient{background-color:transparent}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-0{opacity:0}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-10{opacity:.1}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-20{opacity:.2}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-30{opacity:.3}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-40{opacity:.4}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-50{opacity:.5}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-60{opacity:.6}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-70{opacity:.7}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-80{opacity:.8}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-90{opacity:.9}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-100{opacity:1}.wp-block-post-featured-image:where(.alignleft,.alignright){width:100%}
-/*# sourceURL=https://cooper35211-max.github.io/hemu-shop/wp-includes/blocks/post-featured-image/style.min.css */
-</style>
 <style id="wp-block-post-date-inline-css">
 .wp-block-post-date{box-sizing:border-box}
 /*# sourceURL=https://cooper35211-max.github.io/hemu-shop/wp-includes/blocks/post-date/style.min.css */
+</style>
+<style id="wp-block-post-excerpt-inline-css">
+:where(.wp-block-post-excerpt){box-sizing:border-box;margin-bottom:var(--wp--style--block-gap);margin-top:var(--wp--style--block-gap)}.wp-block-post-excerpt__excerpt{margin-bottom:0;margin-top:0}.wp-block-post-excerpt__more-text{margin-bottom:0;margin-top:var(--wp--style--block-gap)}.wp-block-post-excerpt__more-link{display:inline-block}
+/*# sourceURL=https://cooper35211-max.github.io/hemu-shop/wp-includes/blocks/post-excerpt/style.min.css */
+</style>
+<style id="wp-block-post-featured-image-inline-css">
+.wp-block-post-featured-image{margin-left:0;margin-right:0}.wp-block-post-featured-image a{display:block;height:100%}.wp-block-post-featured-image :where(img){box-sizing:border-box;height:auto;max-width:100%;vertical-align:bottom;width:100%}.wp-block-post-featured-image.alignfull img,.wp-block-post-featured-image.alignwide img{width:100%}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim{background-color:#000;inset:0;position:absolute}.wp-block-post-featured-image{position:relative}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-gradient{background-color:transparent}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-0{opacity:0}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-10{opacity:.1}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-20{opacity:.2}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-30{opacity:.3}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-40{opacity:.4}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-50{opacity:.5}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-60{opacity:.6}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-70{opacity:.7}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-80{opacity:.8}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-90{opacity:.9}.wp-block-post-featured-image .wp-block-post-featured-image__overlay.has-background-dim-100{opacity:1}.wp-block-post-featured-image:where(.alignleft,.alignright){width:100%}
+/*# sourceURL=https://cooper35211-max.github.io/hemu-shop/wp-includes/blocks/post-featured-image/style.min.css */
 </style>
 <style id="wp-block-post-template-inline-css">
 .wp-block-post-template{box-sizing:border-box;list-style:none;margin-bottom:0;margin-top:0;max-width:100%;padding:0}.wp-block-post-template.is-flex-container{display:flex;flex-direction:row;flex-wrap:wrap;gap:1.25em}.wp-block-post-template.is-flex-container>li{margin:0;width:100%}@media (min-width:600px){.wp-block-post-template.is-flex-container.is-flex-container.columns-2>li{width:calc(50% - .625em)}.wp-block-post-template.is-flex-container.is-flex-container.columns-3>li{width:calc(33.33333% - .83333em)}.wp-block-post-template.is-flex-container.is-flex-container.columns-4>li{width:calc(25% - .9375em)}.wp-block-post-template.is-flex-container.is-flex-container.columns-5>li{width:calc(20% - 1em)}.wp-block-post-template.is-flex-container.is-flex-container.columns-6>li{width:calc(16.66667% - 1.04167em)}}@media (max-width:600px){.wp-block-post-template-is-layout-grid[class*=columns-]:not(.has-native-responsive-grid){grid-template-columns:1fr}}.wp-block-post-template-is-layout-constrained>li>.alignright,.wp-block-post-template-is-layout-flow>li>.alignright{float:right;margin-inline-end:0;margin-inline-start:2em}.wp-block-post-template-is-layout-constrained>li>.alignleft,.wp-block-post-template-is-layout-flow>li>.alignleft{float:left;margin-inline-end:2em;margin-inline-start:0}.wp-block-post-template-is-layout-constrained>li>.aligncenter,.wp-block-post-template-is-layout-flow>li>.aligncenter{margin-inline-end:auto;margin-inline-start:auto}
@@ -164,7 +169,7 @@ ol,ul{box-sizing:border-box}:root :where(.wp-block-list.has-background){padding:
 /*# sourceURL=global-styles-inline-css */
 </style>
 <style id="core-block-supports-inline-css">
-.wp-container-core-group-is-layout-ea8fd8c6 > .alignfull{margin-right:calc(var(--wp--preset--spacing--30) * -1);margin-left:calc(var(--wp--preset--spacing--30) * -1);}.wp-elements-1 a:where(:not(.wp-element-button)){color:var(--wp--preset--color--contrast);}.wp-container-core-navigation-is-layout-2cf620a7{gap:var(--wp--preset--spacing--40);justify-content:flex-end;}.wp-container-core-group-is-layout-c71dec02{flex-wrap:nowrap;gap:var(--wp--preset--spacing--30);}.wp-container-core-group-is-layout-788841da{flex-wrap:nowrap;justify-content:space-between;}.wp-container-core-group-is-layout-4e81a00d > .alignfull{margin-right:calc(var(--wp--preset--spacing--50) * -1);margin-left:calc(var(--wp--preset--spacing--50) * -1);}.wp-container-core-columns-is-layout-9de756a1{flex-wrap:nowrap;gap:var(--wp--preset--spacing--50) var(--wp--preset--spacing--50);}.wp-container-core-group-is-layout-265548dc > .alignfull{margin-right:calc(var(--wp--preset--spacing--50) * -1);margin-left:calc(var(--wp--preset--spacing--50) * -1);}.wp-container-core-columns-is-layout-a09ab98b{flex-wrap:nowrap;gap:var(--wp--preset--spacing--50) var(--wp--preset--spacing--50);}.wp-container-core-group-is-layout-94fcd6a8 > .alignfull{margin-right:calc(var(--wp--preset--spacing--50) * -1);margin-left:calc(var(--wp--preset--spacing--50) * -1);}.wp-container-core-group-is-layout-ee782d2f{justify-content:space-between;align-items:flex-end;}.wp-container-core-columns-is-layout-c2504817{flex-wrap:nowrap;gap:var(--wp--preset--spacing--40) var(--wp--preset--spacing--50);}.wp-container-core-columns-is-layout-6edee228{flex-wrap:nowrap;gap:var(--wp--preset--spacing--60) var(--wp--preset--spacing--50);}.wp-container-core-columns-is-layout-08586060{flex-wrap:nowrap;gap:var(--wp--preset--spacing--50) var(--wp--preset--spacing--50);}.wp-container-core-post-template-is-layout-20f96455{grid-template-columns:repeat(auto-fill, minmax(max(min(16rem, 100%), (100% - (var(--wp--preset--spacing--50) * (3 - 1))) /3), 1fr));container-type:inline-size;gap:var(--wp--preset--spacing--50);}.wp-container-core-columns-is-layout-8ae071fe{flex-wrap:nowrap;gap:var(--wp--preset--spacing--40) var(--wp--preset--spacing--50);}.wp-container-core-group-is-layout-81d8c26c{justify-content:space-between;}.wp-container-core-group-is-layout-dbd4ee9b > .alignfull{margin-right:calc(var(--wp--preset--spacing--50) * -1);margin-left:calc(var(--wp--preset--spacing--50) * -1);}
+.wp-container-core-group-is-layout-ea8fd8c6 > .alignfull{margin-right:calc(var(--wp--preset--spacing--30) * -1);margin-left:calc(var(--wp--preset--spacing--30) * -1);}.wp-elements-1 a:where(:not(.wp-element-button)){color:var(--wp--preset--color--contrast);}.wp-container-core-navigation-is-layout-2cf620a7{gap:var(--wp--preset--spacing--40);justify-content:flex-end;}.wp-container-core-group-is-layout-c71dec02{flex-wrap:nowrap;gap:var(--wp--preset--spacing--30);}.wp-container-core-group-is-layout-788841da{flex-wrap:nowrap;justify-content:space-between;}.wp-container-core-group-is-layout-4e81a00d > .alignfull{margin-right:calc(var(--wp--preset--spacing--50) * -1);margin-left:calc(var(--wp--preset--spacing--50) * -1);}.wp-container-core-columns-is-layout-1c1a395f{flex-wrap:nowrap;gap:0 0;}.wp-container-core-columns-is-layout-a946f869{flex-wrap:nowrap;gap:var(--wp--preset--spacing--30) var(--wp--preset--spacing--50);}.wp-container-core-columns-is-layout-6c917595{flex-wrap:nowrap;gap:var(--wp--preset--spacing--40) var(--wp--preset--spacing--50);}.wp-container-core-group-is-layout-63b118f5 > .alignfull{margin-right:calc(var(--wp--preset--spacing--50) * -1);margin-left:calc(var(--wp--preset--spacing--50) * -1);}.wp-container-core-group-is-layout-1e1233a3{justify-content:space-between;align-items:flex-end;}.wp-container-core-columns-is-layout-c2504817{flex-wrap:nowrap;gap:var(--wp--preset--spacing--40) var(--wp--preset--spacing--50);}.wp-container-core-columns-is-layout-6edee228{flex-wrap:nowrap;gap:var(--wp--preset--spacing--60) var(--wp--preset--spacing--50);}.wp-container-core-group-is-layout-94fcd6a8 > .alignfull{margin-right:calc(var(--wp--preset--spacing--50) * -1);margin-left:calc(var(--wp--preset--spacing--50) * -1);}.wp-container-core-columns-is-layout-08586060{flex-wrap:nowrap;gap:var(--wp--preset--spacing--50) var(--wp--preset--spacing--50);}.wp-container-core-group-is-layout-ee782d2f{justify-content:space-between;align-items:flex-end;}.wp-container-core-group-is-layout-f1382024 > .alignfull{margin-right:calc(var(--wp--preset--spacing--50) * -1);margin-left:calc(var(--wp--preset--spacing--50) * -1);}.wp-container-core-columns-is-layout-7e280702{flex-wrap:nowrap;gap:var(--wp--preset--spacing--40) var(--wp--preset--spacing--50);}.wp-container-core-group-is-layout-81d8c26c{justify-content:space-between;}.wp-container-core-group-is-layout-dbd4ee9b > .alignfull{margin-right:calc(var(--wp--preset--spacing--50) * -1);margin-left:calc(var(--wp--preset--spacing--50) * -1);}
 /*# sourceURL=core-block-supports-inline-css */
 </style>
 <style id="wp-block-template-skip-link-inline-css">
@@ -181,7 +186,7 @@ ol,ul{box-sizing:border-box}:root :where(.wp-block-list.has-background){padding:
 </style>
 <link rel="stylesheet" id="hemu-fonts-css" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&#038;family=Noto+Sans+TC:wght@400;500&#038;family=Noto+Serif+TC:wght@500&#038;display=optional" media="print" onload="this.media='all'" />
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&#038;family=Noto+Sans+TC:wght@400;500&#038;family=Noto+Serif+TC:wght@500&#038;display=optional" /></noscript>
-<link rel='stylesheet' id='hemu-css' href='https://cooper35211-max.github.io/hemu-shop/wp-content/themes/hemu/assets/css/hemu.css?ver=1794057162' media='all' />
+<link rel='stylesheet' id='hemu-css' href='https://cooper35211-max.github.io/hemu-shop/wp-content/themes/hemu/assets/css/hemu.css?ver=1794062197' media='all' />
 <style id="twentytwentyfive-style-inline-css">
 a{text-decoration-thickness:1px!important;text-underline-offset:.1em}:where(.wp-site-blocks :focus){outline-width:2px;outline-style:solid}.wp-block-navigation .wp-block-navigation-submenu .wp-block-navigation-item:not(:last-child){margin-bottom:3px}.wp-block-navigation .wp-block-navigation-item .wp-block-navigation-item__content{outline-offset:4px}.wp-block-navigation .wp-block-navigation-item ul.wp-block-navigation__submenu-container .wp-block-navigation-item__content{outline-offset:0}blockquote,caption,figcaption,h1,h2,h3,h4,h5,h6,p{text-wrap:pretty}.more-link{display:block}:where(pre){overflow-x:auto}
 /*# sourceURL=https://cooper35211-max.github.io/hemu-shop/wp-content/themes/twentytwentyfive/style.min.css */
@@ -342,18 +347,18 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 
 <main id="wp--skip-link--target" class="wp-block-group is-layout-flow wp-block-group-is-layout-flow">
 	
-<div class="wp-block-group alignfull hemu-hero has-global-padding is-layout-constrained wp-container-core-group-is-layout-265548dc wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--50);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--50)">
+<div class="wp-block-group alignfull hemu-hero is-layout-flow wp-block-group-is-layout-flow">
 	
-	<div class="wp-block-columns alignwide are-vertically-aligned-bottom is-layout-flex wp-container-core-columns-is-layout-9de756a1 wp-block-columns-is-layout-flex">
+	<div class="wp-block-columns are-vertically-aligned-stretch is-layout-flex wp-container-core-columns-is-layout-1c1a395f wp-block-columns-is-layout-flex">
 		
-		<div class="wp-block-column is-vertically-aligned-bottom is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:38%">
+		<div class="wp-block-column is-vertically-aligned-stretch hemu-hero__panel is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:40%">
 			
 			<div class="wp-block-group hemu-hero__text is-layout-flow wp-block-group-is-layout-flow">
 				
 				<h1 class="wp-block-heading hemu-vertical has-x-large-font-size">給敏感肌的、<br>溫和的日常。</h1>
 				
 				
-				<div class="wp-block-group is-layout-flow wp-block-group-is-layout-flow" style="padding-top:var(--wp--preset--spacing--60)">
+				<div class="wp-block-group hemu-hero__copy is-layout-flow wp-block-group-is-layout-flow">
 					
 					<p class="hemu-label wp-block-paragraph">Taiwan Botanical Skincare</p>
 					
@@ -367,12 +372,15 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 				
 			</div>
 			
+			
+			<p class="hemu-scroll wp-block-paragraph" aria-hidden="true">Scroll</p>
+			
 		</div>
 		
 		
-		<div class="wp-block-column is-vertically-aligned-bottom hemu-hero__photo is-layout-flow wp-block-column-is-layout-flow">
+		<div class="wp-block-column is-vertically-aligned-stretch hemu-hero__photo is-layout-flow wp-block-column-is-layout-flow">
 			
-			<figure class="wp-block-image size-large hemu-arch"><img src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/hero-camellia-1024x682.webp" alt="淡粉色的山茶花" width="1024" height="1280" fetchpriority="high"/></figure>
+			<figure class="wp-block-image size-full"><img src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/hero-camellia.webp" alt="淡粉色的山茶花" width="2000" height="1333" fetchpriority="high"/></figure>
 			
 		</div>
 		
@@ -382,26 +390,42 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 
 
 	
-<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-94fcd6a8 wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--60);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--50)">
+<div class="hemu-marquee" aria-hidden="true"><div class="hemu-marquee__track"><span data-text="Gentle botanicals from Taiwan　—　HEMU Botanics　—　Camellia, Mugwort, Djulis　—　"></span><span data-text="Gentle botanicals from Taiwan　—　HEMU Botanics　—　Camellia, Mugwort, Djulis　—　"></span></div></div>
+
+
 	
-	<div class="wp-block-columns alignwide are-vertically-aligned-center is-layout-flex wp-container-core-columns-is-layout-a09ab98b wp-block-columns-is-layout-flex">
+<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-63b118f5 wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--70);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--50)">
+	
+	<div class="wp-block-columns alignwide is-layout-flex wp-container-core-columns-is-layout-a946f869 wp-block-columns-is-layout-flex">
 		
-		<div class="wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:42%">
+		<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:28%">
+			<p class="hemu-label hemu-label--line wp-block-paragraph">01 — Concept</p>
+		</div>
+		
+		
+		<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
+			<p class="hemu-en-display wp-block-paragraph">Less,<br>but enough.</p>
+			<h2 class="wp-block-heading has-large-font-size" style="margin-top:var(--wp--preset--spacing--40)">少一點，剛剛好。</h2>
+		</div>
+		
+	</div>
+	
+	
+	<div class="wp-block-columns alignwide is-layout-flex wp-container-core-columns-is-layout-6c917595 wp-block-columns-is-layout-flex" style="margin-top:var(--wp--preset--spacing--60)">
+		
+		<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:28%"></div>
+		
+		
+		<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
 			
-			<figure class="wp-block-image size-large hemu-zoom"><img src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/concept-water-1024x682.webp" alt="雙手捧著清澈的水" style="aspect-ratio:3/4;object-fit:cover" loading="lazy"/></figure>
+			<p class="has-accent-4-color has-text-color has-small-font-size wp-block-paragraph">換季泛紅、擦什麼都刺痛，我們也經歷過。所以只做真正需要的幾樣東西：溫和潔顏、補水、修護、鎖水。成分寫得清清楚楚，讓肌膚回到安穩的狀態。</p>
 			
 		</div>
 		
 		
-		<div class="wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow">
+		<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
 			
-			<p class="hemu-label wp-block-paragraph">01 — Concept</p>
-			
-			
-			<h2 class="wp-block-heading">少一點，<br>剛剛好。</h2>
-			
-			
-			<p class="has-accent-4-color has-text-color has-small-font-size wp-block-paragraph" style="margin-top:var(--wp--preset--spacing--40)">換季泛紅、擦什麼都刺痛，<br>我們也經歷過。<br>所以只做真正需要的幾樣東西：<br>溫和潔顏、補水、修護、鎖水。<br>讓肌膚回到安穩的狀態。</p>
+			<p class="has-accent-4-color has-text-color has-en-font-family wp-block-paragraph" style="font-size:clamp(0.875rem, 0.875rem + ((1vw - 0.2rem) * 0.115), 0.938rem);line-height:1.8" lang="en">We make only what sensitive skin truly needs — a gentle cleanse, water, repair and a soft seal — with botanicals grown by farmers we know in Taiwan.</p>
 			
 			
 			<p class="hemu-more wp-block-paragraph" style="margin-top:var(--wp--preset--spacing--40)"><a href="https://cooper35211-max.github.io/hemu-shop/about/">品牌故事</a></p>
@@ -413,21 +437,28 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 </div>
 
 
+
+<figure class="wp-block-image alignfull size-full hemu-band-photo"><img src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/concept-water.webp" alt="雙手捧著清澈的水" loading="lazy"/></figure>
+
+
 	
-<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-265548dc wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--50);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--50)">
+<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-63b118f5 wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--70);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--50)">
 	
-	<div class="wp-block-group alignwide is-content-justification-space-between is-layout-flex wp-container-core-group-is-layout-ee782d2f wp-block-group-is-layout-flex" style="margin-bottom:var(--wp--preset--spacing--50)">
+	<div class="wp-block-group alignwide is-content-justification-space-between is-layout-flex wp-container-core-group-is-layout-1e1233a3 wp-block-group-is-layout-flex">
 		
 		<div class="wp-block-group is-layout-flow wp-block-group-is-layout-flow">
-			<p class="hemu-label wp-block-paragraph">02 — Products</p>
-			<h2 class="wp-block-heading">熱銷推薦</h2>
+			<p class="hemu-label hemu-label--line wp-block-paragraph">02 — 熱銷推薦</p>
+			<h2 class="wp-block-heading hemu-en-display">Products</h2>
 		</div>
 		
 		<p class="hemu-more wp-block-paragraph"><a href="https://cooper35211-max.github.io/hemu-shop/shop/">所有商品</a></p>
 	</div>
 	
-	
-	<div data-wp-context="{&quot;notices&quot;:[],&quot;hideNextPreviousButtons&quot;:false,&quot;isDisabledPrevious&quot;:true,&quot;isDisabledNext&quot;:false,&quot;ariaLabelPrevious&quot;:&quot;\u5148\u524d\u7684\u5546\u54c1&quot;,&quot;ariaLabelNext&quot;:&quot;\u63a5\u4e0b\u4f86\u7684\u5546\u54c1&quot;,&quot;collection&quot;:&quot;woocommerce\/product-collection\/featured&quot;}" data-wp-init="callbacks.onRender" data-wp-interactive="woocommerce/product-collection" data-wp-router-region="wc-product-collection-11" data-block-name="woocommerce/product-collection" data-collection="woocommerce/product-collection/featured" data-display-layout="{&quot;type&quot;:&quot;flex&quot;,&quot;columns&quot;:4,&quot;shrinkColumns&quot;:true}" data-query-id="11" data-query="{&quot;perPage&quot;:4,&quot;pages&quot;:1,&quot;offset&quot;:0,&quot;postType&quot;:&quot;product&quot;,&quot;order&quot;:&quot;asc&quot;,&quot;orderBy&quot;:&quot;menu_order&quot;,&quot;search&quot;:&quot;&quot;,&quot;exclude&quot;:[],&quot;inherit&quot;:false,&quot;taxQuery&quot;:[],&quot;isProductCollectionBlock&quot;:true,&quot;featured&quot;:true,&quot;woocommerceOnSale&quot;:false,&quot;woocommerceStockStatus&quot;:[&quot;instock&quot;,&quot;outofstock&quot;,&quot;onbackorder&quot;],&quot;woocommerceAttributes&quot;:[],&quot;woocommerceHandPickedProducts&quot;:[]}" data-tag-name="div" class="wp-block-woocommerce-product-collection alignwide is-layout-flow wp-block-woocommerce-product-collection-is-layout-flow">		<div data-wp-interactive="woocommerce/store-notices" class="wc-block-components-notices alignwide">
+</div>
+
+
+
+<div data-wp-context="{&quot;notices&quot;:[],&quot;hideNextPreviousButtons&quot;:false,&quot;isDisabledPrevious&quot;:true,&quot;isDisabledNext&quot;:false,&quot;ariaLabelPrevious&quot;:&quot;\u5148\u524d\u7684\u5546\u54c1&quot;,&quot;ariaLabelNext&quot;:&quot;\u63a5\u4e0b\u4f86\u7684\u5546\u54c1&quot;,&quot;collection&quot;:&quot;woocommerce\/product-collection\/featured&quot;}" data-wp-init="callbacks.onRender" data-wp-interactive="woocommerce/product-collection" data-wp-router-region="wc-product-collection-11" data-block-name="woocommerce/product-collection" data-collection="woocommerce/product-collection/featured" data-display-layout="{&quot;type&quot;:&quot;flex&quot;,&quot;columns&quot;:4,&quot;shrinkColumns&quot;:true}" data-query-id="11" data-query="{&quot;perPage&quot;:4,&quot;pages&quot;:1,&quot;offset&quot;:0,&quot;postType&quot;:&quot;product&quot;,&quot;order&quot;:&quot;asc&quot;,&quot;orderBy&quot;:&quot;menu_order&quot;,&quot;search&quot;:&quot;&quot;,&quot;exclude&quot;:[],&quot;inherit&quot;:false,&quot;taxQuery&quot;:[],&quot;isProductCollectionBlock&quot;:true,&quot;featured&quot;:true,&quot;woocommerceOnSale&quot;:false,&quot;woocommerceStockStatus&quot;:[&quot;instock&quot;,&quot;outofstock&quot;,&quot;onbackorder&quot;],&quot;woocommerceAttributes&quot;:[],&quot;woocommerceHandPickedProducts&quot;:[]}" data-tag-name="div" class="wp-block-woocommerce-product-collection alignfull hemu-grid-full is-layout-flow wp-block-woocommerce-product-collection-is-layout-flow">		<div data-wp-interactive="woocommerce/store-notices" class="wc-block-components-notices alignwide">
 			<template data-wp-each--notice="state.notices" data-wp-each-key="context.notice.id">
 				<div
 					class="wc-block-components-notice-banner"
@@ -456,7 +487,7 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 			</template>
 		</div>
 		
-		<ul data-block-name="woocommerce/product-template" class="wc-block-product-template__responsive columns-4 wc-block-product-template wp-block-woocommerce-product-template is-layout-flow wp-block-woocommerce-product-template-is-layout-flow" data-wp-on--scroll="actions.watchScroll" data-wp-init="callbacks.initResizeObserver"><li class="wc-block-product post-13 product type-product status-publish has-post-thumbnail product_cat-cleanser first instock featured shipping-taxable purchasable product-type-simple"
+	<ul data-block-name="woocommerce/product-template" class="wc-block-product-template__responsive columns-4 wc-block-product-template wp-block-woocommerce-product-template is-layout-flow wp-block-woocommerce-product-template-is-layout-flow" data-wp-on--scroll="actions.watchScroll" data-wp-init="callbacks.initResizeObserver"><li class="wc-block-product post-13 product type-product status-publish has-post-thumbnail product_cat-cleanser first instock featured shipping-taxable purchasable product-type-simple"
 					
 				data-wp-interactive="woocommerce/product-collection"
 				data-wp-context='woocommerce/products::{"productId":13,"variationId":null}'
@@ -464,14 +495,14 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 			
 				>
 					
-		<div data-block-name="woocommerce/product-image" data-is-descendent-of-query-loop="true" data-show-sale-badge="false" class="wc-block-components-product-image wc-block-grid__product-image wc-block-components-product-image--aspect-ratio-auto wp-block-woocommerce-product-image"><a href="https://cooper35211-max.github.io/hemu-shop/product/camellia-cleansing-mousse/" data-wp-on--click="woocommerce/product-collection::actions.viewProduct"><img width="1024" height="1024" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-1024x1024.webp" class="attachment-large size-large" alt="山茶花胺基酸潔顏慕斯，禾沐植萃商品照" data-testid="product-image" data-image-id="147" style="object-fit:cover;" loading="lazy" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-1024x1024.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-300x300.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-150x150.webp 150w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-768x768.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-600x600.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-100x100.webp 100w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse.webp 1200w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><div class="wc-block-components-product-image__inner-container">
-		
-		</div></a></div>
-		<h3 style="margin-top:1rem;margin-bottom:0.25rem" class="wp-block-post-title has-small-font-size"><a data-wp-on--click="woocommerce/product-collection::actions.viewProduct" href="https://cooper35211-max.github.io/hemu-shop/product/camellia-cleansing-mousse/" target="_self" >山茶花胺基酸潔顏慕斯</a></h3>
-		<div data-block-name="woocommerce/product-price" data-is-descendent-of-query-loop="true" class="wp-block-woocommerce-product-price" ><div class="wc-block-components-product-price wc-block-grid__product-price " style="" >
+	<div data-block-name="woocommerce/product-image" data-is-descendent-of-query-loop="true" data-show-sale-badge="false" class="wc-block-components-product-image wc-block-grid__product-image wc-block-components-product-image--aspect-ratio-auto wp-block-woocommerce-product-image"><a href="https://cooper35211-max.github.io/hemu-shop/product/camellia-cleansing-mousse/" data-wp-on--click="woocommerce/product-collection::actions.viewProduct"><img width="1024" height="1024" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-1024x1024.webp" class="attachment-large size-large" alt="山茶花胺基酸潔顏慕斯，禾沐植萃商品照" data-testid="product-image" data-image-id="147" style="object-fit:cover;" loading="lazy" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-1024x1024.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-300x300.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-150x150.webp 150w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-768x768.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-600x600.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse-100x100.webp 100w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-cleansing-mousse.webp 1200w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><div class="wc-block-components-product-image__inner-container">
+	
+	</div></a></div>
+	<h3 style="margin-top:1.25rem;margin-bottom:0.25rem" class="wp-block-post-title has-small-font-size"><a data-wp-on--click="woocommerce/product-collection::actions.viewProduct" href="https://cooper35211-max.github.io/hemu-shop/product/camellia-cleansing-mousse/" target="_self" >山茶花胺基酸潔顏慕斯</a></h3>
+	<div data-block-name="woocommerce/product-price" data-is-descendent-of-query-loop="true" class="wp-block-woocommerce-product-price" ><div class="wc-block-components-product-price wc-block-grid__product-price " style="" >
 					<span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#78;&#84;&#36;</span>580</bdi></span>
 				</div></div>
-		
+	
 				</li><li class="wc-block-product post-17 product type-product status-publish has-post-thumbnail product_cat-toner  instock featured shipping-taxable purchasable product-type-simple"
 					
 				data-wp-interactive="woocommerce/product-collection"
@@ -480,14 +511,14 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 			
 				>
 					
-		<div data-block-name="woocommerce/product-image" data-is-descendent-of-query-loop="true" data-show-sale-badge="false" class="wc-block-components-product-image wc-block-grid__product-image wc-block-components-product-image--aspect-ratio-auto wp-block-woocommerce-product-image"><a href="https://cooper35211-max.github.io/hemu-shop/product/mugwort-soothing-toner/" data-wp-on--click="woocommerce/product-collection::actions.viewProduct"><img width="1024" height="1024" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-1024x1024.webp" class="attachment-large size-large" alt="艾草舒緩化妝水，禾沐植萃商品照" data-testid="product-image" data-image-id="149" style="object-fit:cover;" loading="lazy" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-1024x1024.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-300x300.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-150x150.webp 150w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-768x768.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-600x600.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-100x100.webp 100w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner.webp 1200w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><div class="wc-block-components-product-image__inner-container">
-		
-		</div></a></div>
-		<h3 style="margin-top:1rem;margin-bottom:0.25rem" class="wp-block-post-title has-small-font-size"><a data-wp-on--click="woocommerce/product-collection::actions.viewProduct" href="https://cooper35211-max.github.io/hemu-shop/product/mugwort-soothing-toner/" target="_self" >艾草舒緩化妝水</a></h3>
-		<div data-block-name="woocommerce/product-price" data-is-descendent-of-query-loop="true" class="wp-block-woocommerce-product-price" ><div class="wc-block-components-product-price wc-block-grid__product-price " style="" >
+	<div data-block-name="woocommerce/product-image" data-is-descendent-of-query-loop="true" data-show-sale-badge="false" class="wc-block-components-product-image wc-block-grid__product-image wc-block-components-product-image--aspect-ratio-auto wp-block-woocommerce-product-image"><a href="https://cooper35211-max.github.io/hemu-shop/product/mugwort-soothing-toner/" data-wp-on--click="woocommerce/product-collection::actions.viewProduct"><img width="1024" height="1024" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-1024x1024.webp" class="attachment-large size-large" alt="艾草舒緩化妝水，禾沐植萃商品照" data-testid="product-image" data-image-id="149" style="object-fit:cover;" loading="lazy" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-1024x1024.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-300x300.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-150x150.webp 150w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-768x768.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-600x600.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner-100x100.webp 100w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/mugwort-soothing-toner.webp 1200w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><div class="wc-block-components-product-image__inner-container">
+	
+	</div></a></div>
+	<h3 style="margin-top:1.25rem;margin-bottom:0.25rem" class="wp-block-post-title has-small-font-size"><a data-wp-on--click="woocommerce/product-collection::actions.viewProduct" href="https://cooper35211-max.github.io/hemu-shop/product/mugwort-soothing-toner/" target="_self" >艾草舒緩化妝水</a></h3>
+	<div data-block-name="woocommerce/product-price" data-is-descendent-of-query-loop="true" class="wp-block-woocommerce-product-price" ><div class="wc-block-components-product-price wc-block-grid__product-price " style="" >
 					<span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#78;&#84;&#36;</span>720</bdi></span>
 				</div></div>
-		
+	
 				</li><li class="wc-block-product post-21 product type-product status-publish has-post-thumbnail product_cat-serum  instock featured shipping-taxable purchasable product-type-variable has-default-attributes"
 					
 				data-wp-interactive="woocommerce/product-collection"
@@ -496,14 +527,14 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 			
 				>
 					
-		<div data-block-name="woocommerce/product-image" data-is-descendent-of-query-loop="true" data-show-sale-badge="false" class="wc-block-components-product-image wc-block-grid__product-image wc-block-components-product-image--aspect-ratio-auto wp-block-woocommerce-product-image"><a href="https://cooper35211-max.github.io/hemu-shop/product/djulis-repair-serum/" data-wp-on--click="woocommerce/product-collection::actions.viewProduct"><img width="1024" height="1024" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-1024x1024.webp" class="attachment-large size-large" alt="紅藜修護精華，禾沐植萃商品照" data-testid="product-image" data-image-id="151" style="object-fit:cover;" loading="lazy" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-1024x1024.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-300x300.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-150x150.webp 150w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-768x768.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-600x600.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-100x100.webp 100w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum.webp 1200w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><div class="wc-block-components-product-image__inner-container">
-		
-		</div></a></div>
-		<h3 style="margin-top:1rem;margin-bottom:0.25rem" class="wp-block-post-title has-small-font-size"><a data-wp-on--click="woocommerce/product-collection::actions.viewProduct" href="https://cooper35211-max.github.io/hemu-shop/product/djulis-repair-serum/" target="_self" >紅藜修護精華</a></h3>
-		<div data-block-name="woocommerce/product-price" data-is-descendent-of-query-loop="true" class="wp-block-woocommerce-product-price" ><div class="wc-block-components-product-price wc-block-grid__product-price " style="" >
+	<div data-block-name="woocommerce/product-image" data-is-descendent-of-query-loop="true" data-show-sale-badge="false" class="wc-block-components-product-image wc-block-grid__product-image wc-block-components-product-image--aspect-ratio-auto wp-block-woocommerce-product-image"><a href="https://cooper35211-max.github.io/hemu-shop/product/djulis-repair-serum/" data-wp-on--click="woocommerce/product-collection::actions.viewProduct"><img width="1024" height="1024" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-1024x1024.webp" class="attachment-large size-large" alt="紅藜修護精華，禾沐植萃商品照" data-testid="product-image" data-image-id="151" style="object-fit:cover;" loading="lazy" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-1024x1024.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-300x300.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-150x150.webp 150w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-768x768.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-600x600.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum-100x100.webp 100w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/djulis-repair-serum.webp 1200w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><div class="wc-block-components-product-image__inner-container">
+	
+	</div></a></div>
+	<h3 style="margin-top:1.25rem;margin-bottom:0.25rem" class="wp-block-post-title has-small-font-size"><a data-wp-on--click="woocommerce/product-collection::actions.viewProduct" href="https://cooper35211-max.github.io/hemu-shop/product/djulis-repair-serum/" target="_self" >紅藜修護精華</a></h3>
+	<div data-block-name="woocommerce/product-price" data-is-descendent-of-query-loop="true" class="wp-block-woocommerce-product-price" ><div class="wc-block-components-product-price wc-block-grid__product-price " style="" >
 					<span class="woocommerce-Price-amount amount" aria-hidden="true"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#78;&#84;&#36;</span>1,280</bdi></span> <span aria-hidden="true">–</span> <span class="woocommerce-Price-amount amount" aria-hidden="true"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#78;&#84;&#36;</span>1,680</bdi></span><span class="screen-reader-text">價格範圍：&#78;&#84;&#36;1,280 到 &#78;&#84;&#36;1,680</span>
 				</div></div>
-		
+	
 				</li><li class="wc-block-product post-27 product type-product status-publish has-post-thumbnail product_cat-cream last instock featured shipping-taxable purchasable product-type-simple"
 					
 				data-wp-interactive="woocommerce/product-collection"
@@ -512,26 +543,24 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 			
 				>
 					
-		<div data-block-name="woocommerce/product-image" data-is-descendent-of-query-loop="true" data-show-sale-badge="false" class="wc-block-components-product-image wc-block-grid__product-image wc-block-components-product-image--aspect-ratio-auto wp-block-woocommerce-product-image"><a href="https://cooper35211-max.github.io/hemu-shop/product/camellia-moisture-cream/" data-wp-on--click="woocommerce/product-collection::actions.viewProduct"><img width="1024" height="1024" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-1024x1024.webp" class="attachment-large size-large" alt="山茶花保濕乳霜，禾沐植萃商品照" data-testid="product-image" data-image-id="153" style="object-fit:cover;" loading="lazy" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-1024x1024.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-300x300.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-150x150.webp 150w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-768x768.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-600x600.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-100x100.webp 100w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream.webp 1200w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><div class="wc-block-components-product-image__inner-container">
-		
-		</div></a></div>
-		<h3 style="margin-top:1rem;margin-bottom:0.25rem" class="wp-block-post-title has-small-font-size"><a data-wp-on--click="woocommerce/product-collection::actions.viewProduct" href="https://cooper35211-max.github.io/hemu-shop/product/camellia-moisture-cream/" target="_self" >山茶花保濕乳霜</a></h3>
-		<div data-block-name="woocommerce/product-price" data-is-descendent-of-query-loop="true" class="wp-block-woocommerce-product-price" ><div class="wc-block-components-product-price wc-block-grid__product-price " style="" >
+	<div data-block-name="woocommerce/product-image" data-is-descendent-of-query-loop="true" data-show-sale-badge="false" class="wc-block-components-product-image wc-block-grid__product-image wc-block-components-product-image--aspect-ratio-auto wp-block-woocommerce-product-image"><a href="https://cooper35211-max.github.io/hemu-shop/product/camellia-moisture-cream/" data-wp-on--click="woocommerce/product-collection::actions.viewProduct"><img width="1024" height="1024" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-1024x1024.webp" class="attachment-large size-large" alt="山茶花保濕乳霜，禾沐植萃商品照" data-testid="product-image" data-image-id="153" style="object-fit:cover;" loading="lazy" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-1024x1024.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-300x300.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-150x150.webp 150w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-768x768.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-600x600.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream-100x100.webp 100w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/camellia-moisture-cream.webp 1200w" sizes="auto, (max-width: 1024px) 100vw, 1024px" /><div class="wc-block-components-product-image__inner-container">
+	
+	</div></a></div>
+	<h3 style="margin-top:1.25rem;margin-bottom:0.25rem" class="wp-block-post-title has-small-font-size"><a data-wp-on--click="woocommerce/product-collection::actions.viewProduct" href="https://cooper35211-max.github.io/hemu-shop/product/camellia-moisture-cream/" target="_self" >山茶花保濕乳霜</a></h3>
+	<div data-block-name="woocommerce/product-price" data-is-descendent-of-query-loop="true" class="wp-block-woocommerce-product-price" ><div class="wc-block-components-product-price wc-block-grid__product-price " style="" >
 					<span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#78;&#84;&#36;</span>1,080</bdi></span>
 				</div></div>
-		
-				</li></ul>
-	</div>
 	
+				</li></ul>
 </div>
 
 
 	
-<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-94fcd6a8 wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--60);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--50)">
+<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-63b118f5 wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--70);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--50)">
 	
 	<div class="wp-block-group alignwide is-layout-flow wp-block-group-is-layout-flow" style="margin-bottom:var(--wp--preset--spacing--60)">
-		<p class="hemu-label wp-block-paragraph">03 — Ingredients</p>
-		<h2 class="wp-block-heading">來自台灣土地的成分</h2>
+		<p class="hemu-label hemu-label--line wp-block-paragraph">03 — 來自台灣土地的成分</p>
+		<h2 class="wp-block-heading hemu-en-display">Ingredients</h2>
 	</div>
 	
 	
@@ -541,7 +570,7 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 			
 			<div class="wp-block-columns are-vertically-aligned-top is-layout-flex wp-container-core-columns-is-layout-c2504817 wp-block-columns-is-layout-flex">
 				
-				<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:58%">
+				<div class="wp-block-column hemu-band is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:58%">
 					
 					<figure class="wp-block-image size-large hemu-zoom"><img src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/ingredient-camellia-1024x683.webp" alt="山茶花" style="aspect-ratio:3/2;object-fit:cover" loading="lazy"/></figure>
 					
@@ -550,10 +579,10 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 				
 				<div class="wp-block-column hemu-offset is-layout-flow wp-block-column-is-layout-flow">
 					
-					<p class="hemu-label has-accent-4-color has-text-color wp-block-paragraph">Camellia　/　花蓮・壽豐</p>
+					<p class="hemu-en-display hemu-en-display--s wp-block-paragraph" lang="en">Camellia</p>
 					
 					
-					<h3 class="wp-block-heading has-x-large-font-size">山茶花</h3>
+					<h3 class="wp-block-heading has-medium-font-size" style="margin-top:var(--wp--preset--spacing--30)">山茶花　花蓮・壽豐</h3>
 					
 					
 					<p class="has-accent-4-color has-text-color has-small-font-size wp-block-paragraph">冷壓山茶花籽油，親膚好吸收，是潔顏與乳霜的保濕基底。</p>
@@ -572,7 +601,7 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 			
 			<div class="wp-block-columns are-vertically-aligned-top is-layout-flex wp-container-core-columns-is-layout-c2504817 wp-block-columns-is-layout-flex">
 				
-				<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:58%">
+				<div class="wp-block-column hemu-band is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:58%">
 					
 					<figure class="wp-block-image size-large hemu-zoom"><img src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/ingredient-mugwort-1024x807.webp" alt="艾草" style="aspect-ratio:3/2;object-fit:cover" loading="lazy"/></figure>
 					
@@ -581,10 +610,10 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 				
 				<div class="wp-block-column hemu-offset is-layout-flow wp-block-column-is-layout-flow">
 					
-					<p class="hemu-label has-accent-4-color has-text-color wp-block-paragraph">Mugwort　/　花蓮・光復</p>
+					<p class="hemu-en-display hemu-en-display--s wp-block-paragraph" lang="en">Mugwort</p>
 					
 					
-					<h3 class="wp-block-heading has-x-large-font-size">艾草</h3>
+					<h3 class="wp-block-heading has-medium-font-size" style="margin-top:var(--wp--preset--spacing--30)">艾草　花蓮・光復</h3>
 					
 					
 					<p class="has-accent-4-color has-text-color has-small-font-size wp-block-paragraph">契作無農藥艾草，低溫萃取保留舒緩成分，安撫換季泛紅。</p>
@@ -603,7 +632,7 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 			
 			<div class="wp-block-columns are-vertically-aligned-top is-layout-flex wp-container-core-columns-is-layout-c2504817 wp-block-columns-is-layout-flex">
 				
-				<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:58%">
+				<div class="wp-block-column hemu-band is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:58%">
 					
 					<figure class="wp-block-image size-large hemu-zoom"><img src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/ingredient-djulis-1024x684.webp" alt="紅藜" style="aspect-ratio:3/2;object-fit:cover" loading="lazy"/></figure>
 					
@@ -612,10 +641,10 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 				
 				<div class="wp-block-column hemu-offset is-layout-flow wp-block-column-is-layout-flow">
 					
-					<p class="hemu-label has-accent-4-color has-text-color wp-block-paragraph">Djulis　/　台東・太麻里</p>
+					<p class="hemu-en-display hemu-en-display--s wp-block-paragraph" lang="en">Djulis</p>
 					
 					
-					<h3 class="wp-block-heading has-x-large-font-size">紅藜</h3>
+					<h3 class="wp-block-heading has-medium-font-size" style="margin-top:var(--wp--preset--spacing--30)">紅藜　台東・太麻里</h3>
 					
 					
 					<p class="has-accent-4-color has-text-color has-small-font-size wp-block-paragraph">原住民傳統作物「台灣紅藜」，富含抗氧化成分，用在修護精華。</p>
@@ -640,8 +669,8 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 	<div class="wp-block-columns alignwide is-layout-flex wp-container-core-columns-is-layout-6edee228 wp-block-columns-is-layout-flex">
 		
 		<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
-			<p class="hemu-label wp-block-paragraph">04 — Category</p>
-			<h2 class="wp-block-heading" style="margin-bottom:var(--wp--preset--spacing--40)">依系列選購</h2>
+			<p class="hemu-label hemu-label--line wp-block-paragraph">04 — 依系列選購</p>
+			<h2 class="wp-block-heading hemu-en-display hemu-en-display--s" style="margin-bottom:var(--wp--preset--spacing--40)">Category</h2>
 			
 			<nav class="hemu-index" aria-label="商品系列">
 								<a href="https://cooper35211-max.github.io/hemu-shop/product-category/face/cleanser/"><span>潔顏</span><span class="en">Cleanser　→</span></a>
@@ -656,8 +685,8 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 		
 		
 		<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow">
-			<p class="hemu-label wp-block-paragraph">05 — Skin Type</p>
-			<h2 class="wp-block-heading" style="margin-bottom:var(--wp--preset--spacing--40)">依膚質挑選</h2>
+			<p class="hemu-label hemu-label--line wp-block-paragraph">05 — 依膚質挑選</p>
+			<h2 class="wp-block-heading hemu-en-display hemu-en-display--s" style="margin-bottom:var(--wp--preset--spacing--40)">Skin Type</h2>
 			
 			<nav class="hemu-index" aria-label="依膚質挑選">
 								<a href="https://cooper35211-max.github.io/hemu-shop/shop/filter_skin-sensitive/"><span>敏感肌</span><span class="en">換季泛紅、容易刺痛　→</span></a>
@@ -677,8 +706,8 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 <div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-94fcd6a8 wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--60);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--50)">
 	
 	<div class="wp-block-group alignwide is-layout-flow wp-block-group-is-layout-flow" style="margin-bottom:var(--wp--preset--spacing--50)">
-		<p class="hemu-label wp-block-paragraph">06 — Voice</p>
-		<h2 class="wp-block-heading">用過的人怎麼說</h2>
+		<p class="hemu-label hemu-label--line wp-block-paragraph">06 — 用過的人怎麼說</p>
+		<h2 class="wp-block-heading hemu-en-display">Voice</h2>
 	</div>
 	
 	
@@ -719,34 +748,59 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 
 
 	
-<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-94fcd6a8 wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--60);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--50)">
+<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-f1382024 wp-block-group-is-layout-constrained" style="padding-top:var(--wp--preset--spacing--70);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--70);padding-left:var(--wp--preset--spacing--50)">
 	
 	<div class="wp-block-group alignwide is-content-justification-space-between is-layout-flex wp-container-core-group-is-layout-ee782d2f wp-block-group-is-layout-flex" style="margin-bottom:var(--wp--preset--spacing--50)">
 		
 		<div class="wp-block-group is-layout-flow wp-block-group-is-layout-flow">
-			<p class="hemu-label wp-block-paragraph">07 — Journal</p>
-			<h2 class="wp-block-heading">保養指南</h2>
+			<p class="hemu-label hemu-label--line wp-block-paragraph">07 — 保養指南</p>
+			<h2 class="wp-block-heading hemu-en-display">Journal</h2>
 		</div>
 		
-		
 		<p class="hemu-more wp-block-paragraph"><a href="https://cooper35211-max.github.io/hemu-shop/journal/">所有文章</a></p>
-		
 	</div>
 	
 	
-	<div class="wp-block-query alignwide is-layout-flow wp-block-query-is-layout-flow">
-		<ul class="columns-3 has-native-responsive-grid wp-block-post-template is-layout-grid wp-container-core-post-template-is-layout-20f96455 wp-block-post-template-is-layout-grid"><li class="wp-block-post post-52 post type-post status-publish format-standard has-post-thumbnail hentry category-guide">
-		<figure class="wp-block-post-featured-image"><a href="https://cooper35211-max.github.io/hemu-shop/winter-dry-skin/" target="_self" ><img width="768" height="512" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-768x512.webp" class="attachment-medium_large size-medium_large wp-post-image" alt="冬天臉乾到脫皮？換季保濕的 4 個重點" style="aspect-ratio:4/3;width:100%;object-fit:cover;" decoding="async" fetchpriority="high" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-768x512.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-300x200.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-1024x683.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-1536x1024.webp 1536w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-600x400.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter.webp 1600w" sizes="(max-width: 768px) 100vw, 768px" /></a></figure>
-		<div style="margin-top:var(--wp--preset--spacing--30)" class="wp-block-post-date has-text-color has-accent-4-color has-small-font-size"><time datetime="2026-10-09T10:00:00+08:00">2026-10-09</time></div>
-		<h3 style="margin-top:0.25rem" class="wp-block-post-title has-medium-font-size"><a href="https://cooper35211-max.github.io/hemu-shop/winter-dry-skin/" target="_self" >冬天臉乾到脫皮？換季保濕的 4 個重點</a></h3>
+	<div class="wp-block-query alignwide hemu-news is-layout-flow wp-block-query-is-layout-flow">
+		<ul class="wp-block-post-template is-layout-flow wp-block-post-template-is-layout-flow"><li class="wp-block-post post-52 post type-post status-publish format-standard has-post-thumbnail hentry category-guide">
+		
+		<div class="wp-block-group hemu-news__row is-layout-flow wp-block-group-is-layout-flow">
+			<div class="hemu-news__date wp-block-post-date"><time datetime="2026-10-09T10:00:00+08:00">2026-10-09</time></div>
+			
+			<div class="wp-block-group hemu-news__body is-layout-flow wp-block-group-is-layout-flow">
+				<h3 class="wp-block-post-title has-medium-font-size"><a href="https://cooper35211-max.github.io/hemu-shop/winter-dry-skin/" target="_self" >冬天臉乾到脫皮？換季保濕的 4 個重點</a></h3>
+				<div class="wp-block-post-excerpt has-text-color has-accent-4-color has-x-small-font-size"><p class="wp-block-post-excerpt__excerpt">台灣冬天濕冷、室內又開暖氣，臉很容易乾到脫皮。從洗臉水溫到夜間保養，4 &#8230; </p></div>
+			</div>
+			
+			<figure class="hemu-news__thumb wp-block-post-featured-image"><a href="https://cooper35211-max.github.io/hemu-shop/winter-dry-skin/" target="_self" ><img width="300" height="200" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-300x200.webp" class="attachment-medium size-medium wp-post-image" alt="冬天臉乾到脫皮？換季保濕的 4 個重點" style="aspect-ratio:4/3;width:100%;object-fit:cover;" decoding="async" fetchpriority="high" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-300x200.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-1024x683.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-768x512.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-1536x1024.webp 1536w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter-600x400.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-winter.webp 1600w" sizes="(max-width: 300px) 100vw, 300px" /></a></figure>
+		</div>
+		
 		</li><li class="wp-block-post post-51 post type-post status-publish format-standard has-post-thumbnail hentry category-guide">
-		<figure class="wp-block-post-featured-image"><a href="https://cooper35211-max.github.io/hemu-shop/skincare-order/" target="_self" ><img width="768" height="512" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-768x512.webp" class="attachment-medium_large size-medium_large wp-post-image" alt="保養順序怎麼排？早晚各 3 步就夠" style="aspect-ratio:4/3;width:100%;object-fit:cover;" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-768x512.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-300x200.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-1024x683.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-1536x1024.webp 1536w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-600x400.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order.webp 1600w" sizes="(max-width: 768px) 100vw, 768px" /></a></figure>
-		<div style="margin-top:var(--wp--preset--spacing--30)" class="wp-block-post-date has-text-color has-accent-4-color has-small-font-size"><time datetime="2026-10-07T10:00:00+08:00">2026-10-07</time></div>
-		<h3 style="margin-top:0.25rem" class="wp-block-post-title has-medium-font-size"><a href="https://cooper35211-max.github.io/hemu-shop/skincare-order/" target="_self" >保養順序怎麼排？早晚各 3 步就夠</a></h3>
+		
+		<div class="wp-block-group hemu-news__row is-layout-flow wp-block-group-is-layout-flow">
+			<div class="hemu-news__date wp-block-post-date"><time datetime="2026-10-07T10:00:00+08:00">2026-10-07</time></div>
+			
+			<div class="wp-block-group hemu-news__body is-layout-flow wp-block-group-is-layout-flow">
+				<h3 class="wp-block-post-title has-medium-font-size"><a href="https://cooper35211-max.github.io/hemu-shop/skincare-order/" target="_self" >保養順序怎麼排？早晚各 3 步就夠</a></h3>
+				<div class="wp-block-post-excerpt has-text-color has-accent-4-color has-x-small-font-size"><p class="wp-block-post-excerpt__excerpt">潔顏、化妝水、精華、乳霜的正確順序，以及早上和晚上的保養有什麼不同。 </p></div>
+			</div>
+			
+			<figure class="hemu-news__thumb wp-block-post-featured-image"><a href="https://cooper35211-max.github.io/hemu-shop/skincare-order/" target="_self" ><img width="300" height="200" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-300x200.webp" class="attachment-medium size-medium wp-post-image" alt="保養順序怎麼排？早晚各 3 步就夠" style="aspect-ratio:4/3;width:100%;object-fit:cover;" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-300x200.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-1024x683.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-768x512.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-1536x1024.webp 1536w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order-600x400.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-skincare-order.webp 1600w" sizes="(max-width: 300px) 100vw, 300px" /></a></figure>
+		</div>
+		
 		</li><li class="wp-block-post post-50 post type-post status-publish format-standard has-post-thumbnail hentry category-guide">
-		<figure class="wp-block-post-featured-image"><a href="https://cooper35211-max.github.io/hemu-shop/sensitive-skin-check/" target="_self" ><img width="768" height="512" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-768x512.webp" class="attachment-medium_large size-medium_large wp-post-image" alt="我是敏感肌嗎？3 個徵兆幫你判斷" style="aspect-ratio:4/3;width:100%;object-fit:cover;" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-768x512.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-300x200.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-1024x683.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-1536x1024.webp 1536w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-600x400.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin.webp 1600w" sizes="(max-width: 768px) 100vw, 768px" /></a></figure>
-		<div style="margin-top:var(--wp--preset--spacing--30)" class="wp-block-post-date has-text-color has-accent-4-color has-small-font-size"><time datetime="2026-10-05T10:00:00+08:00">2026-10-05</time></div>
-		<h3 style="margin-top:0.25rem" class="wp-block-post-title has-medium-font-size"><a href="https://cooper35211-max.github.io/hemu-shop/sensitive-skin-check/" target="_self" >我是敏感肌嗎？3 個徵兆幫你判斷</a></h3>
+		
+		<div class="wp-block-group hemu-news__row is-layout-flow wp-block-group-is-layout-flow">
+			<div class="hemu-news__date wp-block-post-date"><time datetime="2026-10-05T10:00:00+08:00">2026-10-05</time></div>
+			
+			<div class="wp-block-group hemu-news__body is-layout-flow wp-block-group-is-layout-flow">
+				<h3 class="wp-block-post-title has-medium-font-size"><a href="https://cooper35211-max.github.io/hemu-shop/sensitive-skin-check/" target="_self" >我是敏感肌嗎？3 個徵兆幫你判斷</a></h3>
+				<div class="wp-block-post-excerpt has-text-color has-accent-4-color has-x-small-font-size"><p class="wp-block-post-excerpt__excerpt">換季就泛紅、擦保養品會刺痛？整理敏感肌最常見的 3 個徵兆，以及挑保養品&#8230; </p></div>
+			</div>
+			
+			<figure class="hemu-news__thumb wp-block-post-featured-image"><a href="https://cooper35211-max.github.io/hemu-shop/sensitive-skin-check/" target="_self" ><img width="300" height="200" src="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-300x200.webp" class="attachment-medium size-medium wp-post-image" alt="我是敏感肌嗎？3 個徵兆幫你判斷" style="aspect-ratio:4/3;width:100%;object-fit:cover;" decoding="async" srcset="https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-300x200.webp 300w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-1024x683.webp 1024w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-768x512.webp 768w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-1536x1024.webp 1536w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin-600x400.webp 600w, https://cooper35211-max.github.io/hemu-shop/wp-content/uploads/2026/11/journal-sensitive-skin.webp 1600w" sizes="(max-width: 300px) 100vw, 300px" /></a></figure>
+		</div>
+		
 		</li></ul>
 	</div>
 	
@@ -759,7 +813,10 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 <footer class="wp-block-template-part">
 <div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-dbd4ee9b wp-block-group-is-layout-constrained" style="border-top-color:var(--wp--preset--color--accent-6);border-top-width:1px;padding-top:var(--wp--preset--spacing--60);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--50)">
 	
-	<div class="wp-block-columns alignwide is-layout-flex wp-container-core-columns-is-layout-8ae071fe wp-block-columns-is-layout-flex">
+	<p class="hemu-wordmark alignwide wp-block-paragraph" aria-hidden="true">HEMU Botanics</p>
+	
+	
+	<div class="wp-block-columns alignwide is-layout-flex wp-container-core-columns-is-layout-7e280702 wp-block-columns-is-layout-flex">
 		
 		<div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:38%">
 			<p class="wp-block-site-title"><a href="https://cooper35211-max.github.io/hemu-shop/" target="_self" rel="home" aria-current="page">禾沐植萃 HEMU Botanics</a></p>
@@ -1110,7 +1167,8 @@ var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/
 			document.body.className = c;
 		})();
 	</script>
-	<script id="wc-dependency-detection-registry">if(typeof window.wc.wcUpdateDependencyRegistry==="function"){window.wc.wcUpdateDependencyRegistry({"https:\/\/ajax.googleapis.com\/ajax\/libs\/prototype\/1.7.1.0\/prototype.js":{"handle":"prototype","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/scriptaculous.js":{"handle":"scriptaculous-root","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/builder.js":{"handle":"scriptaculous-builder","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/dragdrop.js":{"handle":"scriptaculous-dragdrop","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/effects.js":{"handle":"scriptaculous-effects","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/slider.js":{"handle":"scriptaculous-slider","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/sound.js":{"handle":"scriptaculous-sound","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/controls.js":{"handle":"scriptaculous-controls","deps":[]},"https:\/\/cooper35211-max.github.io\/hemu-shop\/wp-content\/plugins\/ecpay-ecommerce-for-woocommerce\/public\/js\/blocks\/credit-checkout.js":{"handle":"Wooecpay_Gateway_Credit-blocks-integration","deps":["wc-blocks-registry","wc-settings","wc-types"]},"https:\/\/cooper35211-max.github.io\/hemu-shop\/wp-content\/plugins\/ecpay-ecommerce-for-woocommerce\/public\/js\/blocks\/atm-checkout.js":{"handle":"Wooecpay_Gateway_Atm-blocks-integration","deps":["wc-blocks-registry","wc-settings","wc-types"]}});}</script>
+	<script id="wc-dependency-detection-registry">if(typeof window.wc.wcUpdateDependencyRegistry==="function"){window.wc.wcUpdateDependencyRegistry({"https:\/\/ajax.googleapis.com\/ajax\/libs\/prototype\/1.7.1.0\/prototype.js":{"handle":"prototype","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/scriptaculous.js":{"handle":"scriptaculous-root","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/builder.js":{"handle":"scriptaculous-builder","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/dragdrop.js":{"handle":"scriptaculous-dragdrop","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/effects.js":{"handle":"scriptaculous-effects","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/slider.js":{"handle":"scriptaculous-slider","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/sound.js":{"handle":"scriptaculous-sound","deps":[]},"https:\/\/ajax.googleapis.com\/ajax\/libs\/scriptaculous\/1.9.0\/controls.js":{"handle":"scriptaculous-controls","deps":[]},"https:\/\/cooper35211-max.github.io\/hemu-shop\/wp-content\/themes\/hemu\/assets\/js\/hemu-motion.js":{"handle":"hemu-motion","deps":[]},"https:\/\/cooper35211-max.github.io\/hemu-shop\/wp-content\/plugins\/ecpay-ecommerce-for-woocommerce\/public\/js\/blocks\/credit-checkout.js":{"handle":"Wooecpay_Gateway_Credit-blocks-integration","deps":["wc-blocks-registry","wc-settings","wc-types"]},"https:\/\/cooper35211-max.github.io\/hemu-shop\/wp-content\/plugins\/ecpay-ecommerce-for-woocommerce\/public\/js\/blocks\/atm-checkout.js":{"handle":"Wooecpay_Gateway_Atm-blocks-integration","deps":["wc-blocks-registry","wc-settings","wc-types"]}});}</script>
+<script data-wp-strategy="defer" defer id="hemu-motion-js" src="https://cooper35211-max.github.io/hemu-shop/wp-content/themes/hemu/assets/js/hemu-motion.js?ver=1794061885"></script>
 <script id="sourcebuster-js-js" src="https://cooper35211-max.github.io/hemu-shop/wp-content/plugins/woocommerce/assets/js/sourcebuster/sourcebuster.min.js?ver=11.2.2"></script>
 <script id="wc-order-attribution-js-extra">
 var wc_order_attribution = {"params":{"lifetime":1.0e-5,"session":30,"base64":false,"ajaxurl":"https://cooper35211-max.github.io/hemu-shop/wp-admin/admin-ajax.php","prefix":"wc_order_attribution_","allowTracking":true},"fields":{"source_type":"current.typ","referrer":"current_add.rf","utm_campaign":"current.cmp","utm_source":"current.src","utm_medium":"current.mdm","utm_content":"current.cnt","utm_id":"current.id","utm_term":"current.trm","utm_source_platform":"current.plt","utm_creative_format":"current.fmt","utm_marketing_tactic":"current.tct","session_entry":"current_add.ep","session_start_time":"current_add.fd","session_pages":"session.pgs","session_count":"udata.vst","user_agent":"udata.uag"}};
