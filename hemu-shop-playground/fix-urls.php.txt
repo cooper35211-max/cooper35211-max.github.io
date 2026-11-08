@@ -24,6 +24,16 @@ foreach ( $wpdb->get_results( "SELECT meta_id, meta_value FROM {$wpdb->postmeta}
 	$wpdb->update( $wpdb->postmeta, array( 'meta_value' => maybe_serialize( $swap( maybe_unserialize( $m->meta_value ) ) ) ), array( 'meta_id' => $m->meta_id ) );
 	$n++;
 }
+
+// Playground 限定：綠界的付款頁與超商門市地圖不允許放在別人的框架裡，Playground 又是把網站放在框架中執行，
+// 所以加一個 WooCommerce 內建的「銀行轉帳」當展示用付款，訪客才能完整走完下單、在後台看到訂單。綠界選項照樣保留。
+update_option( 'woocommerce_bacs_settings', array(
+	'enabled'      => 'yes',
+	'title'        => '展示用付款（Playground 限定，不會扣款）',
+	'description'  => '這是作品集展示站。綠界付款頁無法在 Playground 中開啟，選這個可以直接完成訂單、到後台查看。',
+	'instructions' => '展示用訂單，不需要付款。',
+	'account_details' => '',
+) );
 update_option( 'permalink_structure', '/%postname%/' );
 update_option( 'woocommerce_coming_soon', 'no' );
 flush_rewrite_rules();
