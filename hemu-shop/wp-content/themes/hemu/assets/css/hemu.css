@@ -746,3 +746,26 @@ html.hemu-js.hemu-hero-in .hemu-kv__line path { stroke-dashoffset: 0; }
 .hemu-grid-line .wp-block-woocommerce-product-button, .hemu-grid-line .wc-block-components-product-button { align-items: flex-start !important; text-align: left !important; margin-top: auto; }
 .hemu-pd__gallery .wp-block-woocommerce-product-image-gallery { max-width: none !important; width: 100%; }
 .hemu-pd__cart table.variations select { height: auto; line-height: 1.6; min-height: 2.5rem; }
+
+/* 頁首選單：600–1099px 放不下一行（選單約需 522px，1024 寬時只剩約 476px，會換成 2–3 行），
+ * 改成跟手機一樣的漢堡選單。WordPress 導覽區塊內建只在 600px 以下切換，這裡把切換點延到 1100px。 */
+@media (min-width: 600px) and (max-width: 1099px) {
+	header .hemu-main-nav { order: 9; margin-right: 0; }
+	header .hemu-main-nav .wp-block-navigation__responsive-container-open:not(.always-shown) { display: flex !important; }
+	header .hemu-main-nav .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) { display: none !important; }
+	header .hemu-main-nav .wp-block-navigation__responsive-container.is-menu-open { display: flex !important; }
+	header .hemu-main-nav .wp-block-navigation__responsive-container-close:not(.always-shown) { display: flex !important; }
+	header .hemu-main-nav .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+	header .hemu-main-nav .is-menu-open .wp-block-navigation-item__content { font-size: 1.125rem; }
+}
+/* 展開的選單（手機與 600–1099px 共用）：一律靠左，子選單縮排，不要左右亂跳 */
+@media (max-width: 1099px) {
+	header .hemu-main-nav .is-menu-open .wp-block-navigation__responsive-container-content { align-items: flex-start !important; padding: 0 var(--wp--preset--spacing--50); }
+	header .hemu-main-nav .is-menu-open .wp-block-navigation__container,
+	header .hemu-main-nav .is-menu-open .wp-block-navigation-item { align-items: flex-start !important; text-align: left; }
+	header .hemu-main-nav .is-menu-open .wp-block-navigation__submenu-container { padding: 0.75rem 0 0 1.25rem !important; gap: 0.9rem; border-left: 1px solid var(--wp--preset--color--accent-6); margin-top: 0.75rem; }
+	header .hemu-main-nav .is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item__content { font-size: 1rem; color: var(--wp--preset--color--accent-4); }
+}
+/* WooCommerce 圖庫預設 inline opacity:0，等 jQuery＋輪播程式跑完才顯示，商品主圖（LCP）因此晚 1–2 秒出現。
+ * 每個商品都只有一張圖、不會有輪播跳動，直接顯示。 */
+.hemu-pd__gallery .woocommerce-product-gallery { opacity: 1 !important; }
