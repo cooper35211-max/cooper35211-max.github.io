@@ -1,0 +1,76 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"meta": {
+		"title": "禾沐植萃 HEMU Botanics 網路商店（作品集示意）",
+		"description": "WooCommerce + 綠界測試環境。品牌、商品、訂單皆為虛構。",
+		"author": "cooper35211-max"
+	},
+	"landingPage": "/",
+	"preferredVersions": {
+		"php": "8.3",
+		"wp": "latest"
+	},
+	"features": {
+		"networking": true
+	},
+	"steps": [
+		{
+			"step": "importWordPressFiles",
+			"wordPressFilesZip": {
+				"resource": "url",
+				"url": "https://cooper35211-max.github.io/hemu-shop-playground/hemu-site.zip"
+			}
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "wordpress.org/plugins",
+				"slug": "woocommerce"
+			},
+			"options": {
+				"activate": true
+			}
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "wordpress.org/plugins",
+				"slug": "ecpay-ecommerce-for-woocommerce"
+			},
+			"options": {
+				"activate": true
+			}
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "wordpress.org/plugins",
+				"slug": "wpforms-lite"
+			},
+			"options": {
+				"activate": true
+			}
+		},
+		{
+			"step": "setSiteLanguage",
+			"language": "zh_TW"
+		},
+		{
+			"step": "writeFile",
+			"path": "/wordpress/hemu-fix-urls.php",
+			"data": {
+				"resource": "url",
+				"url": "https://cooper35211-max.github.io/hemu-shop-playground/fix-urls.php.txt"
+			}
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php require '/wordpress/hemu-fix-urls.php';"
+		},
+		{
+			"step": "login",
+			"username": "hemu-admin",
+			"password": "hemu-demo-2026"
+		}
+	]
+}

@@ -1,0 +1,31 @@
+<?php
+// Playground 匯入後執行：把資料庫裡本機站的網址（http://localhost:8080）換成 Playground 的網址。
+// 序列化的設定值先反序列化再取代，避免長度不符把設定弄壞。
+require '/wordpress/wp-load.php';
+global $wpdb;
+$old = 'http://localhost:8080';
+$new = untrailingslashit( home_url() );
+$swap = function ( $v ) use ( &$swap, $old, $new ) {
+	if ( is_string( $v ) ) { return str_replace( $old, $new, $v ); }
+	if ( is_array( $v ) ) { foreach ( $v as $k => $x ) { $v[ $k ] = $swap( $x ); } return $v; }
+	if ( is_object( $v ) ) { foreach ( get_object_vars( $v ) as $k => $x ) { $v->$k = $swap( $x ); } return $v; }
+	return $v;
+};
+$n = 0;
+foreach ( $wpdb->get_results( "SELECT ID, post_content, post_excerpt, guid FROM {$wpdb->posts} WHERE post_content LIKE '%localhost:8080%' OR post_excerpt LIKE '%localhost:8080%' OR guid LIKE '%localhost:8080%'" ) as $p ) {
+	$wpdb->update( $wpdb->posts, array( 'post_content' => $swap( $p->post_content ), 'post_excerpt' => $swap( $p->post_excerpt ), 'guid' => $swap( $p->guid ) ), array( 'ID' => $p->ID ) );
+	$n++;
+}
+foreach ( $wpdb->get_results( "SELECT option_name FROM {$wpdb->options} WHERE option_value LIKE '%localhost:8080%' AND option_name NOT IN ('siteurl','home')" ) as $o ) {
+	update_option( $o->option_name, $swap( get_option( $o->option_name ) ) );
+	$n++;
+}
+foreach ( $wpdb->get_results( "SELECT meta_id, meta_value FROM {$wpdb->postmeta} WHERE meta_value LIKE '%localhost:8080%'" ) as $m ) {
+	$wpdb->update( $wpdb->postmeta, array( 'meta_value' => maybe_serialize( $swap( maybe_unserialize( $m->meta_value ) ) ) ), array( 'meta_id' => $m->meta_id ) );
+	$n++;
+}
+update_option( 'permalink_structure', '/%postname%/' );
+update_option( 'woocommerce_coming_soon', 'no' );
+flush_rewrite_rules();
+wp_cache_flush();
+echo "replaced $n rows -> $new\n";
