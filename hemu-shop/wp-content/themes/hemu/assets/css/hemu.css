@@ -590,3 +590,159 @@ html.hemu-js.hemu-hero-in .hemu-kv__line path { stroke-dashoffset: 0; }
 .hemu-section .wc-block-components-product-image img,
 .hemu-section .wp-block-woocommerce-product-image img { border-radius: 16px; }
 .hemu-band::before { border-radius: 20px; }
+
+/* ==========================================================================
+ * 商店頁、商品頁（2026-11-08 改成跟首頁同一套系統）
+ * 共用：標題元件（編號小標＋大英文字）、25% 對齊線、1px 細線分格、照片 16–24px 圓角、陶土色文字連結
+ * ========================================================================== */
+.hemu-crumbs { margin-top: var(--wp--preset--spacing--40) !important; font-size: 0.8125rem; letter-spacing: 0.1em; color: var(--wp--preset--color--accent-4); }
+.hemu-crumbs a { color: inherit; text-decoration: none; }
+.hemu-crumbs a:hover { color: var(--wp--preset--color--contrast); }
+
+/* ---- 商店頁：標題列 ---- */
+.hemu-shop-head { margin-top: var(--wp--preset--spacing--60) !important; margin-bottom: var(--wp--preset--spacing--60) !important; }
+.hemu-shop-head .hemu-label a, .hemu-pd .hemu-label a { color: inherit; text-decoration: none; }
+.hemu-shop-head__desc { grid-column: 2 / -1; margin: 1.25rem 0 0; max-width: 34em; font-size: 0.9375rem; line-height: 2; }
+
+/* ---- 商店頁：左欄篩選＋右邊商品格 ---- */
+.hemu-shop__body { margin-bottom: var(--wp--preset--spacing--70) !important; }
+.hemu-filters { margin: 0; display: block; }
+.hemu-filters__group + .hemu-filters__group { margin-top: 2.5rem; }
+.hemu-filters__label { margin: 0 0 1rem; min-width: 0; display: flex; align-items: baseline; gap: 0.75rem; color: var(--wp--preset--color--accent-1); }
+.hemu-filters__label span { font-family: var(--wp--preset--font-family--body); font-size: 0.75rem; letter-spacing: 0.2em; color: var(--wp--preset--color--accent-4); text-transform: none; }
+.hemu-filters__list { display: flex; flex-direction: column; align-items: flex-start; gap: 0.7rem; }
+.hemu-chip { font-size: 0.9375rem; letter-spacing: 0.12em; }
+.hemu-illust--filters { width: 110px; margin-top: 3rem; opacity: 0.85; }
+.hemu-shop__bar { padding-bottom: 1rem; font-size: 0.8125rem; letter-spacing: 0.1em; color: var(--wp--preset--color--accent-4); }
+.hemu-shop__bar p { margin: 0; }
+.hemu-shop__bar select { font: inherit; letter-spacing: 0.08em; color: var(--wp--preset--color--contrast); background: transparent; border: 0; border-bottom: 1px solid var(--wp--preset--color--accent-6); padding: 0.25rem 1.5rem 0.25rem 0; }
+@media (min-width: 782px) {
+	.hemu-shop__body { display: grid; grid-template-columns: var(--hemu-line) 1fr; align-items: start; }
+	.hemu-shop__side { position: sticky; top: 2rem; padding-right: 2rem; }
+}
+
+/* 商品格：跟首頁熱銷商品同一種 1px 細線分格，這裡在右欄內、3 欄 */
+.hemu-grid-line { border-top: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-grid-line .wc-block-product-template { gap: 0 !important; margin: 0 !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+.hemu-grid-line .wc-block-product-template > li {
+	width: auto !important; margin: 0 !important; padding: clamp(1rem, 2vw, 1.75rem) clamp(1rem, 2vw, 1.75rem) clamp(1.5rem, 2.5vw, 2.25rem);
+	border-right: 1px solid var(--wp--preset--color--accent-6); border-bottom: 1px solid var(--wp--preset--color--accent-6);
+}
+.hemu-grid-line .wc-block-product-template > li:nth-child(3n) { border-right: 0; }
+.hemu-grid-line .wc-block-components-product-image img,
+.hemu-grid-full .wc-block-components-product-image img { border-radius: 16px; }
+.hemu-grid-line .wp-block-post-title { margin: 1.25rem 0 0.25rem; font-size: 0.9375rem !important; line-height: 1.6; }
+/* 加入購物車：從框框按鈕改成跟「選購商品 →」同一種文字連結 */
+.hemu-grid-line .wc-block-components-product-button { justify-content: flex-start !important; margin-top: auto; padding-top: 0.75rem; }
+.hemu-grid-line .wc-block-components-product-button__button,
+.hemu-grid-line .wp-block-button__link {
+	border: 0 !important; border-bottom: 1px solid var(--wp--preset--color--contrast) !important; border-radius: 0 !important;
+	padding: 0 0 0.3rem !important; min-height: 0 !important; font-size: 0.8125rem !important; letter-spacing: 0.16em; width: auto !important;
+}
+.hemu-grid-line .wc-block-components-product-button__button::after { content: "　→"; }
+.hemu-grid-line .wc-block-components-product-button__button:hover { color: var(--wp--preset--color--accent-1) !important; border-bottom-color: var(--wp--preset--color--accent-1) !important; }
+.hemu-grid-line .wc-block-components-product-button .added_to_cart { font-size: 0.8125rem; color: var(--wp--preset--color--accent-1); }
+@media (max-width: 781px) {
+	.hemu-shop-head__desc { grid-column: 1 / -1; }
+	/* 手機：篩選改成兩條橫向捲動的列 */
+	.hemu-shop__side { margin-bottom: 1.5rem; }
+	.hemu-filters__group + .hemu-filters__group { margin-top: 1.25rem; }
+	.hemu-filters__label { margin-bottom: 0.5rem; }
+	.hemu-filters__list { flex-direction: row; overflow-x: auto; gap: 1.25rem; padding-bottom: 0.5rem; scrollbar-width: none; white-space: nowrap; }
+	.hemu-filters__list::-webkit-scrollbar { display: none; }
+	.hemu-illust--filters { display: none; }
+	.hemu-grid-line .wc-block-product-template { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+	.hemu-grid-line .wc-block-product-template > li:nth-child(3n) { border-right: 1px solid var(--wp--preset--color--accent-6); }
+	.hemu-grid-line .wc-block-product-template > li:nth-child(2n) { border-right: 0; }
+	.hemu-grid-line .wc-block-product-template > li { padding: 1rem 0.75rem 1.5rem; }
+}
+
+/* ---- 商品頁：大圖＋資訊欄 ---- */
+.hemu-pd__top { margin-top: var(--wp--preset--spacing--50) !important; }
+@media (min-width: 782px) {
+	.hemu-pd__top { display: grid; grid-template-columns: 55% 1fr; gap: clamp(2.5rem, 6vw, 6rem); align-items: start; }
+	.hemu-pd__info { position: sticky; top: 2rem; padding-top: 1rem; }
+}
+.hemu-pd__gallery .woocommerce-product-gallery { margin: 0 !important; width: 100% !important; float: none !important; }
+.hemu-pd__gallery .woocommerce-product-gallery__image img:not(.zoomImg),
+.hemu-pd__gallery .flex-viewport { border-radius: 24px; background: var(--wp--preset--color--accent-2); }
+.hemu-pd__gallery .flex-control-thumbs { display: flex; gap: 0.75rem; margin: 0.75rem 0 0 !important; }
+.hemu-pd__gallery .flex-control-thumbs li { width: 72px !important; float: none !important; }
+.hemu-pd__gallery .flex-control-thumbs img { border-radius: 12px; opacity: 0.55; transition: opacity 0.3s; }
+.hemu-pd__gallery .flex-control-thumbs img.flex-active, .hemu-pd__gallery .flex-control-thumbs img:hover { opacity: 1; }
+.hemu-pd__gallery .woocommerce-product-gallery__trigger { top: 1rem !important; right: 1rem !important; }
+.hemu-pd__info .hemu-label { margin-bottom: 1.25rem; }
+.hemu-pd__title { font-size: clamp(1.75rem, 2.6vw, 2.375rem) !important; font-weight: 500; letter-spacing: 0.14em; line-height: 1.5; margin: 0 0 0.75rem; }
+.hemu-pd__info .wc-block-components-product-rating { margin-bottom: 1.25rem; font-size: 0.8125rem; }
+.hemu-pd__price, .hemu-pd__price .wc-block-components-product-price { font-size: clamp(1.375rem, 1.8vw, 1.625rem) !important; margin: 0; }
+.hemu-pd__excerpt { margin: 1.5rem 0 2rem; color: var(--wp--preset--color--accent-4); line-height: 2; font-size: 0.9375rem; }
+.hemu-pd__excerpt p { margin: 0; }
+.hemu-pd__cart { padding-top: 1.75rem; border-top: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-pd__cart table.variations { margin-bottom: 1rem; border: 0; }
+.hemu-pd__cart table.variations th, .hemu-pd__cart table.variations td { border: 0; padding: 0 0 0.75rem; vertical-align: middle; }
+.hemu-pd__cart table.variations th label { font-size: 0.8125rem; letter-spacing: 0.2em; color: var(--wp--preset--color--accent-4); font-weight: 400; }
+.hemu-pd__cart table.variations select { border: 0; border-bottom: 1px solid var(--wp--preset--color--contrast); background: transparent; padding: 0.4rem 1.5rem 0.4rem 0; font: inherit; min-width: 9rem; }
+.hemu-pd__cart .reset_variations { font-size: 0.75rem; color: var(--wp--preset--color--accent-4); margin-left: 1rem; }
+.hemu-pd__cart .woocommerce-variation-price .price { font-size: 1.25rem !important; }
+.hemu-pd__cart form.cart:not(.variations_form), .hemu-pd__cart .woocommerce-variation-add-to-cart { display: flex; gap: 0.75rem; align-items: stretch; margin: 0.75rem 0 0; }
+.hemu-pd__cart .quantity input.qty { height: 100%; min-height: 52px; width: 4.5rem; border: 1px solid var(--wp--preset--color--accent-6); border-radius: 999px; text-align: center; background: transparent; }
+.hemu-pd__cart .single_add_to_cart_button { flex: 1; min-height: 52px; border-radius: 999px !important; letter-spacing: 0.2em; }
+.hemu-pd__cart .stock { font-size: 0.8125rem; color: var(--wp--preset--color--accent-4); margin: 0 0 0.5rem; }
+/* 購物須知：細線三行清單 */
+.hemu-pnotes { list-style: none; margin: 2rem 0 0; padding: 0; border-top: 1px solid var(--wp--preset--color--accent-6); font-size: 0.875rem; letter-spacing: 0.08em; }
+.hemu-pnotes li { display: flex; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-pnotes span { width: 6.5em; flex-shrink: 0; font-family: var(--wp--preset--font-family--en); font-size: 0.8125rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--wp--preset--color--accent-1); }
+
+/* ---- 商品頁：說明、評價、搭配推薦（取代分頁） ---- */
+.hemu-pd-sec .hemu-head { margin-bottom: var(--wp--preset--spacing--50) !important; }
+.hemu-pd-desc { border-top: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-pd-desc > h2 { font-size: 1rem !important; font-weight: 500; letter-spacing: 0.2em; margin: 0; padding: 1.5rem 0 0; }
+.hemu-pd-desc > p { margin: 0; padding: 0.75rem 0 1.5rem; line-height: 2.1; border-bottom: 1px solid var(--wp--preset--color--accent-6); }
+@media (min-width: 782px) {
+	/* 小標在左邊 1/4 欄、內容從對齊線開始，一列一個項目 */
+	.hemu-pd-desc { display: grid; grid-template-columns: var(--hemu-line) 1fr; }
+	.hemu-pd-desc > h2, .hemu-pd-desc > p { padding: 1.75rem 0; border-bottom: 1px solid var(--wp--preset--color--accent-6); margin: 0 !important; }
+	.hemu-pd-desc > h2 { grid-column: 1; }
+	.hemu-pd-desc > p { grid-column: 2; max-width: 38em; }
+	.hemu-pd-reviews { padding-left: var(--hemu-line); }
+}
+.hemu-pd-reviews .woocommerce-Reviews-title { display: none; }
+.hemu-pd-reviews .commentlist { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-pd-reviews .commentlist li { padding: 1.75rem 0; border-bottom: 1px solid var(--wp--preset--color--accent-6); margin: 0 !important; }
+.hemu-pd-reviews .comment_container { display: block; }
+.hemu-pd-reviews .comment-text { margin: 0 !important; padding: 0 !important; border: 0 !important; }
+.hemu-pd-reviews .comment-text .description p { font-size: 1rem; line-height: 2; margin: 0.75rem 0 0; }
+.hemu-pd-reviews .meta { font-size: 0.8125rem; letter-spacing: 0.1em; color: var(--wp--preset--color--accent-4); margin: 0.5rem 0 0 !important; }
+.hemu-pd-reviews .star-rating { float: none !important; font-size: 0.8125rem; margin: 0 !important; }
+.hemu-pd-reviews #review_form_wrapper { margin-top: var(--wp--preset--spacing--50); }
+.hemu-pd-reviews .comment-reply-title { display: block; font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 1rem; }
+.hemu-pd-reviews textarea, .hemu-pd-reviews input[type="text"], .hemu-pd-reviews input[type="email"] { width: 100%; border: 1px solid var(--wp--preset--color--accent-6); border-radius: 12px; background: transparent; padding: 0.75rem 1rem; font: inherit; box-sizing: border-box; }
+.hemu-pd-reviews .form-submit input { border-radius: 999px; }
+@media (max-width: 781px) {
+	.hemu-pd__info { margin-top: 2rem; }
+}
+
+/* 搭配推薦：跟商品格同一種細線分格，4 欄（手機 2 欄） */
+.hemu-pair { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-pair li { padding: clamp(1rem, 2vw, 1.75rem) clamp(1rem, 2vw, 1.75rem) clamp(1.5rem, 2.5vw, 2.25rem); border-right: 1px solid var(--wp--preset--color--accent-6); border-bottom: 1px solid var(--wp--preset--color--accent-6); }
+.hemu-pair li:nth-child(4n) { border-right: 0; }
+.hemu-pair__img { display: block; overflow: hidden; border-radius: 16px; }
+.hemu-pair__img img { display: block; width: 100%; height: auto; background: var(--wp--preset--color--accent-2); transition: transform 0.6s ease; }
+.hemu-pair__img:hover img { transform: scale(1.03); }
+.hemu-pair__name { margin: 1.25rem 0 0.25rem; font-size: 0.9375rem; font-weight: 400; letter-spacing: 0.1em; line-height: 1.6; }
+.hemu-pair__name a { color: var(--wp--preset--color--contrast); text-decoration: none; }
+.hemu-pair .price { margin: 0; }
+@media (max-width: 781px) {
+	.hemu-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.hemu-pair li { padding: 1rem 0.75rem 1.5rem; }
+	.hemu-pair li:nth-child(4n) { border-right: 1px solid var(--wp--preset--color--accent-6); }
+	.hemu-pair li:nth-child(2n) { border-right: 0; }
+}
+/* 商品圖填滿左欄（WooCommerce 預設限制寬度） */
+.hemu-pd__gallery .woocommerce-product-gallery__image img:not(.zoomImg) { width: 100% !important; height: auto; display: block; }
+.hemu-pd__gallery .woocommerce-product-gallery__wrapper, .hemu-pd__gallery .woocommerce-product-gallery__image { width: 100% !important; }
+/* 商店卡片：名稱、價格、加入購物車一律靠左 */
+.hemu-grid-line .wp-block-post-title, .hemu-grid-line .wc-block-components-product-price, .hemu-grid-line .wp-block-woocommerce-product-price { text-align: left !important; }
+.hemu-grid-line .wp-block-woocommerce-product-button, .hemu-grid-line .wc-block-components-product-button { align-items: flex-start !important; text-align: left !important; margin-top: auto; }
+.hemu-pd__gallery .wp-block-woocommerce-product-image-gallery { max-width: none !important; width: 100%; }
+.hemu-pd__cart table.variations select { height: auto; line-height: 1.6; min-height: 2.5rem; }
