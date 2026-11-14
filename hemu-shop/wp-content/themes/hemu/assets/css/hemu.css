@@ -66,12 +66,6 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .wp-block-post-featured-image a,
 .wc-block-components-product-image a,
 .hemu-zoom { overflow: hidden; display: block; }
-.wp-block-post-featured-image img,
-.wc-block-components-product-image img,
-.hemu-zoom img { transition: transform 0.6s ease; }
-.wp-block-post-featured-image a:hover img,
-.wc-block-components-product-image a:hover img,
-.hemu-zoom:hover img { transform: scale(1.03); }
 
 /* ---------- 頁首 ---------- */
 .hemu-notice { border-bottom: 1px solid var(--wp--preset--color--accent-6); }
@@ -727,8 +721,7 @@ html.hemu-js.hemu-hero-in .hemu-kv__line path { stroke-dashoffset: 0; }
 .hemu-pair li { padding: clamp(1rem, 2vw, 1.75rem) clamp(1rem, 2vw, 1.75rem) clamp(1.5rem, 2.5vw, 2.25rem); border-right: 1px solid var(--wp--preset--color--accent-6); border-bottom: 1px solid var(--wp--preset--color--accent-6); }
 .hemu-pair li:nth-child(4n) { border-right: 0; }
 .hemu-pair__img { display: block; overflow: hidden; border-radius: 16px; }
-.hemu-pair__img img { display: block; width: 100%; height: auto; background: var(--wp--preset--color--accent-2); transition: transform 0.6s ease; }
-.hemu-pair__img:hover img { transform: scale(1.03); }
+.hemu-pair__img img { display: block; width: 100%; height: auto; background: var(--wp--preset--color--accent-2); }
 .hemu-pair__name { margin: 1.25rem 0 0.25rem; font-size: 0.9375rem; font-weight: 400; letter-spacing: 0.1em; line-height: 1.6; }
 .hemu-pair__name a { color: var(--wp--preset--color--contrast); text-decoration: none; }
 .hemu-pair .price { margin: 0; }
@@ -771,89 +764,126 @@ html.hemu-js.hemu-hero-in .hemu-kv__line path { stroke-dashoffset: 0; }
 .hemu-pd__gallery .woocommerce-product-gallery { opacity: 1 !important; }
 
 /* ==========================================================================
- * 按鈕互動（2026-11-14，使用者：「按鈕的互動感有點少」）
- * 原則：同一類按鈕同一種動作；動作短（0.3–0.6 秒）、有方向感；按下去有回饋；鍵盤操作看得到焦點；尊重「減少動態效果」。
+ * 按鈕互動（2026-11-14，使用者：「按鈕的互動感有點少」；同日對照 modern-web-guidance 修正）
+ * 原則：同一類按鈕同一種動作；動作短（0.3–0.6 秒）、有方向感；按下去有回饋；鍵盤 :focus-visible 跟滑鼠 hover 一樣的效果。
+ * 依指南：
+ *  - 會動的部分（位移、縮放、色塊蓋上、線條畫出）只寫在 @media (prefers-reduced-motion: no-preference) 裡；顏色變化不論設定都保留
+ *  - 縮放、位移用個別屬性 scale／translate，基本狀態先給 identity 值（scale: 1），避免 hover 時才產生新的堆疊脈絡；
+ *    也不會蓋掉 WooCommerce 用 transform 做的定位（購物車數字）
+ *  - 底線不用背景漸層假裝：靜態用原生 text-decoration；要「畫出來」的動畫才用 ::before＋clip-path
+ *  - 可點的地方至少 24×24px，觸控裝置再加大
  * ========================================================================== */
 :root { --hemu-ease: cubic-bezier(0.77, 0, 0.18, 1); }
 
-/* 1. 實心按鈕（加入購物車、結帳、送出）：滑過時陶土色由左往右蓋上，離開時往右退；按下微縮 */
-:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button.contained):not(.has-icon):not(.wc-block-mini-cart__button):not(.wp-block-navigation__responsive-container-open):not(.wp-block-navigation__responsive-container-close):not(.wc-block-components-drawer__close):not(.pswp__button):not(.hemu-grid-line *):not(.is-style-outline > *) {
-	position: relative; isolation: isolate; overflow: hidden;
-	transition: color 0.4s ease, transform 0.15s ease, box-shadow 0.4s ease !important;
+/* 0. 共用：可點元素的焦點外框（指南：用 :focus-visible、outline＋outline-offset，對比 3:1 以上；陶土色對米色底約 6.5:1） */
+:where(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid var(--wp--preset--color--accent-1) !important; outline-offset: 3px; }
+
+/* 1. 實心按鈕（加入購物車、結帳、送出） */
+.hemu-solid, :is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button.contained):not(.has-icon):not(.wc-block-mini-cart__button):not(.wp-block-navigation__responsive-container-open):not(.wp-block-navigation__responsive-container-close):not(.wc-block-components-drawer__close):not(.pswp__button):not(.hemu-grid-line *):not(.is-style-outline > *) {
+	position: relative; isolation: isolate; overflow: hidden; scale: 1;
+	transition: color 0.4s ease, background-color 0.4s ease, box-shadow 0.4s ease !important;
 }
-:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button.contained):not(.has-icon):not(.wc-block-mini-cart__button):not(.wp-block-navigation__responsive-container-open):not(.wp-block-navigation__responsive-container-close):not(.wc-block-components-drawer__close):not(.pswp__button):not(.hemu-grid-line *):not(.is-style-outline > *)::before {
-	content: ""; position: absolute; inset: 0; z-index: -1; background: var(--wp--preset--color--accent-1);
-	transform: scaleX(0); transform-origin: right center; transition: transform 0.55s var(--hemu-ease);
-}
-:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button.contained):not(.has-icon):not(.wc-block-mini-cart__button):not(.wp-block-navigation__responsive-container-open):not(.wp-block-navigation__responsive-container-close):not(.wc-block-components-drawer__close):not(.pswp__button):not(.hemu-grid-line *):not(.is-style-outline > *):hover {
-	background-color: var(--wp--preset--color--contrast) !important; color: var(--wp--preset--color--white) !important;
+/* 減少動態效果時：滑過直接換成陶土色（不是色塊蓋上） */
+:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button.contained):not(.has-icon):not(.wc-block-mini-cart__button):not(.wp-block-navigation__responsive-container-open):not(.wp-block-navigation__responsive-container-close):not(.wc-block-components-drawer__close):not(.pswp__button):not(.hemu-grid-line *):not(.is-style-outline > *):is(:hover, :focus-visible) {
+	background-color: var(--wp--preset--color--accent-1) !important; color: var(--wp--preset--color--white) !important;
 	box-shadow: 0 10px 24px -14px rgba(58, 48, 43, 0.55);
 }
-:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button.contained):not(.has-icon):not(.wc-block-mini-cart__button):not(.wp-block-navigation__responsive-container-open):not(.wp-block-navigation__responsive-container-close):not(.wc-block-components-drawer__close):not(.pswp__button):not(.hemu-grid-line *):not(.is-style-outline > *):hover::before {
-	transform: scaleX(1); transform-origin: left center;
+@media (prefers-reduced-motion: no-preference) {
+	/* 陶土色由左往右蓋上、離開時往右退；按下微縮 */
+	:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button.contained):not(.has-icon):not(.wc-block-mini-cart__button):not(.wp-block-navigation__responsive-container-open):not(.wp-block-navigation__responsive-container-close):not(.wc-block-components-drawer__close):not(.pswp__button):not(.hemu-grid-line *):not(.is-style-outline > *) {
+		transition: color 0.4s ease, box-shadow 0.4s ease, scale 0.15s ease !important;
+	}
+	:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button.contained):not(.has-icon):not(.wc-block-mini-cart__button):not(.wp-block-navigation__responsive-container-open):not(.wp-block-navigation__responsive-container-close):not(.wc-block-components-drawer__close):not(.pswp__button):not(.hemu-grid-line *):not(.is-style-outline > *)::before {
+		content: ""; position: absolute; inset: 0; z-index: -1; background: var(--wp--preset--color--accent-1);
+		scale: 0 1; transform-origin: right center; transition: scale 0.55s var(--hemu-ease);
+	}
+	:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button.contained):not(.has-icon):not(.wc-block-mini-cart__button):not(.wp-block-navigation__responsive-container-open):not(.wp-block-navigation__responsive-container-close):not(.wc-block-components-drawer__close):not(.pswp__button):not(.hemu-grid-line *):not(.is-style-outline > *):is(:hover, :focus-visible) {
+		background-color: var(--wp--preset--color--contrast) !important;
+	}
+	:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button.contained):not(.has-icon):not(.wc-block-mini-cart__button):not(.wp-block-navigation__responsive-container-open):not(.wp-block-navigation__responsive-container-close):not(.wc-block-components-drawer__close):not(.pswp__button):not(.hemu-grid-line *):not(.is-style-outline > *):is(:hover, :focus-visible)::before {
+		scale: 1 1; transform-origin: left center;
+	}
+	:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button):active { scale: 0.97; }
 }
-:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button):active { transform: scale(0.97); }
-/* 細框按鈕：底色由下往上填滿 */
-.wp-block-button.is-style-outline > .wp-block-button__link { position: relative; isolation: isolate; overflow: hidden; transition: color 0.4s ease !important; }
-.wp-block-button.is-style-outline > .wp-block-button__link::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--wp--preset--color--contrast); transform: scaleY(0); transform-origin: bottom; transition: transform 0.45s var(--hemu-ease); }
-.wp-block-button.is-style-outline > .wp-block-button__link:hover { background: transparent !important; }
-.wp-block-button.is-style-outline > .wp-block-button__link:hover::before { transform: scaleY(1); }
+/* 細框按鈕：底色由下往上填滿（減少動態效果時直接換色） */
+.wp-block-button.is-style-outline > .wp-block-button__link { position: relative; isolation: isolate; overflow: hidden; transition: color 0.4s ease, background-color 0.4s ease !important; }
+.wp-block-button.is-style-outline > .wp-block-button__link:is(:hover, :focus-visible) { background: var(--wp--preset--color--contrast) !important; color: var(--wp--preset--color--white) !important; }
+@media (prefers-reduced-motion: no-preference) {
+	.wp-block-button.is-style-outline > .wp-block-button__link::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--wp--preset--color--contrast); scale: 1 0; transform-origin: bottom; transition: scale 0.45s var(--hemu-ease); }
+	.wp-block-button.is-style-outline > .wp-block-button__link:is(:hover, :focus-visible) { background: transparent !important; }
+	.wp-block-button.is-style-outline > .wp-block-button__link:is(:hover, :focus-visible)::before { scale: 1 1; }
+}
 
-/* 2. 文字＋箭頭連結（選購商品 →、所有商品 →、加入購物車 →）：底線先往右退、再從左邊畫回來；箭頭往前推 */
+/* 2. 文字＋箭頭連結（選購商品 →、所有商品 →、加入購物車 →）
+ *    靜態：原生底線（text-decoration）。動畫：原生底線藏起來，改用 ::before 線條，先往右退、再從左邊畫回來；箭頭往前推 */
 .hemu-more a, .hemu-grid-line .wc-block-components-product-button__button {
-	border-bottom: 0 !important; padding-right: 0 !important;
-	/* 不能加 !important：CSS 動畫蓋不過 !important，底線就不會重畫 */
-	background-image: linear-gradient(currentColor, currentColor); background-repeat: no-repeat;
-	background-position: left bottom; background-size: 100% 1px; background-color: transparent !important;
+	border-bottom: 0 !important; padding-right: 0 !important; background: none !important;
+	text-decoration: underline solid currentColor 1px !important; text-underline-offset: 0.45em;
 	transition: color 0.3s ease !important;
 }
-.hemu-more a:hover, .hemu-grid-line .wc-block-components-product-button__button:hover {
-	color: var(--wp--preset--color--accent-1) !important; padding-right: 0 !important;
-	animation: hemu-line-redraw 0.7s var(--hemu-ease);
+.hemu-more a:is(:hover, :focus-visible), .hemu-grid-line .wc-block-components-product-button__button:is(:hover, :focus-visible) { color: var(--wp--preset--color--accent-1) !important; }
+.hemu-more a::after, .hemu-grid-line .wc-block-components-product-button__button::after { display: inline-block; translate: 0; }
+@media (prefers-reduced-motion: no-preference) {
+	.hemu-more a, .hemu-grid-line .wc-block-components-product-button__button { position: relative; text-decoration: none !important; }
+	.hemu-more a::before, .hemu-grid-line .wc-block-components-product-button__button::before {
+		content: ""; position: absolute; left: 0; right: 0; bottom: 0; border-bottom: 1px solid currentColor;
+		clip-path: inset(-1px 0 -1px 0); pointer-events: none;
+	}
+	.hemu-more a:is(:hover, :focus-visible)::before, .hemu-grid-line .wc-block-components-product-button__button:is(:hover, :focus-visible)::before { animation: hemu-line-redraw 0.7s var(--hemu-ease); }
+	.hemu-more a::after, .hemu-grid-line .wc-block-components-product-button__button::after { transition: translate 0.4s var(--hemu-ease); }
+	.hemu-more a:is(:hover, :focus-visible)::after, .hemu-grid-line .wc-block-components-product-button__button:is(:hover, :focus-visible)::after { translate: 6px 0; }
 }
 @keyframes hemu-line-redraw {
-	0% { background-size: 100% 1px; background-position: right bottom; }
-	45% { background-size: 0% 1px; background-position: right bottom; }
-	46% { background-size: 0% 1px; background-position: left bottom; }
-	100% { background-size: 100% 1px; background-position: left bottom; }
+	0% { clip-path: inset(-1px 0 -1px 0); }
+	45% { clip-path: inset(-1px 0 -1px 100%); }   /* 往右退掉 */
+	46% { clip-path: inset(-1px 100% -1px 0); }   /* 換到左邊、長度 0 */
+	100% { clip-path: inset(-1px 0 -1px 0); }      /* 從左邊畫回來 */
 }
-.hemu-more a::after, .hemu-grid-line .wc-block-components-product-button__button::after { display: inline-block; transition: transform 0.4s var(--hemu-ease); }
-.hemu-more a:hover::after, .hemu-grid-line .wc-block-components-product-button__button:hover::after { transform: translateX(6px); }
 
-/* 3. 主選單、篩選、麵包屑：底線由左往右長出來 */
-header .hemu-main-nav .wp-block-navigation-item__content, .hemu-chip, .hemu-crumbs a, footer a {
-	background: linear-gradient(currentColor, currentColor) left bottom / 0% 1px no-repeat; padding-bottom: 2px;
-	transition: background-size 0.4s var(--hemu-ease), color 0.3s ease; text-decoration: none !important;
+/* 3. 主選單、篩選、麵包屑、頁尾連結：滑過時底線由左往右畫出來（::before＋clip-path）；減少動態效果時直接出現原生底線 */
+header .hemu-main-nav .wp-block-navigation-item__content, .hemu-chip, .hemu-crumbs a, footer a { background: none !important; text-decoration: none !important; }
+:is(header .hemu-main-nav .wp-block-navigation-item__content, .hemu-chip, .hemu-crumbs a, footer a):is(:hover, :focus-visible), .hemu-chip.is-active {
+	text-decoration: underline solid currentColor 1px !important; text-underline-offset: 0.4em;
 }
-header .hemu-main-nav .wp-block-navigation-item__content:hover, .hemu-chip:hover, .hemu-crumbs a:hover, footer a:hover { background-size: 100% 1px; }
-.hemu-chip.is-active { border-bottom: 0 !important; background-size: 100% 1px; }
-.is-menu-open .wp-block-navigation-item__content { background: none !important; }
+.hemu-chip.is-active { border-bottom: 0 !important; }
+@media (prefers-reduced-motion: no-preference) {
+	header .hemu-main-nav .wp-block-navigation-item__content, .hemu-chip, .hemu-crumbs a, footer a { position: relative; }
+	:is(header .hemu-main-nav .wp-block-navigation-item__content, .hemu-chip, .hemu-crumbs a, footer a):is(:hover, :focus-visible), .hemu-chip.is-active { text-decoration: none !important; }
+	:is(header .hemu-main-nav .wp-block-navigation-item__content, .hemu-chip, .hemu-crumbs a, footer a)::before {
+		content: ""; position: absolute; left: 0; right: 0; bottom: 0.15em; border-bottom: 1px solid currentColor;
+		clip-path: inset(-1px 100% -1px 0); transition: clip-path 0.4s var(--hemu-ease); pointer-events: none;
+	}
+	:is(header .hemu-main-nav .wp-block-navigation-item__content, .hemu-chip, .hemu-crumbs a, footer a):is(:hover, :focus-visible)::before, .hemu-chip.is-active::before { clip-path: inset(-1px 0 -1px 0); }
+	.is-menu-open .wp-block-navigation-item__content::before { display: none; }
+}
+/* 可點範圍至少 24px：麵包屑、頁尾連結原本 21–23px；觸控裝置再加大 */
+.hemu-crumbs a, footer a { display: inline-block; min-block-size: 24px; padding-block: 2px; box-sizing: border-box; }
+@media (pointer: coarse) { .hemu-crumbs a, footer a, .hemu-chip { min-block-size: 32px; padding-block: 6px; } }
 
-/* 4. 頁首圖示（搜尋、會員、購物車）：滑過時淡淡的圓形底色、圖示變陶土色 */
+/* 4. 頁首圖示（搜尋、會員、購物車）：淡色圓形底、圖示變陶土色；按下縮小 */
 header .wp-block-search__button, header .wc-block-customer-account a, header .wc-block-mini-cart__button {
-	border-radius: 999px; transition: background-color 0.3s ease, color 0.3s ease, transform 0.15s ease;
+	border-radius: 999px; scale: 1; transition: background-color 0.3s ease, color 0.3s ease;
 }
-header .wp-block-search__button:hover, header .wc-block-customer-account a:hover, header .wc-block-mini-cart__button:hover {
+header :is(.wp-block-search__button, .wc-block-customer-account a, .wc-block-mini-cart__button):is(:hover, :focus-visible) {
 	background-color: var(--wp--preset--color--accent-2) !important; color: var(--wp--preset--color--accent-1) !important;
 }
-header .wp-block-search__button:active, header .wc-block-customer-account a:active, header .wc-block-mini-cart__button:active { transform: scale(0.92); }
-/* 加入購物車後，購物車數字跳一下（hemu-motion.js 偵測數字改變時加 class） */
-.wc-block-mini-cart__badge.hemu-bump { animation: hemu-bump 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
-/* WooCommerce 用 translateY(-50%) 定位徽章，動畫要保留這個位移，否則跳動時位置會跑掉 */
-@keyframes hemu-bump { 0% { transform: translateY(-50%) scale(1); } 25% { transform: translateY(-50%) scale(1.5); background: var(--wp--preset--color--accent-1); } 55% { transform: translateY(-50%) scale(0.92); background: var(--wp--preset--color--accent-1); } 100% { transform: translateY(-50%) scale(1); } }
+@media (prefers-reduced-motion: no-preference) {
+	header .wp-block-search__button, header .wc-block-customer-account a, header .wc-block-mini-cart__button { transition: background-color 0.3s ease, color 0.3s ease, scale 0.15s ease; }
+	header :is(.wp-block-search__button, .wc-block-customer-account a, .wc-block-mini-cart__button):active { scale: 0.92; }
+	/* 加入購物車後，購物車數字跳一下（hemu-motion.js 偵測數字改變時加 class）。用 scale，不會蓋掉 WooCommerce 用 transform 做的定位 */
+	.wc-block-mini-cart__badge { scale: 1; }
+	.wc-block-mini-cart__badge.hemu-bump { animation: hemu-bump 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+}
+/* 減少動態效果時：數字只變色一下，不縮放（指南：顏色變化保留、位移縮放關掉） */
+@media (prefers-reduced-motion: reduce) { .wc-block-mini-cart__badge.hemu-bump { animation: hemu-bump-color 0.9s ease; } }
+@keyframes hemu-bump { 0% { scale: 1; } 25% { scale: 1.5; background: var(--wp--preset--color--accent-1); } 55% { scale: 0.92; background: var(--wp--preset--color--accent-1); } 100% { scale: 1; } }
+@keyframes hemu-bump-color { 0%, 60% { background: var(--wp--preset--color--accent-1); } }
 
-/* 5. 商品卡片：圖片放大（原本就有）＋名稱變陶土色 */
+/* 5. 商品卡片：名稱變陶土色；圖片微放大（只在沒有減少動態效果時） */
 .wc-block-product-template > li .wp-block-post-title a, .hemu-pair__name a { transition: color 0.3s ease; }
-.wc-block-product-template > li:hover .wp-block-post-title a, .hemu-pair li:hover .hemu-pair__name a { color: var(--wp--preset--color--accent-1); }
-.wc-block-components-product-image a:hover img, .hemu-pair__img:hover img { transform: scale(1.05); }
-.wp-block-post-featured-image img, .wc-block-components-product-image img, .hemu-pair__img img { transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) !important; }
-
-/* 6. 鍵盤操作：看得到焦點（滑鼠點擊不顯示） */
-:is(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid var(--wp--preset--color--accent-1) !important; outline-offset: 3px; }
-
-@media (prefers-reduced-motion: reduce) {
-	:is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button)::before { transition: none !important; }
-	.hemu-more a:hover, .hemu-grid-line .wc-block-components-product-button__button:hover { animation: none; }
-	.wc-block-mini-cart__badge.hemu-bump { animation: none; }
-	.hemu-more a::after, header .hemu-main-nav .wp-block-navigation-item__content, .hemu-chip, .hemu-crumbs a, footer a { transition: none; }
+.wc-block-product-template > li:is(:hover, :focus-within) .wp-block-post-title a, .hemu-pair li:is(:hover, :focus-within) .hemu-pair__name a { color: var(--wp--preset--color--accent-1); }
+.wp-block-post-featured-image img, .wc-block-components-product-image img, .hemu-pair__img img, .hemu-zoom img { scale: 1; }
+@media (prefers-reduced-motion: no-preference) {
+	.wp-block-post-featured-image img, .wc-block-components-product-image img, .hemu-pair__img img, .hemu-zoom img { transition: scale 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) !important; }
+	:is(.wp-block-post-featured-image a, .wc-block-components-product-image a, .hemu-pair__img, .hemu-zoom):is(:hover, :focus-visible) img { scale: 1.05; }
 }
