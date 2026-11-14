@@ -723,7 +723,7 @@ html.hemu-js.hemu-hero-in .hemu-kv__line path { stroke-dashoffset: 0; }
 .hemu-pair__img { display: block; overflow: hidden; border-radius: 16px; }
 .hemu-pair__img img { display: block; width: 100%; height: auto; background: var(--wp--preset--color--accent-2); }
 .hemu-pair__name { margin: 1.25rem 0 0.25rem; font-size: 0.9375rem; font-weight: 400; letter-spacing: 0.1em; line-height: 1.6; }
-.hemu-pair__name a { color: var(--wp--preset--color--contrast); text-decoration: none; }
+.hemu-pair__name a { color: var(--wp--preset--color--contrast); text-decoration: none; display: inline-block; } /* 長商品名換行時，焦點外框才會是一個完整的框 */
 .hemu-pair .price { margin: 0; }
 @media (max-width: 781px) {
 	.hemu-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
