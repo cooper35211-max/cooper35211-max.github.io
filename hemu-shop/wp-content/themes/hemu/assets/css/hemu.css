@@ -822,6 +822,11 @@ html.hemu-js.hemu-hero-in .hemu-kv__line path { stroke-dashoffset: 0; }
 	transition: color 0.3s ease !important;
 }
 .hemu-more a:is(:hover, :focus-visible), .hemu-grid-line .wc-block-components-product-button__button:is(:hover, :focus-visible) { color: var(--wp--preset--color--accent-1) !important; }
+/* 連結本身要是一整塊（inline-block）：行內元素的焦點外框會把往前推的箭頭也框進去，外框變成缺角的形狀（2026-11-14 使用者截圖） */
+.hemu-more a { display: inline-block; line-height: 1.6; padding-bottom: 0.35em; padding-right: 8px !important; } /* 右邊留給往前推 6px 的箭頭，不碰到焦點外框 */
+.hemu-more a::before { right: 8px !important; }
+.hemu-grid-line .wc-block-components-product-button__button { padding-right: 8px !important; overflow: visible !important; }
+.hemu-grid-line .wc-block-components-product-button__button::before { right: 8px !important; }
 .hemu-more a::after, .hemu-grid-line .wc-block-components-product-button__button::after { display: inline-block; translate: 0; }
 @media (prefers-reduced-motion: no-preference) {
 	.hemu-more a, .hemu-grid-line .wc-block-components-product-button__button { position: relative; text-decoration: none !important; }
