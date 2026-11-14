@@ -777,6 +777,9 @@ html.hemu-js.hemu-hero-in .hemu-kv__line path { stroke-dashoffset: 0; }
 
 /* 0. 共用：可點元素的焦點外框（指南：用 :focus-visible、outline＋outline-offset，對比 3:1 以上；陶土色對米色底約 6.5:1） */
 :where(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid var(--wp--preset--color--accent-1) !important; outline-offset: 3px; }
+/* 母主題 Twenty Twenty-Five 的 :where(.wp-site-blocks *:focus) 會在「任何聚焦」時畫 2px、文字同色、無間距的框，
+ * 滑鼠點連結的那一下也會出現，壓在連結底線上（2026-11-14 使用者截圖）。滑鼠點擊不顯示框，鍵盤操作才顯示上面的陶土色框。 */
+:where(.wp-site-blocks *):focus:not(:focus-visible) { outline: none; }
 
 /* 1. 實心按鈕（加入購物車、結帳、送出） */
 .hemu-solid, :is(.wp-element-button, .wp-block-button__link, .wpforms-submit, .wc-block-components-button.contained):not(.has-icon):not(.wc-block-mini-cart__button):not(.wp-block-navigation__responsive-container-open):not(.wp-block-navigation__responsive-container-close):not(.wc-block-components-drawer__close):not(.pswp__button):not(.hemu-grid-line *):not(.is-style-outline > *) {
