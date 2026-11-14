@@ -136,3 +136,28 @@
 	// 沒有進站動畫的頁面（或 loader 被移除）保險：0.3 秒後直接播
 	setTimeout( function () { if ( ! root.classList.contains( 'hemu-loading' ) ) { heroIn(); } }, 300 );
 } )();
+
+/* 加入購物車後，頁首購物車的數字跳一下（數字改變或第一次出現時加 class，動畫在 hemu.css）。
+ * 購物車是空的時候沒有數字元素，所以觀察整個購物車按鈕。 */
+( function () {
+	var watch = function () {
+		document.querySelectorAll( '.wc-block-mini-cart__button' ).forEach( function ( btn ) {
+			if ( btn.dataset.hemuBump ) { return; }
+			btn.dataset.hemuBump = '1';
+			var count = function () { var b = btn.querySelector( '.wc-block-mini-cart__badge' ); return b ? b.textContent.trim() : ''; };
+			var last = count();
+			new MutationObserver( function () {
+				var now = count();
+				if ( now === last ) { return; }
+				last = now;
+				var b = btn.querySelector( '.wc-block-mini-cart__badge' );
+				if ( ! b || ! now ) { return; }
+				b.classList.remove( 'hemu-bump' );
+				void b.offsetWidth; // 重新觸發動畫
+				b.classList.add( 'hemu-bump' );
+			} ).observe( btn, { childList: true, characterData: true, subtree: true } );
+		} );
+	};
+	if ( document.readyState === 'loading' ) { document.addEventListener( 'DOMContentLoaded', watch ); } else { watch(); }
+	setTimeout( watch, 2000 ); // 迷你購物車是程式後來才畫出來的
+} )();
