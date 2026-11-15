@@ -302,3 +302,164 @@ html:not(.cz-js) .cz-slider > .wp-block-cover:not(:first-child) { display: none;
 }
 /* 手機：數字實績 2×2，不要直排 4 列 */
 @media (max-width: 599px) { .cz-stats > .wp-block-group { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } .cz-stat { padding-left: var(--wp--preset--spacing--30); } }
+
+/* ==========================================================================
+ * 2026-11-15 內頁改版：內頁頁首大圖＋麵包屑、服務卡、服務頁交錯排版、關於我們、據點、聯絡方式、消息列表、案例篩選
+ * ========================================================================== */
+/* 內頁頁首：頁面的精選圖片＋深藍遮罩 80%（白字對比夠）；沒有精選圖片時就是純深藍 */
+.cz-pagehero { min-height: 380px; }
+.cz-pagehero .wp-block-post-title, .cz-pagehero .wp-block-post-excerpt { margin: 0; }
+.cz-pagehero .wp-block-post-excerpt { max-width: 48rem; }
+.cz-pagehero .wp-block-cover__image-background { scale: 1; }
+@media (prefers-reduced-motion: no-preference) { .cz-pagehero .wp-block-cover__image-background { animation: cz-kenburns 7s ease-out both; } }
+@media (max-width: 781px) { .cz-pagehero { min-height: 300px; } }
+.cz-crumb ol { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; list-style: none; margin: 0; padding: 0; font-size: 0.875rem; color: var(--wp--preset--color--accent-2); }
+.cz-crumb li + li::before { content: "/"; margin-right: 0.5rem; opacity: 0.6; }
+.cz-crumb a { display: inline-block; min-block-size: 24px; padding-block: 2px; box-sizing: border-box; text-decoration: none; }
+.cz-crumb a:is(:hover, :focus-visible) { text-decoration: underline; text-underline-offset: 0.3em; }
+.cz-crumb [aria-current] { color: var(--wp--preset--color--base); }
+
+/* 卡片共用：滑過時上浮（捲動進場的 translate 會蓋掉，所以 is-in 狀態再寫一次） */
+.cz-svc, .cz-value, .cz-loc, .cz-tile, .cz-team { translate: 0 0; }
+@media (prefers-reduced-motion: no-preference) {
+	:is(.cz-svc, .cz-value, .cz-loc, .cz-tile):is(:hover, :focus-within),
+	html.cz-reveal-on :is(.cz-svc, .cz-value, .cz-loc, .cz-tile).cz-reveal.is-in:is(:hover, :focus-within) { translate: 0 -4px; }
+	html.cz-reveal-on :is(.cz-svc, .cz-value, .cz-loc, .cz-tile).cz-reveal.is-in { transition: opacity 0.7s ease, translate 0.4s cubic-bezier(0.22, 0.61, 0.36, 1), border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; transition-delay: 0s; }
+	:is(.cz-svc, .cz-value, .cz-loc, .cz-tile, .cz-team) .cz-icon { transition: translate 0.4s ease; }
+	:is(.cz-svc, .cz-value, .cz-loc, .cz-tile, .cz-team):is(:hover, :focus-within) .cz-icon { translate: 0 -3px; }
+}
+
+/* 首頁服務項目：左邊照片、右邊四張卡（整張可點，連到服務頁對應段落） */
+.cz-svcs__aside .cz-head { margin-bottom: var(--wp--preset--spacing--50); }
+.cz-svcs__img { margin: 0; position: relative; }
+.cz-svcs__img img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.cz-svcs__img::after { content: ""; position: absolute; left: -12px; bottom: -12px; width: 96px; height: 96px; border-left: 3px solid var(--wp--preset--color--accent-1); border-bottom: 3px solid var(--wp--preset--color--accent-1); pointer-events: none; }
+.cz-svc-grid { height: 100%; }
+.cz-svc { position: relative; padding: var(--wp--preset--spacing--50); border-top: 3px solid var(--wp--preset--color--accent-6); transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; }
+.cz-svc p, .cz-svc h3 { margin: 0; }
+.cz-svc__top { margin-bottom: var(--wp--preset--spacing--30); }
+/* 編號是裝飾（標題已說明內容），用 CSS 計數器畫出淡色大字，不放進內容：淡色字放在內容裡會被無障礙檢查判為對比不足 */
+.cz-svc-grid { counter-reset: cz-svc; }
+.cz-svc { counter-increment: cz-svc; }
+.cz-svc__top::after { content: counter(cz-svc, decimal-leading-zero); font-size: 2.25rem; font-weight: 700; line-height: 1; color: var(--wp--preset--color--accent-6); font-variant-numeric: tabular-nums; transition: color 0.3s ease; }
+.cz-svc h3 a { color: var(--wp--preset--color--navy); text-decoration: none; }
+.cz-svc h3 a::after { content: ""; position: absolute; inset: 0; }
+.cz-svc__go { margin-top: var(--wp--preset--spacing--30) !important; color: var(--wp--preset--color--accent-3); font-weight: 700; }
+.cz-svc:is(:hover, :focus-within) { background: var(--wp--preset--color--base) !important; border-top-color: var(--wp--preset--color--accent-1); box-shadow: 0 18px 36px -24px rgba(11, 39, 93, 0.45); }
+.cz-svc:is(:hover, :focus-within) .cz-svc__top::after { color: var(--wp--preset--color--accent-2); }
+.cz-svc:is(:hover, :focus-within) h3 a { color: var(--wp--preset--color--accent-3); }
+@media (prefers-reduced-motion: no-preference) { .cz-svc .cz-arrow { transition: translate 0.35s var(--cz-ease); } .cz-svc:is(:hover, :focus-within) .cz-arrow { translate: 6px 0; } }
+@media (max-width: 781px) { .cz-svcs__img img { aspect-ratio: 16 / 9; } }
+
+/* 圖示小方塊（服務頁快速跳轉、聯絡方式）：整塊可點，左邊金條滑過時出現 */
+.cz-tile { position: relative; gap: var(--wp--preset--spacing--30); padding: var(--wp--preset--spacing--40); border-left: 3px solid transparent; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+.cz-tile p { margin: 0; line-height: 1.5; }
+.cz-tile a { display: inline-block; color: var(--wp--preset--color--navy); font-weight: 700; text-decoration: none; } /* 裡面有區塊元素（編號、說明），設成一整塊焦點外框才不會斷成兩段 */
+.cz-tile a::after { content: ""; position: absolute; inset: 0; }
+.cz-tile small { display: block; font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.1em; color: var(--wp--preset--color--accent-3); }
+.cz-tile:is(:hover, :focus-within) { border-left-color: var(--wp--preset--color--accent-1); box-shadow: 0 14px 30px -22px rgba(11, 39, 93, 0.5); }
+.cz-tile:is(:hover, :focus-within) a { color: var(--wp--preset--color--accent-3); }
+.cz-method a { font-size: 1.125rem; word-break: break-all; }
+.cz-method__note { display: block; font-size: 0.875rem; color: var(--wp--preset--color--accent-4); }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+#cz-form, .cz-svcrow { scroll-margin-top: 24px; }
+
+/* 服務頁：照片與說明左右交錯（沿用產品頁 .cz-prod 的 is-reverse） */
+.cz-svcrow__img { margin: 0; overflow: hidden; }
+.cz-svcrow__img img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; scale: 1; }
+@media (prefers-reduced-motion: no-preference) { .cz-svcrow__img img { transition: scale 0.8s cubic-bezier(0.22, 0.61, 0.36, 1); } .cz-svcrow:hover .cz-svcrow__img img { scale: 1.04; } }
+.cz-svcrow__label { gap: 12px; }
+.cz-svcrow__label p { margin: 0; }
+.cz-svcrow h3 { margin: 0 0 0.25rem; color: var(--wp--preset--color--navy); }
+.cz-svcrow .cz-spec { margin: 0; }
+
+/* 關於我們 */
+.cz-facts .cz-stat { padding-left: var(--wp--preset--spacing--30); }
+.cz-photo { position: relative; }
+.cz-photo__img { margin: 0; }
+.cz-photo__img img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.cz-photo__badge { position: absolute; left: calc(-1 * var(--wp--preset--spacing--40)); bottom: calc(-1 * var(--wp--preset--spacing--40)); padding: var(--wp--preset--spacing--40) var(--wp--preset--spacing--50); }
+.cz-photo__badge p { margin: 0; }
+@media (max-width: 781px) { .cz-photo__badge { position: static; } }
+.cz-value { padding: var(--wp--preset--spacing--50); border-top: 3px solid var(--wp--preset--color--accent-3); transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+.cz-value p, .cz-value h3 { margin: 0; }
+.cz-value h3 { margin: var(--wp--preset--spacing--30) 0 0.5rem; color: var(--wp--preset--color--navy); }
+.cz-value:is(:hover, :focus-within) { border-top-color: var(--wp--preset--color--accent-1); box-shadow: 0 18px 36px -24px rgba(11, 39, 93, 0.45); }
+/* 深藍底的時間軸：區塊標題的說明文字改淺色（預設灰字在深藍上對比不夠） */
+.cz-tl-sec .cz-head p { color: var(--wp--preset--color--accent-2) !important; }
+.cz-tl { position: relative; }
+.cz-tl::before, .cz-tl::after { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 2px; background: rgba(255, 255, 255, 0.2); }
+.cz-tl::after { background: var(--wp--preset--color--accent-1); transform-origin: left; scale: 1 1; }
+.cz-tl__item { position: relative; padding-top: 36px; }
+.cz-tl__item::before { content: ""; position: absolute; left: 0; top: 0; width: 12px; height: 12px; border: 2px solid var(--wp--preset--color--accent-1); background: var(--wp--preset--color--navy); border-radius: 50%; z-index: 1; transition: background-color 0.3s ease; }
+.cz-tl__item:hover::before { background: var(--wp--preset--color--accent-1); }
+.cz-tl__item p, .cz-tl__item h3 { margin: 0; }
+.cz-tl__year { font-size: 1.75rem; font-weight: 700; line-height: 1.1; color: var(--wp--preset--color--accent-1); font-variant-numeric: tabular-nums; }
+.cz-tl__item h3 { color: var(--wp--preset--color--base); margin: 0.4rem 0 0.25rem; }
+@media (prefers-reduced-motion: no-preference) {
+	html.cz-reveal-on .cz-tl::after { scale: 0 1; transition: scale 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.2s; }
+	html.cz-reveal-on .cz-tl.is-in::after { scale: 1 1; }
+	html.cz-reveal-on .cz-tl.cz-reveal { opacity: 1; translate: 0 0; }
+}
+@media (max-width: 781px) {
+	.cz-tl { grid-template-columns: 1fr !important; } /* 直線在左邊，只能單欄 */
+	.cz-tl::before, .cz-tl::after { left: 5px; right: auto; top: 0; bottom: 0; width: 2px; height: auto; }
+	.cz-tl::after { transform-origin: top; }
+	html.cz-reveal-on .cz-tl::after { scale: 1 0; }
+	html.cz-reveal-on .cz-tl.is-in::after { scale: 1 1; }
+	.cz-tl__item { padding-top: 0; padding-left: 32px; }
+	.cz-tl__item::before { top: 6px; }
+}
+.cz-team { padding-top: var(--wp--preset--spacing--40); border-top: 1px solid var(--wp--preset--color--accent-6); }
+.cz-team p, .cz-team h3 { margin: 0; }
+.cz-team h3 { color: var(--wp--preset--color--navy); margin-top: var(--wp--preset--spacing--20); }
+.cz-team__num { font-size: 1.75rem; font-weight: 700; line-height: 1; color: var(--wp--preset--color--accent-3); }
+.cz-cert { gap: var(--wp--preset--spacing--30); padding: var(--wp--preset--spacing--40); }
+.cz-cert p { margin: 0; line-height: 1.5; }
+.cz-cert strong { color: var(--wp--preset--color--navy); }
+
+/* 服務據點 */
+.cz-loc { padding: var(--wp--preset--spacing--50); border-top: 3px solid var(--wp--preset--color--accent-6); transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+.cz-loc.is-hq { border-top-color: var(--wp--preset--color--accent-1); }
+.cz-loc p, .cz-loc h3 { margin: 0; }
+.cz-loc h3 { color: var(--wp--preset--color--navy); }
+.cz-loc a { display: inline-block; min-block-size: 24px; padding-block: 2px; font-weight: 700; color: var(--wp--preset--color--accent-3); }
+.cz-loc__note { color: var(--wp--preset--color--accent-3); font-weight: 700; }
+.cz-loc:is(:hover, :focus-within) { border-top-color: var(--wp--preset--color--accent-3); box-shadow: 0 18px 36px -24px rgba(11, 39, 93, 0.45); }
+
+/* 聯絡頁：送出表單之後的三個步驟 */
+.cz-steps { position: relative; }
+.cz-step { gap: var(--wp--preset--spacing--30); padding: 0 0 var(--wp--preset--spacing--40); position: relative; }
+.cz-step:not(:last-child)::before { content: ""; position: absolute; left: 17px; top: 40px; bottom: 4px; width: 2px; background: var(--wp--preset--color--accent-6); }
+.cz-step p { margin: 0; }
+.cz-step strong { color: var(--wp--preset--color--navy); }
+.cz-step__no { flex: 0 0 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: var(--wp--preset--color--navy); color: var(--wp--preset--color--base); font-weight: 700; }
+
+/* 最新消息頁：大日期方塊＋標題；右側欄捲動時固定 */
+.cz-newsq .wp-block-post-template { list-style: none; padding: 0; margin: var(--wp--preset--spacing--40) 0 0; }
+.cz-newsitem { gap: var(--wp--preset--spacing--40); padding: var(--wp--preset--spacing--40) 0; border-bottom: 1px solid var(--wp--preset--color--accent-6); position: relative; }
+.cz-newsq .wp-block-post:first-child .cz-newsitem { border-top: 1px solid var(--wp--preset--color--accent-6); }
+.cz-date { flex: 0 0 84px; padding: 12px 0; text-align: center; }
+.cz-date .wp-block-post-date { margin: 0; }
+.cz-date__d { font-size: 2rem; font-weight: 700; line-height: 1.1; }
+.cz-date__ym { font-size: 0.8125rem; letter-spacing: 0.06em; color: var(--wp--preset--color--accent-1); }
+.cz-newsitem__body { min-width: 0; }
+.cz-newsitem .wp-block-post-title, .cz-newsitem .wp-block-post-excerpt, .cz-newsitem .wp-block-post-excerpt__excerpt { margin: 0; }
+.cz-newsitem .wp-block-post-title a { text-decoration: none; transition: color 0.3s ease; }
+.cz-newsitem .wp-block-post-title a::after { content: ""; position: absolute; inset: 0; }
+.cz-newsitem:is(:hover, :focus-within) .wp-block-post-title a { color: var(--wp--preset--color--accent-3) !important; }
+.cz-aside { display: flex; flex-direction: column; gap: var(--wp--preset--spacing--30); }
+.cz-aside > * { margin: 0 !important; }
+.cz-asidebox p, .cz-asidebox h3 { margin: 0; }
+.cz-asidebox h3 { color: var(--wp--preset--color--navy); }
+@media (min-width: 782px) { .cz-aside { position: sticky; top: var(--wp--preset--spacing--40); align-self: flex-start; } }
+@media (max-width: 480px) { .cz-date { flex-basis: 68px; } .cz-date__d { font-size: 1.5rem; } }
+
+/* 案例頁：產業篩選按鈕（由 chengze-motion.js 產生） */
+.cz-filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 var(--wp--preset--spacing--40); padding: 0; list-style: none; }
+.cz-filter button { min-height: 40px; padding: 0 18px; border: 1px solid var(--wp--preset--color--accent-6); background: var(--wp--preset--color--base); color: var(--wp--preset--color--navy); font: inherit; font-size: 0.9375rem; cursor: pointer; border-radius: 2px; transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+.cz-filter button:is(:hover, :focus-visible) { border-color: var(--wp--preset--color--accent-3); color: var(--wp--preset--color--accent-3); }
+.cz-filter button[aria-pressed="true"] { background: var(--wp--preset--color--navy); border-color: var(--wp--preset--color--navy); color: var(--wp--preset--color--base); }
+.cz-filter__count { margin: 0 0 var(--wp--preset--spacing--30); font-size: 0.875rem; color: var(--wp--preset--color--accent-4); }
+.cz-caseq .wp-block-post[hidden] { display: none !important; }

@@ -87,8 +87,9 @@
 		pause.addEventListener( 'click', function () { playing = ! playing; schedule(); } );
 		prev.addEventListener( 'click', function () { go( current - 1, true ); } );
 		next.addEventListener( 'click', function () { go( current + 1, true ); } );
-		slider.addEventListener( 'mouseenter', function () { hovering = true; schedule(); } );
-		slider.addEventListener( 'mouseleave', function () { hovering = false; schedule(); } );
+		// 滑鼠只有停在控制列上才暫停：原本整張輪播都會暫停，但大圖佔了大半個畫面，滑鼠放著不動就一直不換（2026-11-15 使用者回報「沒有自動更換」）
+		nav.addEventListener( 'mouseenter', function () { hovering = true; schedule(); } );
+		nav.addEventListener( 'mouseleave', function () { hovering = false; schedule(); } );
 		slider.addEventListener( 'focusin', function () { focusing = true; schedule(); } );
 		slider.addEventListener( 'focusout', function ( e ) { if ( ! slider.contains( e.relatedTarget ) ) { focusing = false; schedule(); } } );
 		// 手機左右滑動
@@ -132,9 +133,47 @@
 		} );
 	}
 
-	/* ---------- 3. 捲動進場（往上浮現；同一排依序延遲） ---------- */
+	/* ---------- 3. 案例頁的產業篩選（依每張卡片上的產業標籤；沒有 JS 時不出現按鈕，顯示全部案例） ---------- */
+	document.querySelectorAll( '.cz-caseq' ).forEach( function ( q ) {
+		var list = q.querySelector( '.wp-block-post-template' );
+		var posts = Array.prototype.slice.call( q.querySelectorAll( '.wp-block-post' ) );
+		if ( ! list || posts.length < 2 ) { return; }
+		var tagsOf = function ( p ) { return Array.prototype.map.call( p.querySelectorAll( '.wp-block-post-terms a' ), function ( a ) { return a.textContent.trim(); } ); };
+		var all = [];
+		posts.forEach( function ( p ) { tagsOf( p ).forEach( function ( t ) { if ( all.indexOf( t ) < 0 ) { all.push( t ); } } ); } );
+		if ( all.length < 2 ) { return; }
+		var bar = document.createElement( 'div' );
+		bar.className = 'cz-filter';
+		bar.setAttribute( 'role', 'group' );
+		bar.setAttribute( 'aria-label', '依產業篩選案例' );
+		var count = document.createElement( 'p' );
+		count.className = 'cz-filter__count';
+		count.setAttribute( 'aria-live', 'polite' );
+		var btns = [];
+		var apply = function ( tag ) {
+			var n = 0;
+			posts.forEach( function ( p ) {
+				var show = ! tag || tagsOf( p ).indexOf( tag ) > -1;
+				p.hidden = ! show;
+				if ( show ) { n++; p.classList.add( 'is-in' ); }
+			} );
+			btns.forEach( function ( b ) { b.setAttribute( 'aria-pressed', String( b.dataset.tag === ( tag || '' ) ) ); } );
+			count.textContent = '顯示 ' + n + ' 件案例' + ( tag ? '（' + tag + '）' : '' );
+		};
+		[ '' ].concat( all ).forEach( function ( t ) {
+			var b = document.createElement( 'button' );
+			b.type = 'button'; b.dataset.tag = t; b.textContent = t || '全部';
+			b.addEventListener( 'click', function () { apply( t ); } );
+			bar.appendChild( b ); btns.push( b );
+		} );
+		list.parentNode.insertBefore( bar, list );
+		list.parentNode.insertBefore( count, list );
+		apply( '' );
+	} );
+
+	/* ---------- 4. 捲動進場（往上浮現；同一排依序延遲） ---------- */
 	if ( ! reduce && 'IntersectionObserver' in window ) {
-		var items = document.querySelectorAll( '.cz-head, .cz-stat, .cz-card, .cz-ind, .cz-prod, .cz-news .wp-block-column, .wp-block-post' );
+		var items = document.querySelectorAll( '.cz-head, .cz-stat, .cz-card, .cz-ind, .cz-prod, .cz-news .wp-block-column, .wp-block-post, .cz-svc, .cz-svcs__img, .cz-tile, .cz-value, .cz-photo, .cz-tl, .cz-tl__item, .cz-team, .cz-cert, .cz-loc, .cz-step, .cz-aside > *' );
 		root.classList.add( 'cz-reveal-on' );
 		var rio = new IntersectionObserver( function ( entries ) {
 			entries.forEach( function ( en ) {
