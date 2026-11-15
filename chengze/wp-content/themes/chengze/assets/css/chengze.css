@@ -10,16 +10,16 @@
  * ========================================================================== */
 :root { --cz-ease: cubic-bezier(0.65, 0, 0.35, 1); }
 
-/* 0. 頁首選單：600–959px 放不下一行（實測 900px 時頁首從 82px 變 127px），
+/* 0. 頁首選單：600–999px 放不下一行（實測 900px 時頁首從 82px 變 127px；2026-11-15 選單加了「產品」後 960–980px 也會換行），
  *    改成跟手機一樣的漢堡選單。WordPress 導覽區塊內建只在 600px 以下切換。 */
-@media (min-width: 600px) and (max-width: 959px) {
+@media (min-width: 600px) and (max-width: 999px) {
 	header .wp-block-navigation__responsive-container-open:not(.always-shown) { display: flex !important; }
 	header .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) { display: none !important; }
 	header .wp-block-navigation__responsive-container.is-menu-open { display: flex !important; }
 	header .wp-block-navigation__responsive-container-close:not(.always-shown) { display: flex !important; }
 	header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
 }
-@media (max-width: 959px) {
+@media (max-width: 999px) {
 	header .is-menu-open .wp-block-navigation__responsive-container-content { align-items: flex-start !important; padding: 0 var(--wp--preset--spacing--50); }
 	header .is-menu-open .wp-block-navigation__container { align-items: flex-start !important; }
 	header .is-menu-open .wp-block-navigation-item__content { font-size: 1.125rem; }
@@ -124,3 +124,181 @@ footer a { display: inline-block; min-block-size: 24px; padding-block: 1px; box-
 /* 可點範圍至少 24px：聯絡頁表格裡的電話、信箱（19px），文章分類、標籤連結（16px） */
 .wp-block-table td a, .wp-block-post-terms a { display: inline-block; min-block-size: 24px; padding-block: 2px; box-sizing: border-box; }
 @media (pointer: coarse) { .wp-block-table td a, .wp-block-post-terms a { min-block-size: 32px; padding-block: 6px; } }
+
+/* ==========================================================================
+ * 2026-11-15 改版：參考台達電源官網的資訊量（輪播、產品卡、應用產業、消息／活動／FAQ、頁尾網站地圖）
+ * 配色改成「夜空藍×金」：深藍 #0b275d、主色 #2b5284、金 #dea924（金色只當底色或深色底上的字，白底上不用金色字：對比只有 2:1）
+ * ========================================================================== */
+
+/* 進站載入畫面：固定 2 秒（細線 0→100% 跑 1.8 秒，停 0.2 秒），再往上掀開 0.6 秒。純 CSS 計時 */
+.cz-loader { display: none; }
+html.cz-loading .cz-loader {
+	display: grid; place-items: center; position: fixed; inset: 0; z-index: 100000;
+	background: var(--wp--preset--color--navy); color: var(--wp--preset--color--base);
+	animation: cz-loader-out 0.6s cubic-bezier(0.76, 0, 0.24, 1) 2s forwards;
+}
+html.cz-loading { overflow: hidden; }
+.cz-loader__inner { width: min(320px, 80vw); text-align: center; }
+.cz-loader__name { margin: 0; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 700; letter-spacing: 0.12em; opacity: 0; translate: 0 12px; animation: cz-loader-in 0.6s ease-out 0.1s forwards; }
+.cz-loader__en { margin: 0.4rem 0 1.5rem; font-size: 0.75rem; letter-spacing: 0.32em; color: var(--wp--preset--color--accent-1); opacity: 0; animation: cz-loader-in 0.6s ease-out 0.35s forwards; }
+.cz-loader__track { height: 2px; background: rgba(255, 255, 255, 0.18); overflow: hidden; }
+.cz-loader__bar { display: block; height: 100%; background: var(--wp--preset--color--accent-1); transform-origin: left; scale: 0 1; animation: cz-loader-bar 1.8s cubic-bezier(0.45, 0, 0.2, 1) forwards; }
+@property --cz-p { syntax: '<integer>'; inherits: false; initial-value: 0; }
+.cz-loader__num { --cz-p: 0; counter-reset: p var(--cz-p); animation: cz-loader-num 1.8s cubic-bezier(0.45, 0, 0.2, 1) forwards; font-variant-numeric: tabular-nums; font-size: 0.8125rem; letter-spacing: 0.1em; color: var(--wp--preset--color--accent-2); }
+.cz-loader__num::after { content: counter(p) "%"; }
+@keyframes cz-loader-in { to { opacity: 1; translate: 0 0; } }
+@keyframes cz-loader-bar { to { scale: 1 1; } }
+@keyframes cz-loader-num { to { --cz-p: 100; } }
+@keyframes cz-loader-out { to { translate: 0 -100%; visibility: hidden; } }
+
+/* 頁首上方資訊列 */
+.cz-topbar p { margin: 0; }
+.cz-topbar a { font-weight: 700; }
+@media (max-width: 781px) { .cz-topbar__sites, .cz-topbar__hours { display: none; } }
+
+/* 區塊標題元件：短金條＋標題＋說明，右側「查看更多」 */
+.cz-head { gap: var(--wp--preset--spacing--30); margin-bottom: 0; }
+.cz-head .cz-bar { width: 40px; margin-bottom: 0.75rem; }
+.cz-head h2 { margin: 0; }
+.cz-head p { margin: 0.5rem 0 0; }
+
+/* 輪播 */
+.cz-slider { position: relative; overflow: hidden; background: var(--wp--preset--color--navy); }
+.cz-slider .wp-block-cover { min-height: min(78vh, 720px); }
+.cz-slider.is-ready .cz-slides { display: grid; }
+.cz-slider.is-ready .cz-slides > .wp-block-cover { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity 0.8s ease, visibility 0s linear 0.8s; }
+.cz-slider.is-ready .cz-slides > .wp-block-cover.is-active { opacity: 1; visibility: visible; transition: opacity 0.8s ease, visibility 0s; z-index: 1; }
+html:not(.cz-js) .cz-slider > .wp-block-cover:not(:first-child) { display: none; }
+.cz-slider .wp-block-cover__image-background { scale: 1; }
+@media (prefers-reduced-motion: no-preference) {
+	/* 作用中的那張：照片慢慢推近、文字往上浮現 */
+	.cz-slider .is-active .wp-block-cover__image-background { animation: cz-kenburns 7s ease-out forwards; }
+	.cz-slider .is-active .wp-block-cover__inner-container > * { animation: cz-rise 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s both; }
+}
+@keyframes cz-kenburns { from { scale: 1.08; } to { scale: 1; } }
+@keyframes cz-rise { from { opacity: 0; translate: 0 24px; } to { opacity: 1; translate: 0 0; } }
+.cz-slider__nav {
+	position: absolute; z-index: 2; left: 50%; translate: -50% 0; bottom: var(--wp--preset--spacing--50);
+	width: min(var(--wp--style--global--wide-size, 1340px), calc(100% - 2 * var(--wp--preset--spacing--50)));
+	display: flex; align-items: center; gap: 8px;
+}
+.cz-slider__nav button {
+	display: inline-grid; place-items: center; min-width: 40px; min-height: 40px; padding: 0; border: 1px solid rgba(255, 255, 255, 0.45);
+	background: rgba(11, 39, 93, 0.35); color: var(--wp--preset--color--base); cursor: pointer; border-radius: 2px;
+	transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+.cz-slider__nav button:is(:hover, :focus-visible) { background: var(--wp--preset--color--accent-1); border-color: var(--wp--preset--color--accent-1); color: var(--wp--preset--color--navy); }
+.cz-slider__nav svg { fill: none; stroke: currentColor; stroke-width: 2; }
+.cz-slider__pause svg path { fill: currentColor; }
+.cz-slider__nav .cz-slider__dots { display: flex; gap: 6px; margin: 0 4px; }
+.cz-slider__nav .cz-slider__dot { min-width: 44px; min-height: 40px; border: 0; background: transparent; }
+.cz-slider__bar { display: block; width: 36px; height: 3px; background: rgba(255, 255, 255, 0.4); position: relative; overflow: hidden; }
+.cz-slider__dot[aria-current] .cz-slider__bar::after { content: ""; position: absolute; inset: 0; background: var(--wp--preset--color--accent-1); }
+.cz-slider__nav .cz-slider__dot:is(:hover, :focus-visible) { background: transparent; }
+.cz-slider__nav .cz-slider__dot:is(:hover, :focus-visible) .cz-slider__bar { background: rgba(255, 255, 255, 0.85); }
+@media (prefers-reduced-motion: no-preference) {
+	/* 自動播放中：金色進度條從左跑到右，看得出多久換下一張 */
+	.cz-slider.is-playing .cz-slider__dots.is-run .cz-slider__dot[aria-current] .cz-slider__bar::after { transform-origin: left; animation: cz-progress var(--cz-delay, 6000ms) linear forwards; }
+}
+@keyframes cz-progress { from { scale: 0 1; } to { scale: 1 1; } }
+@media (max-width: 781px) {
+	.cz-slider .wp-block-cover { min-height: 600px; padding-bottom: 110px !important; }
+	.cz-slider__nav .cz-slider__bar { width: 20px; }
+	.cz-slider__nav .cz-slider__dot { min-width: 28px; }
+}
+
+/* 數字實績 */
+.cz-stat { padding-left: var(--wp--preset--spacing--40); border-left: 3px solid var(--wp--preset--color--accent-1); }
+.cz-stat p { margin: 0; }
+.cz-count { display: inline-block; text-align: right; font-variant-numeric: tabular-nums; }
+.cz-unit { font-size: 0.45em; margin-left: 0.2em; font-weight: 700; color: var(--wp--preset--color--accent-3); }
+
+/* 產品卡 */
+.cz-card { background: var(--wp--preset--color--base); border: 1px solid var(--wp--preset--color--accent-6); transition: border-color 0.3s ease, box-shadow 0.3s ease; translate: 0 0; }
+.cz-card__img { margin: 0; background: #eef1f5; overflow: hidden; }
+.cz-card__img img { display: block; width: 100%; height: auto; scale: 1; }
+.cz-card__body { padding: var(--wp--preset--spacing--40) var(--wp--preset--spacing--40) var(--wp--preset--spacing--50); border-top: 3px solid var(--wp--preset--color--accent-6); transition: border-color 0.3s ease; }
+.cz-card__body p, .cz-card__body h3 { margin: 0; }
+.cz-card__body h3 { margin: 0.25rem 0 0.5rem; }
+.cz-card__body h3 a { color: var(--wp--preset--color--navy); text-decoration: none; }
+.cz-card:is(:hover, :focus-within) { border-color: var(--wp--preset--color--accent-3); box-shadow: 0 18px 36px -24px rgba(11, 39, 93, 0.45); }
+.cz-card:is(:hover, :focus-within) .cz-card__body { border-top-color: var(--wp--preset--color--accent-1); }
+.cz-card:is(:hover, :focus-within) h3 a { color: var(--wp--preset--color--accent-3); }
+/* 標題連結蓋滿整張卡片（整張可點，但只有一個 Tab 停點） */
+.cz-card { position: relative; }
+.cz-card h3 a::after { content: ""; position: absolute; inset: 0; }
+@media (prefers-reduced-motion: no-preference) {
+	.cz-card { transition: border-color 0.3s ease, box-shadow 0.3s ease, translate 0.4s cubic-bezier(0.22, 0.61, 0.36, 1); }
+	.cz-card:is(:hover, :focus-within) { translate: 0 -4px; }
+	.cz-card__img img { transition: scale 0.6s cubic-bezier(0.22, 0.61, 0.36, 1); }
+	.cz-card:is(:hover, :focus-within) .cz-card__img img { scale: 1.06; }
+}
+.cz-note { margin-top: var(--wp--preset--spacing--30) !important; }
+/* 手機：產品卡改成左右滑動 */
+@media (max-width: 781px) {
+	.cz-cards { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; margin-right: calc(-1 * var(--wp--preset--spacing--50)); padding-right: var(--wp--preset--spacing--50); padding-bottom: 8px; }
+	.cz-cards > .cz-card { flex: 0 0 78%; scroll-snap-align: start; }
+}
+
+/* 應用產業卡 */
+.cz-ind { overflow: hidden; border: 1px solid var(--wp--preset--color--accent-6); transition: border-color 0.3s ease; }
+.cz-ind__img { margin: 0; flex: 0 0 42%; overflow: hidden; }
+.cz-ind__img img { width: 100%; height: 100%; object-fit: cover; display: block; scale: 1; }
+.cz-ind__body { padding: var(--wp--preset--spacing--40); flex: 1; min-width: 0; }
+.cz-ind__body h3 { margin: 0; color: var(--wp--preset--color--navy); }
+.cz-icon { fill: none; stroke: var(--wp--preset--color--accent-3); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; display: block; }
+.cz-ind__list { margin: 0; padding-left: 1.1em; color: var(--wp--preset--color--accent-4); line-height: 1.8; }
+.cz-ind__list li::marker { color: var(--wp--preset--color--accent-1); }
+.cz-ind__body p { margin: 0; }
+.cz-ind:is(:hover, :focus-within) { border-color: var(--wp--preset--color--accent-3); }
+@media (prefers-reduced-motion: no-preference) {
+	.cz-ind__img img { transition: scale 0.7s cubic-bezier(0.22, 0.61, 0.36, 1); }
+	.cz-ind:is(:hover, :focus-within) .cz-ind__img img { scale: 1.06; }
+	.cz-icon { transition: stroke 0.3s ease, translate 0.4s ease; translate: 0 0; }
+	.cz-ind:is(:hover, :focus-within) .cz-icon { translate: 0 -3px; }
+}
+@media (max-width: 480px) { .cz-ind { flex-direction: column; } .cz-ind__img { flex-basis: auto; aspect-ratio: 16 / 9; } }
+
+/* 最新消息／展覽／FAQ */
+.cz-news .cz-head { margin-bottom: var(--wp--preset--spacing--40); }
+.cz-newslist .wp-block-post-template { list-style: none; padding: 0; margin: 0; }
+.cz-newslist .wp-block-post { padding: var(--wp--preset--spacing--30) 0; border-bottom: 1px solid var(--wp--preset--color--accent-6); }
+.cz-newslist .wp-block-post:first-child { border-top: 1px solid var(--wp--preset--color--accent-6); }
+.cz-newslist .wp-block-post-date, .cz-newslist .wp-block-post-title { margin: 0; }
+.cz-newslist .wp-block-post-title a { color: var(--wp--preset--color--navy); text-decoration: none; }
+.cz-event { position: relative; overflow: hidden; }
+.cz-event p, .cz-event h3 { margin: 0; }
+.cz-event::after { content: ""; position: absolute; right: -40px; top: -40px; width: 140px; height: 140px; border: 2px solid var(--wp--preset--color--accent-1); border-radius: 50%; opacity: 0.35; pointer-events: none; }
+.cz-faq { border-bottom: 1px solid var(--wp--preset--color--accent-6); }
+.cz-faq:first-of-type { border-top: 1px solid var(--wp--preset--color--accent-6); }
+.cz-faq + .cz-faq { margin-top: 0; }
+.cz-faq summary { list-style: none; cursor: pointer; padding: 0.9rem 2rem 0.9rem 0; position: relative; font-weight: 700; color: var(--wp--preset--color--navy); }
+.cz-faq summary::-webkit-details-marker { display: none; }
+.cz-faq summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 10px; height: 10px; border-right: 2px solid var(--wp--preset--color--accent-3); border-bottom: 2px solid var(--wp--preset--color--accent-3); translate: 0 -70%; rotate: 45deg; }
+.cz-faq[open] summary::after { translate: 0 -30%; rotate: 225deg; }
+.cz-faq summary:is(:hover, :focus-visible) { color: var(--wp--preset--color--accent-3); }
+.cz-faq p { margin: 0 0 1rem; }
+@media (prefers-reduced-motion: no-preference) { .cz-faq summary::after { transition: rotate 0.3s ease, translate 0.3s ease; } }
+
+/* 產品頁：照片與說明左右交錯 */
+.cz-prod__img { margin: 0; background: #eef1f5; }
+.cz-prod__img img { display: block; width: 100%; height: auto; }
+@media (min-width: 782px) { .cz-prod.is-reverse { flex-direction: row-reverse; } }
+.cz-prod h2 { margin: 0.25rem 0 0.75rem; }
+.cz-spec { padding: 0; list-style: none; border-top: 1px solid var(--wp--preset--color--accent-6); }
+.cz-spec li { padding: 0.6rem 0 0.6rem 1.4rem; border-bottom: 1px solid var(--wp--preset--color--accent-6); position: relative; }
+.cz-spec li::before { content: ""; position: absolute; left: 0; top: 1.05rem; width: 8px; height: 8px; background: var(--wp--preset--color--accent-1); }
+.cz-prod { scroll-margin-top: 24px; }
+
+/* 頁尾網站地圖 */
+.cz-footer h2 { margin-bottom: 0.5rem; }
+
+/* 捲動進場（只在 JS 加上 html.cz-reveal-on 之後生效，沒有 JS 時內容照常顯示） */
+@media (prefers-reduced-motion: no-preference) {
+	html.cz-reveal-on .cz-reveal { opacity: 0; translate: 0 28px; transition: opacity 0.7s ease, translate 0.8s cubic-bezier(0.22, 0.61, 0.36, 1); transition-delay: calc(var(--cz-i, 0) * 80ms); }
+	html.cz-reveal-on .cz-reveal.is-in { opacity: 1; translate: 0 0; }
+	html.cz-reveal-on .cz-card.cz-reveal.is-in:is(:hover, :focus-within) { translate: 0 -4px; }
+	html.cz-reveal-on .cz-card.cz-reveal.is-in { transition: opacity 0.7s ease, translate 0.4s cubic-bezier(0.22, 0.61, 0.36, 1), border-color 0.3s ease, box-shadow 0.3s ease; transition-delay: 0s; }
+}
+/* 手機：數字實績 2×2，不要直排 4 列 */
+@media (max-width: 599px) { .cz-stats > .wp-block-group { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } .cz-stat { padding-left: var(--wp--preset--spacing--30); } }
