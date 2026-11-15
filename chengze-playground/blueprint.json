@@ -1,0 +1,53 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"meta": {
+		"title": "承澤自動化設備有限公司 企業官網（作品集示意）",
+		"description": "WordPress 區塊佈景主題＋WPForms 聯絡表單。公司、產品、案例皆為虛構。",
+		"author": "cooper35211-max"
+	},
+	"landingPage": "/",
+	"preferredVersions": {
+		"php": "8.3",
+		"wp": "latest"
+	},
+	"steps": [
+		{
+			"step": "importWordPressFiles",
+			"wordPressFilesZip": {
+				"resource": "url",
+				"url": "https://cooper35211-max.github.io/chengze-playground/chengze-site.zip"
+			}
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "wordpress.org/plugins",
+				"slug": "wpforms-lite"
+			},
+			"options": {
+				"activate": true
+			}
+		},
+		{
+			"step": "setSiteLanguage",
+			"language": "zh_TW"
+		},
+		{
+			"step": "writeFile",
+			"path": "/wordpress/chengze-fix-urls.php",
+			"data": {
+				"resource": "url",
+				"url": "https://cooper35211-max.github.io/chengze-playground/fix-urls.php.txt"
+			}
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php require '/wordpress/chengze-fix-urls.php';"
+		},
+		{
+			"step": "login",
+			"username": "chengze-admin",
+			"password": "chengze-demo-2026"
+		}
+	]
+}
