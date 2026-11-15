@@ -180,7 +180,7 @@
 				if ( en.isIntersecting ) { en.target.classList.add( 'is-in' ); rio.unobserve( en.target ); }
 			} );
 		}, { rootMargin: '0px 0px -8% 0px' } );
-		var fold = innerHeight * 0.92;
+		var fold = innerHeight; // 只要載入時露出一點就不做淡入（畫面外的元素是全透明，無障礙檢查會略過；淡入途中的半透明才會被判對比不足）
 		items.forEach( function ( el ) {
 			// 載入時已經在畫面裡的不做淡入：首屏內容直接顯示（不會先空白），也避免 Lighthouse 在淡入途中量到半透明的顏色、判對比不足
 			if ( el.getBoundingClientRect().top < fold ) { return; }
