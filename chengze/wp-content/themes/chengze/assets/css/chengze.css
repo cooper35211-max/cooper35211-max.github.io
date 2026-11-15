@@ -398,7 +398,7 @@ html { scroll-behavior: smooth; }
 .cz-tl__year { font-size: 1.75rem; font-weight: 700; line-height: 1.1; color: var(--wp--preset--color--accent-1); font-variant-numeric: tabular-nums; }
 .cz-tl__item h3 { color: var(--wp--preset--color--base); margin: 0.4rem 0 0.25rem; }
 @media (prefers-reduced-motion: no-preference) {
-	html.cz-reveal-on .cz-tl::after { scale: 0 1; transition: scale 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.2s; }
+	html.cz-reveal-on .cz-tl.cz-reveal::after { scale: 0 1; transition: scale 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.2s; }
 	html.cz-reveal-on .cz-tl.is-in::after { scale: 1 1; }
 	html.cz-reveal-on .cz-tl.cz-reveal { opacity: 1; translate: 0 0; }
 }
@@ -406,7 +406,7 @@ html { scroll-behavior: smooth; }
 	.cz-tl { grid-template-columns: 1fr !important; } /* 直線在左邊，只能單欄 */
 	.cz-tl::before, .cz-tl::after { left: 5px; right: auto; top: 0; bottom: 0; width: 2px; height: auto; }
 	.cz-tl::after { transform-origin: top; }
-	html.cz-reveal-on .cz-tl::after { scale: 1 0; }
+	html.cz-reveal-on .cz-tl.cz-reveal::after { scale: 1 0; }
 	html.cz-reveal-on .cz-tl.is-in::after { scale: 1 1; }
 	.cz-tl__item { padding-top: 0; padding-left: 32px; }
 	.cz-tl__item::before { top: 6px; }

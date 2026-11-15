@@ -180,7 +180,10 @@
 				if ( en.isIntersecting ) { en.target.classList.add( 'is-in' ); rio.unobserve( en.target ); }
 			} );
 		}, { rootMargin: '0px 0px -8% 0px' } );
+		var fold = innerHeight * 0.92;
 		items.forEach( function ( el ) {
+			// 載入時已經在畫面裡的不做淡入：首屏內容直接顯示（不會先空白），也避免 Lighthouse 在淡入途中量到半透明的顏色、判對比不足
+			if ( el.getBoundingClientRect().top < fold ) { return; }
 			var sib = Array.prototype.indexOf.call( el.parentNode.children, el );
 			el.style.setProperty( '--cz-i', Math.min( sib, 5 ) );
 			el.classList.add( 'cz-reveal' );
