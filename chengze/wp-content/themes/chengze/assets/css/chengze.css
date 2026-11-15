@@ -1,0 +1,126 @@
+/* ==========================================================================
+ * 承澤：頁首選單、焦點外框、按鈕互動（2026-11-15，依 wp-portfolio skill 做完禾沐後新增的規則補上）
+ * 寫法對照 modern-web-guidance：ui-behaviors/motion、css/individual-transform-properties、
+ * visual-design/custom-text-decorations、accessibility/accessibility
+ *  - 位移、縮放、色塊蓋上、線條畫出只寫在 @media (prefers-reduced-motion: no-preference) 裡；顏色變化不論設定都保留
+ *  - 縮放用個別屬性 scale，基本狀態先給 scale: 1
+ *  - hover 效果一律寫成 :is(:hover, :focus-visible)，鍵盤操作看到一樣的效果
+ *  - 可點範圍至少 24px，觸控裝置 32px
+ * 風格維持工業／商務：動作短、直線、不彈跳。
+ * ========================================================================== */
+:root { --cz-ease: cubic-bezier(0.65, 0, 0.35, 1); }
+
+/* 0. 頁首選單：600–959px 放不下一行（實測 900px 時頁首從 82px 變 127px），
+ *    改成跟手機一樣的漢堡選單。WordPress 導覽區塊內建只在 600px 以下切換。 */
+@media (min-width: 600px) and (max-width: 959px) {
+	header .wp-block-navigation__responsive-container-open:not(.always-shown) { display: flex !important; }
+	header .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) { display: none !important; }
+	header .wp-block-navigation__responsive-container.is-menu-open { display: flex !important; }
+	header .wp-block-navigation__responsive-container-close:not(.always-shown) { display: flex !important; }
+	header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+}
+@media (max-width: 959px) {
+	header .is-menu-open .wp-block-navigation__responsive-container-content { align-items: flex-start !important; padding: 0 var(--wp--preset--spacing--50); }
+	header .is-menu-open .wp-block-navigation__container { align-items: flex-start !important; }
+	header .is-menu-open .wp-block-navigation-item__content { font-size: 1.125rem; }
+}
+
+/* 1. 焦點外框：鍵盤操作才顯示主色藍框；深色區（主視覺、CTA、頁尾、深色案例卡）改用白框，對比才夠 */
+:where(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid var(--wp--preset--color--accent-3) !important; outline-offset: 3px; }
+/* 頁首選單的展開容器平常也帶著 has-navy-background-color（展開後的底色），所以排除沒展開的狀態 */
+:where(.wp-block-cover, .has-navy-background-color:not(.wp-block-navigation__responsive-container), .has-accent-3-background-color, .has-accent-4-background-color, footer, .is-menu-open) :where(a, button, input, select, textarea, summary):focus-visible { outline-color: var(--wp--preset--color--base) !important; }
+/* 母主題 Twenty Twenty-Five 的 :where(.wp-site-blocks *:focus) 在滑鼠點擊時也會畫框（文字同色、沒有間距，壓在底線上），只留鍵盤的 */
+:where(.wp-site-blocks *):focus:not(:focus-visible) { outline: none; }
+
+/* 2. 實心按鈕：深藍色塊由左往右蓋上、離開時往右退；按下微縮。減少動態效果時直接換成深藍 */
+.wp-block-button:not(.is-style-outline) > .wp-block-button__link, .wpforms-submit {
+	position: relative; isolation: isolate; overflow: hidden; scale: 1;
+	vertical-align: top; /* overflow:hidden 的 inline-block 基線會移到底部，外層多出約 9px 空白（頁首從 82px 變 91px） */
+	transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+.wp-block-button:not(.is-style-outline) > .wp-block-button__link:is(:hover, :focus-visible), .wpforms-submit:is(:hover, :focus-visible) {
+	background-color: var(--wp--preset--color--navy) !important; color: var(--wp--preset--color--base) !important;
+	box-shadow: 0 10px 22px -14px rgba(11, 34, 56, 0.7);
+}
+/* 深色底上的按鈕滑過改成白底深藍字，不然深藍會融進背景 */
+:where(.wp-block-cover, .has-navy-background-color, .has-accent-3-background-color) .wp-block-button:not(.is-style-outline) > .wp-block-button__link:is(:hover, :focus-visible) {
+	background-color: var(--wp--preset--color--base) !important; color: var(--wp--preset--color--navy) !important;
+}
+@media (prefers-reduced-motion: no-preference) {
+	.wp-block-button:not(.is-style-outline) > .wp-block-button__link, .wpforms-submit { transition: color 0.35s ease, box-shadow 0.35s ease, scale 0.15s ease !important; }
+	.wp-block-button:not(.is-style-outline) > .wp-block-button__link::before, .wpforms-submit::before {
+		content: ""; position: absolute; inset: 0; z-index: -1; background: var(--wp--preset--color--navy);
+		scale: 0 1; transform-origin: right center; transition: scale 0.45s var(--cz-ease);
+	}
+	:where(.wp-block-cover, .has-navy-background-color, .has-accent-3-background-color) .wp-block-button:not(.is-style-outline) > .wp-block-button__link::before { background: var(--wp--preset--color--base); }
+	.wp-block-button:not(.is-style-outline) > .wp-block-button__link:is(:hover, :focus-visible), .wpforms-submit:is(:hover, :focus-visible) { background-color: var(--wp--preset--color--action) !important; }
+	.wp-block-button:not(.is-style-outline) > .wp-block-button__link:is(:hover, :focus-visible)::before, .wpforms-submit:is(:hover, :focus-visible)::before { scale: 1 1; transform-origin: left center; }
+	.wp-block-button__link:active, .wpforms-submit:active { scale: 0.97; }
+}
+
+/* 3. 細框按鈕（主視覺「看案例實績」）：白底由下往上填滿、字變深藍 */
+.wp-block-button.is-style-outline > .wp-block-button__link { position: relative; isolation: isolate; overflow: hidden; scale: 1; vertical-align: top; transition: color 0.35s ease, background-color 0.35s ease !important; }
+.wp-block-button.is-style-outline > .wp-block-button__link:is(:hover, :focus-visible) { background: var(--wp--preset--color--base) !important; color: var(--wp--preset--color--navy) !important; }
+@media (prefers-reduced-motion: no-preference) {
+	.wp-block-button.is-style-outline > .wp-block-button__link::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--wp--preset--color--base); scale: 1 0; transform-origin: bottom; transition: scale 0.4s var(--cz-ease); }
+	.wp-block-button.is-style-outline > .wp-block-button__link:is(:hover, :focus-visible) { background: transparent !important; }
+	.wp-block-button.is-style-outline > .wp-block-button__link:is(:hover, :focus-visible)::before { scale: 1 1; }
+}
+
+/* 4. 文字＋箭頭連結（查看完整服務說明 →、查看全部案例 →、閱讀完整案例 →）：
+ *    連結設成一整塊（inline-block），焦點外框才不會缺角；底線先往右退、再從左邊畫回來；箭頭由 JS 包成 .cz-arrow 往前推 */
+.cz-more, .wp-block-read-more {
+	display: inline-block; line-height: 1.6; min-block-size: 24px; padding-block: 2px; padding-right: 8px; box-sizing: border-box;
+	text-decoration: underline solid currentColor 1px; text-underline-offset: 0.35em; transition: color 0.3s ease;
+}
+.cz-more:is(:hover, :focus-visible), .wp-block-read-more:is(:hover, :focus-visible) { color: var(--wp--preset--color--navy); }
+.cz-arrow { display: inline-block; translate: 0; }
+@media (prefers-reduced-motion: no-preference) {
+	.cz-more, .wp-block-read-more { position: relative; text-decoration: none; }
+	.cz-more::before, .wp-block-read-more::before {
+		content: ""; position: absolute; left: 0; right: 8px; bottom: 0.2em; border-bottom: 1px solid currentColor;
+		clip-path: inset(-1px 0 -1px 0); pointer-events: none;
+	}
+	.cz-more:is(:hover, :focus-visible)::before, .wp-block-read-more:is(:hover, :focus-visible)::before { animation: cz-line-redraw 0.65s var(--cz-ease); }
+	.cz-arrow { transition: translate 0.35s var(--cz-ease); }
+	:is(.cz-more, .wp-block-read-more):is(:hover, :focus-visible) .cz-arrow { translate: 6px 0; }
+}
+@keyframes cz-line-redraw {
+	0% { clip-path: inset(-1px 0 -1px 0); }
+	45% { clip-path: inset(-1px 0 -1px 100%); }
+	46% { clip-path: inset(-1px 100% -1px 0); }
+	100% { clip-path: inset(-1px 0 -1px 0); }
+}
+
+/* 5. 主選單、頁尾連結：滑過時底線由左往右畫出來；減少動態效果時直接出現原生底線 */
+header .wp-block-navigation-item__content, footer a { text-decoration: none !important; }
+:is(header .wp-block-navigation-item__content, footer a):is(:hover, :focus-visible) { text-decoration: underline solid currentColor 1px !important; text-underline-offset: 0.4em; }
+@media (prefers-reduced-motion: no-preference) {
+	header .wp-block-navigation-item__content, footer a { position: relative; }
+	:is(header .wp-block-navigation-item__content, footer a):is(:hover, :focus-visible) { text-decoration: none !important; }
+	:is(header .wp-block-navigation-item__content, footer a)::before {
+		content: ""; position: absolute; left: 0; right: 0; bottom: 0.1em; border-bottom: 1px solid currentColor;
+		clip-path: inset(-1px 100% -1px 0); transition: clip-path 0.35s var(--cz-ease); pointer-events: none;
+	}
+	:is(header .wp-block-navigation-item__content, footer a):is(:hover, :focus-visible)::before { clip-path: inset(-1px 0 -1px 0); }
+	.is-menu-open .wp-block-navigation-item__content::before { display: none; }
+}
+/* 頁尾連結原本 22px 高，放大到至少 24px；觸控裝置 32px */
+footer a { display: inline-block; min-block-size: 24px; padding-block: 1px; box-sizing: border-box; }
+@media (pointer: coarse) { footer a, header .wp-block-navigation-item__content { min-block-size: 32px; padding-block: 4px; } }
+
+/* 6. 案例卡片：滑過時標題變主色藍、圖片微放大 */
+.wp-block-post-title a { transition: color 0.3s ease; }
+.wp-block-post:is(:hover, :focus-within) .wp-block-post-title a { color: var(--wp--preset--color--accent-3); }
+.wp-block-post-featured-image { overflow: hidden; }
+.wp-block-post-featured-image img { scale: 1; }
+@media (prefers-reduced-motion: no-preference) {
+	.wp-block-post-featured-image img { transition: scale 0.7s cubic-bezier(0.22, 0.61, 0.36, 1); }
+	.wp-block-post:is(:hover, :focus-within) .wp-block-post-featured-image img { scale: 1.04; }
+}
+
+/* 7. 會換行的連結（手機版上一篇／下一篇的長標題）設成 inline-block，焦點外框才是一個完整的框 */
+.wp-block-post-navigation-link a { display: inline-block; }
+/* 可點範圍至少 24px：聯絡頁表格裡的電話、信箱（19px），文章分類、標籤連結（16px） */
+.wp-block-table td a, .wp-block-post-terms a { display: inline-block; min-block-size: 24px; padding-block: 2px; box-sizing: border-box; }
+@media (pointer: coarse) { .wp-block-table td a, .wp-block-post-terms a { min-block-size: 32px; padding-block: 6px; } }
