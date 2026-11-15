@@ -173,7 +173,7 @@
 
 	/* ---------- 4. 捲動進場（往上浮現；同一排依序延遲） ---------- */
 	if ( ! reduce && 'IntersectionObserver' in window ) {
-		var items = document.querySelectorAll( '.cz-head, .cz-stat, .cz-card, .cz-ind, .cz-prod, .cz-news .wp-block-column, .wp-block-post, .cz-svc, .cz-svcs__img, .cz-tile, .cz-value, .cz-photo, .cz-tl, .cz-tl__item, .cz-team, .cz-cert, .cz-loc, .cz-step, .cz-aside > *' );
+		var items = document.querySelectorAll( '.cz-head, .cz-stat, .cz-card, .cz-ind, .cz-prod, .cz-news .wp-block-column, .wp-block-post, .cz-svc, .cz-svcs__img, .cz-tile, .cz-value, .cz-photo, .cz-tl, .cz-tl__item, .cz-team, .cz-cert, .cz-loc, .cz-step, .cz-aside > *, .cz-table, .cz-postnav' );
 		root.classList.add( 'cz-reveal-on' );
 		var rio = new IntersectionObserver( function ( entries ) {
 			entries.forEach( function ( en ) {
