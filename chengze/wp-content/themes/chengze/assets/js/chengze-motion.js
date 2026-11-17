@@ -109,20 +109,24 @@
 	/* ---------- 2. 數字從 0 數上去 ---------- */
 	var counts = document.querySelectorAll( '.cz-count' );
 	if ( counts.length && ! reduce && 'IntersectionObserver' in window ) {
+		var run = function ( el ) {
+			if ( el.dataset.run ) { return; }
+			el.dataset.run = '1';
+			io.unobserve( el );
+			var end = parseInt( el.getAttribute( 'data-end' ), 10 ), t0 = null;
+			var step = function ( t ) {
+				if ( ! t0 ) { t0 = t; }
+				var p = Math.min( ( t - t0 ) / 1400, 1 );
+				el.textContent = Math.round( end * ( 1 - Math.pow( 1 - p, 3 ) ) );
+				if ( p < 1 ) { requestAnimationFrame( step ); }
+			};
+			requestAnimationFrame( step );
+		};
 		var io = new IntersectionObserver( function ( entries ) {
 			entries.forEach( function ( en ) {
-				if ( ! en.isIntersecting ) { return; }
-				io.unobserve( en.target );
-				var el = en.target, end = parseInt( el.getAttribute( 'data-end' ), 10 ), t0 = null;
-				var step = function ( t ) {
-					if ( ! t0 ) { t0 = t; }
-					var p = Math.min( ( t - t0 ) / 1400, 1 );
-					el.textContent = Math.round( end * ( 1 - Math.pow( 1 - p, 3 ) ) );
-					if ( p < 1 ) { requestAnimationFrame( step ); }
-				};
-				requestAnimationFrame( step );
+				if ( en.isIntersecting ) { run( en.target ); }
 			} );
-		}, { threshold: 0 } ); // 一露出就開始數（數字區塊在首屏下緣，常常只露出一半）
+		}, { threshold: 1, rootMargin: '0px 0px -15% 0px' } ); // 數字整個露出、離畫面下緣有一段距離才開始數。原本一露出就數（threshold 0），數字區塊剛好在首屏下緣，載入時只露出幾 px 就數完了，捲下來看已經停了（2026-11-17 使用者回報「數字沒有動」）
 		counts.forEach( function ( el ) {
 			var n = parseInt( el.textContent, 10 );
 			if ( isNaN( n ) ) { return; }
@@ -131,6 +135,8 @@
 			el.textContent = '0';
 			io.observe( el );
 		} );
+		// 保險：數字整個在畫面裡（只是貼近下緣）、使用者又沒捲動時，4 秒後照樣開始數，不會一直停在 0
+		setTimeout( function () { counts.forEach( function ( el ) { if ( el.dataset.end && el.getBoundingClientRect().bottom <= innerHeight ) { run( el ); } } ); }, 4000 );
 	}
 
 	/* ---------- 3. 案例頁的產業篩選（依每張卡片上的產業標籤；沒有 JS 時不出現按鈕，顯示全部案例） ---------- */
