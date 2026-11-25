@@ -538,7 +538,8 @@ p.sy-quote { font-size: 1.0625rem; }
 @media (max-width: 599px) { .sy-facts > div, .sy-facts--wide > div { grid-template-columns: 1fr; gap: 0.2rem; } }
 
 /* 篩選、錨點用的小膠囊 */
-.sy-chip { display: inline-block; padding: 0.55rem 1.25rem; border: 1px solid var(--sy-greige); border-radius: 999px; background: transparent; color: var(--sy-text); font: inherit; font-size: 0.875rem; letter-spacing: 0.1em; text-decoration: none; cursor: pointer; transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
+/* 篩選按鈕、輸入框的邊框用 --sy-sub：greige 在米色底上只有 1.3–1.5:1，WCAG 要求按鈕與輸入框邊界 3:1（2026-11-25 驗收） */
+.sy-chip { display: inline-block; padding: 0.55rem 1.25rem; border: 1px solid var(--sy-sub); border-radius: 999px; background: transparent; color: var(--sy-text); font: inherit; font-size: 0.875rem; letter-spacing: 0.1em; text-decoration: none; cursor: pointer; transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
 .sy-chip:hover { border-color: var(--sy-green); color: var(--sy-green); }
 .sy-chip[aria-pressed="true"], .sy-chip[aria-current="page"] { background: var(--sy-green); border-color: var(--sy-green); color: #fff; }
 .sy-anchors ul, .sy-catnav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.6rem; }
@@ -595,7 +596,7 @@ html { scroll-padding-top: 2rem; }
 .sy-ev .em-booking-form label, .sy-ev .em-booking-form .em-booking-form-section-title { display: block; font-size: 0.875rem; letter-spacing: 0.08em; margin-bottom: 0.4rem; font-weight: 500; }
 .sy-ev .em-booking-form p, .sy-ev .em-booking-form .input-group { margin: 0 0 1.25rem; }
 .sy-ev .em-booking-form input[type="text"], .sy-ev .em-booking-form input[type="email"], .sy-ev .em-booking-form input[type="tel"], .sy-ev .em-booking-form textarea, .sy-ev .em-booking-form select {
-	width: 100%; box-sizing: border-box; padding: 0.8rem 1rem; border: 1px solid var(--sy-greige); border-radius: 6px; background: var(--sy-base); color: var(--sy-text); font: inherit;
+	width: 100%; box-sizing: border-box; padding: 0.8rem 1rem; border: 1px solid var(--sy-sub); border-radius: 6px; background: var(--sy-base); color: var(--sy-text); font: inherit;
 }
 .sy-ev .em-booking-form select { width: auto; min-width: 6rem; }
 .sy-ev .em-booking-form input:focus-visible, .sy-ev .em-booking-form textarea:focus-visible, .sy-ev .em-booking-form select:focus-visible { outline: 2px solid var(--sy-green); outline-offset: 2px; border-color: var(--sy-green); }
@@ -676,7 +677,7 @@ html { scroll-padding-top: 2rem; }
 .sy-form .wpforms-field { padding: 0 0 1.4rem !important; }
 .sy-form .wpforms-field-label { font-weight: 500 !important; font-size: 0.875rem !important; letter-spacing: 0.08em; color: var(--sy-text) !important; margin-bottom: 0.5rem !important; }
 .sy-form .wpforms-required-label { color: var(--sy-tan-dark) !important; }
-.sy-form input[type="text"], .sy-form input[type="email"], .sy-form select, .sy-form textarea { width: 100% !important; max-width: none !important; padding: 0.8rem 1rem !important; height: auto !important; border: 1px solid var(--sy-greige) !important; border-radius: 6px !important; background: var(--sy-base) !important; color: var(--sy-text) !important; font: inherit !important; box-shadow: none !important; }
+.sy-form input[type="text"], .sy-form input[type="email"], .sy-form select, .sy-form textarea { width: 100% !important; max-width: none !important; padding: 0.8rem 1rem !important; height: auto !important; border: 1px solid var(--sy-sub) !important; border-radius: 6px !important; background: var(--sy-base) !important; color: var(--sy-text) !important; font: inherit !important; box-shadow: none !important; }
 .sy-form input:focus-visible, .sy-form select:focus-visible, .sy-form textarea:focus-visible { outline: 2px solid var(--sy-green) !important; outline-offset: 2px; border-color: var(--sy-green) !important; }
 .sy-form .wpforms-field-description { font-size: 0.8125rem !important; color: var(--sy-sub) !important; }
 .sy-form .wpforms-submit { background: var(--sy-green) !important; color: #fff !important; border: 0 !important; border-radius: 0 !important; padding: 1rem 2.75rem !important; height: auto !important; font: inherit !important; font-weight: 500 !important; letter-spacing: 0.15em !important; transition: background-color 0.3s ease !important; } /* WPForms 預設 transition: all，焦點外框會從白色漸變成綠色 */
@@ -725,7 +726,9 @@ html { scroll-padding-top: 2rem; }
 .sy-ev .em-booking-form .ticket-price strong { font-family: var(--sy-latin); font-size: 1.5rem; /* 24px 以上算大字，焙茶色在米色卡片上 4.48:1 才合格（2026-11-25 驗收） */ font-weight: 400; color: var(--sy-tan-dark); }
 .sy-ev .em-booking-form .em-tickets-spaces { display: flex; gap: 1rem; align-items: center; }
 .sy-ev .em-booking-form .em-tickets-spaces label { margin: 0; }
-.sy-ev .em-booking-form .em-consent-checkbox label { display: flex; gap: 0.6rem; align-items: flex-start; font-weight: 400; letter-spacing: 0; font-size: 0.875rem; line-height: 1.8; }
+/* 同意欄：label 裡有文字＋連結＋文字，用 flex 會被拆成 3 欄（2026-11-25 驗收），改成核取方塊絕對定位在左邊 */
+.sy-ev .em-booking-form .em-consent-checkbox label { display: block; position: relative; padding-left: 1.75rem; font-weight: 400; letter-spacing: 0; font-size: 0.875rem; line-height: 1.8; }
+.sy-ev .em-booking-form .em-consent-checkbox input[type="checkbox"] { position: absolute; left: 0; top: 0; }
 .sy-ev .em-booking-form input[type="checkbox"] { width: 1.1rem; height: 1.1rem; margin-top: 0.3rem; accent-color: var(--sy-green); flex: none; }
 .sy-ev .em-booking-summary { font-size: 0.9375rem; }
 .sy-ev .em-bs-row { display: grid; grid-template-columns: 3rem 1fr auto; gap: 0.5rem; padding: 0.5rem 0; }
