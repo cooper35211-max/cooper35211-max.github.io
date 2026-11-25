@@ -1,0 +1,32 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//wp-events-plugin.com//7.6//EN
+TZID:Asia/Taipei
+X-WR-TIMEZONE:Asia/Taipei
+BEGIN:VEVENT
+UID:155@localhost
+DTSTART;TZID=Asia/Taipei:20270110T103000
+DTEND;TZID=Asia/Taipei:20270110T123000
+DTSTAMP:20261124T025225Z
+URL:https://cooper35211-max.github.io/seiyu/events/oolong-20270110/
+SUMMARY:高山烏龍｜梨山、阿里山、杉林溪
+DESCRIPTION:\n同樣是高山烏龍，海拔與山頭不同，香氣和喉
+ 韻也不一樣。三款並排對照著喝，練習分辨花香、果香
+ 與「山韻」。\n\n\n\n課程約 120 分鐘，茶具、茶葉與茶點
+ 都由茶室準備，結束後每位帶一包今天喝到的茶回家。
+ 請提早 5–10 分鐘到，先喝一杯迎賓茶。\n
+ATTACH;FMTTYPE=image/jpeg:https://cooper35211-max.github.io/seiyu/wp-content/uploads/2026/11
+ /course-oolong.jpg
+CATEGORIES:高山烏龍
+END:VEVENT
+BEGIN:VTIMEZONE
+TZID:Asia/Taipei
+X-LIC-LOCATION:Asia/Taipei
+BEGIN:STANDARD
+DTSTART:20260110T103000
+TZOFFSETFROM:+0800
+TZOFFSETTO:+0800
+TZNAME:CST
+END:STANDARD
+END:VTIMEZONE
+END:VCALENDAR

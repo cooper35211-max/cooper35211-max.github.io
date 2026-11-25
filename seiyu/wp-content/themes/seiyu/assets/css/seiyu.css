@@ -1,0 +1,742 @@
+/**
+ * 青嶼茶室樣式（2026-11-23 階段 3：設計系統）
+ * 顏色一律用 theme.json 的變數（--wp--preset--color--*），不寫死色碼；只有白色按鈕字、半透明疊色例外。
+ * 動作（位移、縮放、色塊蓋上、線條畫出）只寫在 @media (prefers-reduced-motion: no-preference) 裡；
+ * 開了「減少動態效果」時只保留淡入與顏色變化（使用者 2026-11-23 的選擇，跟承澤、禾沐「完全不動」不同）。
+ */
+:root {
+	--sy-base: var(--wp--preset--color--base);
+	--sy-text: var(--wp--preset--color--contrast);
+	--sy-green: var(--wp--preset--color--accent-1);
+	--sy-tan: var(--wp--preset--color--accent-2);
+	--sy-greige: var(--wp--preset--color--accent-3);
+	--sy-light: var(--wp--preset--color--accent-4);
+	--sy-sub: var(--wp--preset--color--accent-5);
+	--sy-tan-dark: var(--wp--preset--color--accent-6);
+	--sy-latin: var(--wp--preset--font-family--latin);
+	--sy-head: var(--wp--preset--font-family--heading);
+	--sy-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+	--sy-gap-section: clamp(6rem, 12vw, 10rem);
+	--sy-header-h: 84px;
+	--sy-radius: clamp(24px, 3.4vw, 48px); /* 照片圓角（D 款：貼邊的那側不圓，只圓內側），全站照片共用 */
+	--sy-intro: 0s; /* 首屏動畫延遲：第一次進站要等載入畫面 */
+}
+html.sy-intro { --sy-intro: calc(var(--sy-lt) + 0.1s); }
+::selection { background: var(--sy-greige); color: var(--sy-text); }
+.screen-reader-text { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* 焦點：Twenty Twenty-Five 在任何聚焦（含滑鼠點擊）都畫貼著文字的框；改成只有鍵盤聚焦才顯示、留間距（禾沐踩過） */
+:where(.wp-site-blocks *:focus) { outline: none; }
+:where(.wp-site-blocks) :focus-visible { outline: 2px solid var(--sy-green); outline-offset: 4px; }
+.sy-footer :focus-visible { outline-color: var(--sy-base); }
+.skip-link.screen-reader-text:focus-visible { outline: 2px solid var(--sy-green); outline-offset: 2px; background: var(--sy-base); color: var(--sy-text); }
+
+/* 英文小標、數字 */
+.sy-en { font-family: var(--sy-latin); font-size: 0.8125rem; letter-spacing: 0.3em; text-transform: uppercase; }
+.sy-num { font-family: var(--sy-latin); letter-spacing: 0.06em; }
+
+/* ---------- 頁首 ---------- */
+.sy-header { min-height: var(--sy-header-h); align-items: center; position: relative; z-index: 10; }
+.sy-header .wp-block-site-title a { text-decoration: none; }
+
+/* 店名商標（頁首、頁尾共用；顏色跟著文字色） */
+.sy-brand { display: inline-flex; align-items: center; gap: 0.75rem; color: inherit; text-decoration: none; }
+.sy-brand__mark { flex: none; color: var(--sy-green); overflow: visible; }
+.sy-footer .sy-brand__mark { color: var(--sy-base); }
+.sy-brand__name { font-family: var(--sy-head); font-size: 1.5rem; letter-spacing: 0.2em; line-height: 1; }
+.sy-brand__ripple { opacity: 0.5; transform-origin: 50px 50px; transform-box: view-box; }
+.sy-brand__ripple--2 { opacity: 0.3; }
+.sy-brand__leaf { transform-origin: 50px 50px; transform-box: view-box; }
+@media (prefers-reduced-motion: no-preference) {
+	/* 滑過商標：水紋往外擴一圈、茶葉轉一下 */
+	.sy-brand__ripple, .sy-brand__leaf { transition: scale 0.6s var(--sy-ease), rotate 0.8s var(--sy-ease), opacity 0.6s ease; }
+	.sy-brand:is(:hover, :focus-visible) .sy-brand__ripple { scale: 1.18; opacity: 0.25; }
+	.sy-brand:is(:hover, :focus-visible) .sy-brand__ripple--2 { scale: 1.3; }
+	.sy-brand:is(:hover, :focus-visible) .sy-brand__leaf { rotate: -24deg; }
+}
+.sy-nav a { text-decoration: none; position: relative; display: inline-block; padding: 0.25rem 0; }
+.sy-nav .wp-block-navigation-item__content::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; scale: 0 1; transform-origin: right; }
+.sy-header__cta .wp-block-button__link { padding: 0.7rem 1.4rem; }
+/* 選單 7 項放不下的寬度改用漢堡按鈕（導覽區塊內建只在 600px 以下切換；禾沐的做法） */
+@media (min-width: 600px) and (max-width: 1099px) {
+	.sy-nav .wp-block-navigation__responsive-container-open:not(.always-shown) { display: flex; }
+	.sy-nav .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) { display: none; }
+}
+@media (max-width: 599px) { .wp-block-buttons.sy-header__cta { display: none; } } /* is-layout-flex 的 display:flex 權重比較高 */
+
+/* ---------- 按鈕 ---------- */
+.wp-element-button, .wp-block-button__link { position: relative; isolation: isolate; overflow: hidden; scale: 1; vertical-align: top; transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease; }
+.wp-block-button:not(.is-style-outline) .wp-block-button__link::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--sy-text); scale: 0 1; transform-origin: right; }
+.wp-block-button.is-style-outline .wp-block-button__link { background: transparent; color: var(--sy-text); border: 1px solid currentColor; }
+.wp-block-button.is-style-outline .wp-block-button__link::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--sy-text); scale: 1 0; transform-origin: bottom; }
+.wp-block-button.is-style-outline .wp-block-button__link:is(:hover, :focus-visible) { color: var(--sy-base); }
+.sy-btn-light .wp-block-button__link { color: var(--sy-base) !important; }
+.sy-btn-light .wp-block-button__link::before { background: var(--sy-base) !important; }
+.sy-btn-light .wp-block-button__link:is(:hover, :focus-visible) { color: var(--sy-text) !important; }
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-button:not(.is-style-outline) .wp-block-button__link:is(:hover, :focus-visible) { background: var(--sy-text); }
+	.wp-block-button.is-style-outline .wp-block-button__link:is(:hover, :focus-visible) { background: var(--sy-text); }
+	.sy-btn-light .wp-block-button__link:is(:hover, :focus-visible) { background: var(--sy-base) !important; }
+}
+
+/* 文字＋箭頭連結：箭頭往前推、底線重畫 */
+.sy-arrow { display: inline-block; position: relative; padding-right: 1.6em; color: var(--sy-text); text-decoration: none; letter-spacing: 0.12em; }
+.sy-arrow::after { content: "→"; position: absolute; right: 0.2em; top: 0; font-family: var(--sy-latin); }
+.sy-arrow::before { content: ""; position: absolute; left: 0; right: 1.6em; bottom: 0.1em; height: 1px; background: currentColor; }
+.sy-arrow:is(:hover, :focus-visible) { color: var(--sy-green); }
+
+@media (prefers-reduced-motion: no-preference) {
+	.sy-nav .wp-block-navigation-item__content::after { transition: scale 0.4s var(--sy-ease); }
+	.sy-nav .wp-block-navigation-item__content:is(:hover, :focus-visible)::after { scale: 1 1; transform-origin: left; }
+	.wp-block-button .wp-block-button__link::before { transition: scale 0.5s var(--sy-ease); }
+	.wp-block-button:not(.is-style-outline) .wp-block-button__link:is(:hover, :focus-visible)::before { scale: 1 1; transform-origin: left; }
+	.wp-block-button.is-style-outline .wp-block-button__link:is(:hover, :focus-visible)::before { scale: 1 1; }
+	.wp-block-button__link:active { scale: 0.97; }
+	.sy-arrow::after { transition: translate 0.4s var(--sy-ease); }
+	.sy-arrow:is(:hover, :focus-visible)::after { translate: 6px 0; }
+	.sy-arrow::before { transition: clip-path 0.5s var(--sy-ease); clip-path: inset(0 0 0 0); }
+	.sy-arrow:is(:hover, :focus-visible)::before { animation: sy-redraw 0.6s var(--sy-ease); }
+	@keyframes sy-redraw { 0% { clip-path: inset(0 0 0 0); } 45% { clip-path: inset(0 0 0 100%); } 46% { clip-path: inset(0 100% 0 0); } 100% { clip-path: inset(0 0 0 0); } }
+}
+@media (pointer: coarse) { .sy-arrow, .sy-nav a { padding-top: 0.5rem; padding-bottom: 0.5rem; } }
+
+/* ---------- 首頁第一屏：中央直排標語＋兩側照片 ---------- */
+.sy-hero { display: grid; grid-template-columns: 37.5fr 25fr 37.5fr; grid-template-rows: minmax(0, 1fr); height: clamp(600px, calc(100svh - var(--sy-header-h)), 960px); }
+.sy-hero > * { margin: 0 !important; }
+.sy-hero__photo { height: 100%; overflow: hidden; position: relative; }
+.sy-hero__photo--l { border-radius: 0 var(--sy-radius) var(--sy-radius) 0; }
+.sy-hero__photo--r { border-radius: var(--sy-radius) 0 0 var(--sy-radius); }
+/* 照片比框高 140px，留給視差（c）上下移動的空間 */
+.sy-hero__photo img { position: absolute; left: 0; top: -70px; width: 100%; height: calc(100% + 140px) !important; max-width: none; object-fit: cover; display: block; }
+@media (prefers-reduced-motion: no-preference) {
+	/* a：首屏照片慢慢放大 */
+	.sy-hero__photo img { animation: sy-slowzoom 9s cubic-bezier(0.25, 0.1, 0.25, 1) var(--sy-intro) both; }
+	@keyframes sy-slowzoom { from { scale: 1; } to { scale: 1.07; } }
+	/* b：第一次進站，載入畫面掀開後照片由下往上揭開 */
+	html.sy-intro .sy-hero__photo { animation: sy-unveil 1.3s cubic-bezier(0.76, 0, 0.24, 1) calc(var(--sy-lt) + 0.15s) both; }
+	html.sy-intro .sy-hero__photo--r { animation-delay: calc(var(--sy-lt) + 0.35s); }
+	/* 中間欄：英文小標→（標語逐字）→說明→按鈕，依序浮上來 */
+	html.sy-intro .sy-hero__en, html.sy-intro .sy-hero__lead, html.sy-intro .sy-hero__cta { animation: sy-rise 1s var(--sy-ease) calc(var(--sy-lt) + 0.2s) both; }
+	html.sy-intro .sy-hero__lead { animation-delay: calc(var(--sy-lt) + 1.1s); }
+	html.sy-intro .sy-hero__cta { animation-delay: calc(var(--sy-lt) + 1.35s); }
+	@keyframes sy-rise { from { opacity: 0; translate: 0 16px; } to { opacity: 1; translate: 0 0; } }
+}
+@keyframes sy-unveil { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+.sy-hero__center { min-height: 0; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; padding: 2rem 1rem; text-align: center; }
+.sy-hero__en { color: var(--sy-green); margin: 0; }
+.sy-hero__title { writing-mode: vertical-rl; margin: 0; font-size: clamp(2.25rem, 3.2vw, 3.25rem); line-height: 1.6; letter-spacing: 0.32em; display: flex; flex-direction: column; gap: 0.5em; } /* 直排時 column＝由右往左排：第一行（為自己）在最右邊 */
+.sy-hero__line { display: block; text-align: start; } /* 中間欄的 text-align:center 在直排時會變成上下置中，抵消第二行的錯開 */
+.sy-hero__line--accent { color: var(--sy-green); }
+.sy-hero__line + .sy-hero__line { margin-top: 2.4em; } /* 第二行往下錯開，跟樣張一樣（直排時 padding 是邏輯方向，用實體的 margin-top） */
+.sy-hero__lead { margin: 0; color: var(--sy-sub); line-height: 2; }
+@media (max-width: 781px) {
+	.sy-hero { grid-template-columns: 1fr; height: auto; }
+	.sy-hero__photo--l { aspect-ratio: 4 / 3; border-radius: 0 0 var(--sy-radius) var(--sy-radius); }
+	.sy-hero__photo--r { display: none; }  /* 手機只放一張，第二張在階段 4 移到下一段開頭 */
+	.sy-hero__center { padding: 3.5rem 1.5rem 4rem; gap: 1.5rem; }
+	.sy-hero__title { writing-mode: horizontal-tb; gap: 0.2em; font-size: 2.25rem; letter-spacing: 0.16em; }
+	.sy-hero__line { text-align: center; } /* 橫排時改回置中 */
+	.sy-hero__line + .sy-hero__line { margin-top: 0; }
+}
+
+/* ---------- 首屏氛圍：和紙紋理＋暖光、直排小字＋季節標籤（2026-11-24 使用者選 F，之後拿掉窗外樹影、捲動提示） ---------- */
+/* A：全站底色一層很淡的紙張纖維（SVG 雜訊，不另外下載圖片） */
+body { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .45 0 0 0 0 .38 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.sy-hero { position: relative; }
+/* A：標語後面一圈焙茶色暖光（跟載入畫面同一種光） */
+.sy-hero__center { position: relative; z-index: 3; background: radial-gradient(ellipse 70% 45% at 50% 45%, rgb(194 149 123 / 0.16), transparent 75%); }
+/* D：季節標籤、照片上的直排小字（照片上的字用和紙白＋陰影，任何照片都讀得到） */
+.sy-hero__season, .sy-hero__vtext { position: absolute; z-index: 3; margin: 0 !important; color: var(--sy-base); text-shadow: 0 0 14px rgb(46 51 38 / 0.45), 0 0 2px rgb(46 51 38 / 0.3); }
+.sy-hero__season { left: clamp(1.25rem, 2.2vw, 2rem); top: clamp(1.25rem, 2vw, 1.75rem); font-size: 0.9375rem; font-weight: 500; letter-spacing: 0.2em; line-height: 1.8; }
+/* 季節標籤底下的照片可能很亮（霧、白牆）：左上角一層很淡的暗色漸層 */
+.sy-hero__photo--l::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 60% 30% at 0 0, rgb(46 51 38 / 0.45), transparent 75%); }
+.sy-hero__season .sy-num { display: block; font-size: 0.8125rem; font-weight: 400; letter-spacing: 0.3em; }
+.sy-hero__vtext { writing-mode: vertical-rl; bottom: 2.5rem; font-size: 0.9375rem; letter-spacing: 0.5em; }
+.sy-hero__vtext--l { right: calc(62.5% + 1.75rem); }
+.sy-hero__vtext--r { left: calc(62.5% + 1.75rem); }
+@media (prefers-reduced-motion: no-preference) {
+	/* 第一次進站：照片揭開後才出現 */
+	html.sy-intro .sy-hero__season, html.sy-intro .sy-hero__vtext { animation: sy-fade 1.2s ease calc(var(--sy-lt) + 1.4s) both; }
+}
+@media (max-width: 781px) {
+	.sy-hero__vtext { display: none; }
+}
+
+/* ---------- 段落與區塊標題元件（全站同一個） ---------- */
+.sy-section { padding-top: var(--sy-gap-section); padding-bottom: 0; }
+.sy-main > .sy-section:last-child { padding-bottom: var(--sy-gap-section); }
+.sy-head { display: grid; grid-template-columns: 1fr 3fr auto; align-items: end; gap: 1rem 2rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.sy-head > * { margin: 0 !important; }
+.sy-head__en { font-family: var(--sy-latin); font-size: 0.8125rem; letter-spacing: 0.3em; color: var(--sy-green); display: flex; align-items: center; gap: 1rem; padding-bottom: 0.9em; }
+.sy-head__title { font-size: var(--wp--preset--font-size--x-large); }
+@media (max-width: 781px) {
+	.sy-head { grid-template-columns: 1fr auto; }
+	.sy-head__en { grid-column: 1 / -1; padding-bottom: 0; }
+}
+
+/* 場次列表：一行一場、細線分隔（日本網站的消息列表做法，不用卡片） */
+.sy-section .sy-sessions { margin-left: 25% !important; margin-right: 0 !important; } /* constrained 版面會把子元素左右邊距設成 auto !important */
+.sy-sessions { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--sy-greige); }
+.sy-session { display: grid; grid-template-columns: 9rem 1fr 7rem 5.5rem 5rem; align-items: center; gap: 1.5rem; padding: 1.6rem 0; border-top: 1px solid var(--sy-greige); }
+.sy-session p { margin: 0; }
+.sy-session__date .sy-num { font-size: 1.75rem; display: block; line-height: 1.1; }
+.sy-session__date small { font-size: 0.8125rem; color: var(--sy-sub); }
+.sy-session__price { color: var(--sy-tan-dark); font-size: 1.125rem; }
+.sy-session__seats { font-size: 0.875rem; color: var(--sy-sub); }
+.sy-session.is-few .sy-session__seats { color: var(--sy-tan-dark); font-weight: 500; }
+.sy-session.is-full { color: var(--sy-sub); }
+.sy-session.is-full .sy-session__title { text-decoration: line-through; text-decoration-thickness: 1px; }
+.sy-session__go { text-align: right; }
+.sy-session__closed { font-size: 0.875rem; letter-spacing: 0.12em; color: var(--sy-sub); }
+@media (max-width: 1023px) { .sy-section .sy-sessions { margin-left: 0 !important; } }
+@media (max-width: 781px) {
+	.sy-session { grid-template-columns: 5.5rem 1fr auto; grid-template-areas: "date title title" "date price go" "date seats go"; gap: 0.25rem 1rem; }
+	.sy-session__date { grid-area: date; align-self: start; }
+	.sy-session__title { grid-area: title; }
+	.sy-session__price { grid-area: price; }
+	.sy-session__seats { grid-area: seats; }
+	.sy-session__go { grid-area: go; align-self: end; }
+}
+
+/* ---------- 頁尾（全站唯一一塊深色） ---------- */
+.sy-footer .wp-block-site-title a { text-decoration: none; }
+.sy-footer .sy-en { opacity: 0.75; }
+.sy-footer__links { list-style: none; padding: 0; margin: 0.75rem 0 0; line-height: 2.4; }
+.sy-footer__links a { text-decoration: none; display: inline-block; position: relative; }
+.sy-footer__links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0.3em; height: 1px; background: currentColor; scale: 0 1; transform-origin: right; }
+@media (prefers-reduced-motion: no-preference) {
+	.sy-footer__links a::after { transition: scale 0.4s var(--sy-ease); }
+	.sy-footer__links a:is(:hover, :focus-visible)::after { scale: 1 1; transform-origin: left; }
+}
+.sy-footer__note { margin-top: var(--wp--preset--spacing--60) !important; padding-top: 1.5rem; border-top: 1px solid rgb(246 242 236 / 0.2); opacity: 0.75; }
+
+/* ---------- 進站載入畫面：提樑壺倒茶（長度 --sy-lt，預設 2 秒；各段用比例排時間），純 CSS 計時 ---------- */
+:root { --sy-lt: 2s; }
+.sy-loader { display: none; }
+html.sy-loading { overflow: hidden; }
+html.sy-loading .sy-loader {
+	display: grid; place-items: center; position: fixed; inset: 0; z-index: 100000; color: var(--sy-text);
+	/* 氛圍：中央一圈暖光（焙茶色，很淡）＋四周微暗，像午後茶室的光 */
+	background:
+		radial-gradient(ellipse 60% 50% at 50% 46%, rgb(194 149 123 / 0.16), transparent 70%),
+		radial-gradient(ellipse 120% 100% at 50% 50%, transparent 55%, rgb(46 51 38 / 0.08)),
+		var(--sy-base);
+	animation: sy-loader-out 0.8s ease var(--sy-lt) forwards;
+}
+/* 和紙紋理：SVG 雜訊，很淡 */
+html.sy-loading .sy-loader::before {
+	content: ""; position: absolute; inset: 0; opacity: 0.35; mix-blend-mode: multiply; pointer-events: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .5 0 0 0 0 .42 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.sy-loader__inner { position: relative; text-align: center; animation: sy-loader-drift calc(var(--sy-lt) + 0.8s) ease-out both; }
+.sy-lp { display: block; width: clamp(220px, 24vw, 340px); height: auto; margin: 0 auto 1rem; overflow: visible; }
+.sy-lp__line { fill: none; stroke: var(--sy-text); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+.sy-lp__handle { fill: none; stroke: var(--sy-tan); stroke-width: 2.4; stroke-linecap: round; }
+/* 壺：從直立轉到倒茶的角度，倒完稍微收回 */
+.sy-lp__pot { transform-box: view-box; transform-origin: 70px 74px; opacity: 0; animation: sy-pot calc(var(--sy-lt) * 0.85) cubic-bezier(0.45, 0, 0.2, 1) both; }
+@keyframes sy-pot { 0% { opacity: 0; rotate: -6deg; translate: -10px 0; } 18% { opacity: 1; } 30% { rotate: 28deg; translate: 0 0; } 72% { rotate: 28deg; opacity: 1; } 100% { rotate: 6deg; opacity: 1; } }
+/* 茶水：先從壺嘴畫到杯裡，倒完尾巴往下收 */
+.sy-lp__stream { fill: none; stroke: var(--sy-tan); stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; animation: sy-stream calc(var(--sy-lt) * 0.5) linear calc(var(--sy-lt) * 0.24) both; }
+@keyframes sy-stream { 0% { stroke-dashoffset: 1; } 30% { stroke-dashoffset: 0; } 75% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -1; } }
+.sy-lp__tea { fill: var(--sy-tan); opacity: 0.85; translate: 0 52px; animation: sy-tea calc(var(--sy-lt) * 0.5) cubic-bezier(0.3, 0, 0.3, 1) calc(var(--sy-lt) * 0.3) both; }
+@keyframes sy-tea { to { translate: 0 18px; } }
+.sy-lp__ripple { fill: none; stroke: var(--sy-base); stroke-width: 0.8; opacity: 0; transform-box: fill-box; transform-origin: center; animation: sy-ripple calc(var(--sy-lt) * 0.35) ease-out calc(var(--sy-lt) * 0.42) both; }
+.sy-lp__ripple--2 { animation-delay: calc(var(--sy-lt) * 0.56); }
+@keyframes sy-ripple { 0% { opacity: 0.9; scale: 0.3; translate: 0 6px; } 100% { opacity: 0; scale: 3.2; translate: 0 -10px; } }
+.sy-lp__steam { fill: none; stroke: var(--sy-sub); stroke-width: 1; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; animation: sy-steam calc(var(--sy-lt) * 0.55) ease-out calc(var(--sy-lt) * 0.6) both; }
+.sy-lp__steam--2 { animation-delay: calc(var(--sy-lt) * 0.7); }
+@keyframes sy-steam { 0% { stroke-dashoffset: 1; opacity: 0; translate: 0 6px; } 30% { opacity: 0.55; } 100% { stroke-dashoffset: 0; opacity: 0; translate: 0 -10px; } }
+.sy-loader__name { margin: 0; font-family: var(--sy-head); font-size: 2rem; letter-spacing: 0.4em; padding-left: 0.4em; opacity: 0; animation: sy-name calc(var(--sy-lt) * 0.55) ease-out calc(var(--sy-lt) * 0.3) both; }
+@keyframes sy-name { from { opacity: 0; filter: blur(8px); letter-spacing: 0.7em; } to { opacity: 1; filter: blur(0); letter-spacing: 0.4em; } }
+.sy-loader__rule { display: block; width: 40px; height: 1px; margin: 0.9rem auto 0; background: var(--sy-tan); scale: 0 1; animation: sy-rule calc(var(--sy-lt) * 0.4) var(--sy-ease) calc(var(--sy-lt) * 0.5) both; }
+@keyframes sy-rule { to { scale: 1 1; } }
+.sy-loader__en { margin: 0.7rem 0 0; font-family: var(--sy-latin); font-size: 0.75rem; letter-spacing: 0.4em; color: var(--sy-sub); opacity: 0; animation: sy-fade calc(var(--sy-lt) * 0.4) ease-out calc(var(--sy-lt) * 0.55) both; }
+@keyframes sy-fade { to { opacity: 1; } }
+/* 杯子先淡入 */
+.sy-lp__cupg { opacity: 0; animation: sy-fade calc(var(--sy-lt) * 0.25) ease-out both; }
+/* 光裡的浮塵：幾顆很淡的小點慢慢往上飄，讓畫面有空氣感 */
+.sy-loader__dust { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.sy-loader__dust i { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--sy-tan); opacity: 0; animation: sy-dust calc(var(--sy-lt) * 1.4) ease-in-out both; }
+.sy-loader__dust i:nth-child(1) { left: 38%; top: 62%; animation-delay: 0s; }
+.sy-loader__dust i:nth-child(2) { left: 46%; top: 70%; width: 2px; height: 2px; animation-delay: calc(var(--sy-lt) * 0.15); }
+.sy-loader__dust i:nth-child(3) { left: 55%; top: 58%; animation-delay: calc(var(--sy-lt) * 0.05); }
+.sy-loader__dust i:nth-child(4) { left: 61%; top: 68%; width: 4px; height: 4px; animation-delay: calc(var(--sy-lt) * 0.25); }
+.sy-loader__dust i:nth-child(5) { left: 42%; top: 50%; width: 2px; height: 2px; animation-delay: calc(var(--sy-lt) * 0.3); }
+.sy-loader__dust i:nth-child(6) { left: 58%; top: 46%; animation-delay: calc(var(--sy-lt) * 0.1); }
+.sy-loader__dust i:nth-child(7) { left: 50%; top: 76%; width: 2px; height: 2px; animation-delay: calc(var(--sy-lt) * 0.2); }
+.sy-loader__dust i:nth-child(8) { left: 66%; top: 55%; width: 2px; height: 2px; animation-delay: calc(var(--sy-lt) * 0.35); }
+@keyframes sy-dust { 0% { opacity: 0; translate: 0 0; } 30% { opacity: 0.5; } 100% { opacity: 0; translate: 14px -90px; } }
+@keyframes sy-loader-drift { from { translate: 0 8px; } to { translate: 0 -8px; } }
+/* 離場：整片淡出、微微失焦，接首屏照片揭開 */
+@keyframes sy-loader-out { to { opacity: 0; filter: blur(6px); visibility: hidden; } }
+
+/* ---------- 捲動進場：只在程式加上 html.sy-reveal-on 之後生效（沒有 JS 時內容照常顯示） ---------- */
+html.sy-reveal-on .sy-reveal { opacity: 0; transition: opacity 0.9s ease; transition-delay: calc(var(--sy-i, 0) * 120ms); }
+html.sy-reveal-on .sy-reveal.is-in { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+	html.sy-reveal-on .sy-reveal { translate: 0 40px; transition: opacity 0.9s ease, translate 1s var(--sy-ease); transition-delay: calc(var(--sy-i, 0) * 120ms); }
+	html.sy-reveal-on .sy-reveal.is-in { translate: 0 0; }
+}
+
+/* ---------- b：照片捲到時由下往上揭開（加 .sy-unveil 在 figure 上；照片同時從 1.12 倍縮回） ---------- */
+html.sy-reveal-on .sy-unveil.sy-reveal { opacity: 1; translate: none; }
+@media (prefers-reduced-motion: no-preference) {
+	html.sy-reveal-on .sy-unveil.sy-reveal { clip-path: inset(100% 0 0 0); transition: clip-path 1.3s cubic-bezier(0.76, 0, 0.24, 1); }
+	html.sy-reveal-on .sy-unveil.sy-reveal img { scale: 1.12; transition: scale 1.8s var(--sy-ease); }
+	html.sy-reveal-on .sy-unveil.sy-reveal.is-in { clip-path: inset(0 0 0 0); }
+	html.sy-reveal-on .sy-unveil.sy-reveal.is-in img { scale: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+	html.sy-reveal-on .sy-unveil.sy-reveal { opacity: 0; }
+	html.sy-reveal-on .sy-unveil.sy-reveal.is-in { opacity: 1; }
+}
+
+/* ---------- d：滑過照片微微放大（加 .sy-zoom 在含照片的連結或卡片上） ---------- */
+.sy-zoom { overflow: hidden; }
+@media (prefers-reduced-motion: no-preference) {
+	.sy-zoom img { transition: scale 0.9s var(--sy-ease); }
+	.sy-zoom:is(:hover, :focus-within) img { scale: 1.05; }
+}
+
+/* ---------- e：標題逐字浮現（程式把字拆成 .sy-ch；父層加上 .is-in 時依序出現） ---------- */
+html.sy-split-on .sy-ch { display: inline-block; opacity: 0; transition: opacity 0.8s ease; transition-delay: calc(var(--sy-d, 0s) + var(--ci, 0) * 80ms); }
+html.sy-split-on .is-in .sy-ch, html.sy-split-on .sy-ch-wrap.is-in .sy-ch { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+	html.sy-split-on .sy-ch { translate: 0 0.45em; filter: blur(4px); transition: opacity 0.8s ease, translate 0.9s var(--sy-ease), filter 0.8s ease; transition-delay: calc(var(--sy-d, 0s) + var(--ci, 0) * 80ms); }
+	html.sy-split-on .is-in .sy-ch { translate: 0 0; filter: blur(0); }
+}
+.sy-hero__title { --sy-d: calc(var(--sy-intro) + 0.3s); }
+
+/* ---------- f：漂浮的小插圖（茶葉、熱氣），程式依捲動做不同速度的視差，CSS 再加輕微搖擺 ---------- */
+.sy-section { position: relative; }
+.sy-float { position: absolute; pointer-events: none; color: var(--sy-tan); z-index: 0; }
+.sy-float svg { display: block; width: 100%; height: auto; overflow: visible; }
+.sy-float--steam { color: var(--sy-greige); }
+@media (prefers-reduced-motion: no-preference) {
+	.sy-float svg { animation: sy-sway 6s ease-in-out infinite alternate; }
+	.sy-float--b svg { animation-duration: 7.5s; animation-delay: -2s; }
+	@keyframes sy-sway { from { rotate: -6deg; translate: 0 -6px; } to { rotate: 8deg; translate: 0 6px; } }
+}
+@media (max-width: 1023px) { .sy-float { display: none; } }
+
+/* =====================================================================
+   階段 4：首頁段落（2026-11-24）
+   ===================================================================== */
+:root { --sy-radius-s: clamp(14px, 1.6vw, 22px); }
+.sy-band { padding-bottom: var(--sy-gap-section) !important; }
+.sy-band + .sy-section { } /* 灰底段落之後的白底段落照常有上距 */
+.sy-empty { color: var(--sy-sub); }
+/* 照片框＋視差：照片比框高，留給 data-sy-px 移動 */
+.sy-pxframe { position: relative; overflow: hidden; }
+.sy-pxframe img { position: absolute; left: 0; top: -50px; width: 100%; height: calc(100% + 100px) !important; max-width: none; object-fit: cover; }
+
+/* 手機版：首屏第二張照片放在場次段落開頭 */
+.sy-mobile-photo { display: none; }
+@media (max-width: 781px) {
+	.sy-section .sy-mobile-photo { display: block; margin: calc(var(--sy-gap-section) * -0.5) 0 var(--sy-gap-section) auto !important; width: 78%; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--sy-radius) 0 0 var(--sy-radius); margin-right: calc(var(--wp--style--root--padding-right, 1.5rem) * -1) !important; }
+	.sy-mobile-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+
+/* ---------- 02 課程卡 ---------- */
+.sy-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1.25rem, 2.4vw, 2.5rem); }
+.sy-card { position: relative; }
+.sy-card:nth-child(even) { margin-top: clamp(0rem, 4vw, 4rem); } /* 錯落排列，比較不像表格 */
+.sy-card__photo { margin: 0 0 1.25rem; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--sy-radius-s); }
+.sy-card__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sy-card__en { margin: 0; font-family: var(--sy-latin); font-size: 0.6875rem; letter-spacing: 0.24em; color: var(--sy-green); }
+.sy-card__title { margin: 0.35rem 0 0.25rem; font-size: 1.75rem; line-height: 1.4; }
+.sy-card__title a { color: inherit; text-decoration: none; }
+.sy-card__title a::after { content: ""; position: absolute; inset: 0; z-index: 1; } /* 整張卡可點，Tab 只停一次 */
+.sy-card__title a:focus-visible { outline: none; }
+.sy-card:has(a:focus-visible) { outline: 2px solid var(--sy-green); outline-offset: 6px; border-radius: var(--sy-radius-s); }
+.sy-card__sub { margin: 0; font-size: 0.9375rem; color: var(--sy-sub); }
+.sy-card__meta { margin: 0.75rem 0 0; font-size: 0.875rem; color: var(--sy-tan-dark); }
+.sy-card:hover .sy-card__title { color: var(--sy-green); }
+@media (max-width: 1023px) { .sy-cards { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 599px) { .sy-cards { grid-template-columns: 1fr; gap: 3rem; } .sy-card:nth-child(even) { margin-top: 0; } .sy-card__photo { aspect-ratio: 4 / 3; } }
+
+/* 包場：照片貼左邊、只圓右側 */
+.sy-private { display: grid; grid-template-columns: 55fr 45fr; align-items: center; gap: clamp(2rem, 5vw, 5rem); margin-top: var(--sy-gap-section) !important; }
+.sy-private > * { margin: 0 !important; }
+.sy-private__photo { aspect-ratio: 16 / 11; border-radius: 0 var(--sy-radius) var(--sy-radius) 0; }
+.sy-private__body { max-width: 30rem; padding-right: var(--wp--preset--spacing--50); }
+.sy-private__en { color: var(--sy-green); margin: 0; }
+.sy-private__title { font-size: var(--wp--preset--font-size--x-large); margin: 0.5rem 0 1.5rem; }
+.sy-ticks { list-style: none; padding: 0; margin: 1.5rem 0 2rem; }
+.sy-ticks li { position: relative; padding-left: 1.6em; margin: 0.4rem 0; }
+.sy-ticks li::before { content: ""; position: absolute; left: 0.2em; top: 0.85em; width: 0.7em; height: 1px; background: var(--sy-tan); }
+@media (max-width: 781px) {
+	.sy-private { grid-template-columns: 1fr; }
+	.sy-private__photo { width: 92%; }
+	.sy-private__body { padding: 0 var(--wp--preset--spacing--50); }
+}
+
+/* ---------- 03 第一次來：照片貼右邊、只圓左側 ---------- */
+.sy-first { padding-right: 0 !important; display: grid; grid-template-columns: 52fr 48fr; align-items: center; gap: clamp(2rem, 5vw, 5rem); padding-left: max(var(--wp--preset--spacing--50), calc(50% - 620px)) !important; }
+.sy-first > * { margin: 0 !important; }
+.sy-first .sy-head { grid-template-columns: 1fr; margin-bottom: 1.5rem; }
+.sy-first__lead { color: var(--sy-sub); margin: 0 0 2.5rem; max-width: 32rem; }
+.sy-first__photo { aspect-ratio: 5 / 6; width: 100%; border-radius: var(--sy-radius) 0 0 var(--sy-radius); }
+.sy-points { list-style: none; margin: 0; padding: 0; counter-reset: sy-pt; }
+.sy-point { counter-increment: sy-pt; position: relative; padding: 1.5rem 0 1.5rem 4.5rem; border-top: 1px solid var(--sy-greige); }
+.sy-point:last-child { border-bottom: 1px solid var(--sy-greige); }
+.sy-point::before { content: counter(sy-pt, decimal-leading-zero); position: absolute; left: 0; top: 1.35rem; font-family: var(--sy-latin); font-size: 2rem; line-height: 1; color: var(--sy-green); } /* 裝飾編號用 CSS 計數器畫（承澤的經驗） */
+.sy-point__title { margin: 0 0 0.35rem; font-family: inherit; font-size: 1.125rem; font-weight: 500; letter-spacing: 0.12em; }
+.sy-point p { margin: 0; color: var(--sy-sub); font-size: 0.9375rem; }
+@media (max-width: 781px) {
+	.sy-first { grid-template-columns: 1fr; padding-right: 0 !important; }
+	.sy-first__body { padding-right: var(--wp--preset--spacing--50); }
+	.sy-first__photo { width: 88%; margin-left: auto !important; aspect-ratio: 4 / 3; }
+}
+
+/* ---------- 04 一堂課的樣子 ---------- */
+.sy-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1.25rem, 2.4vw, 2.5rem); position: relative; }
+.sy-steps::before { content: ""; position: absolute; left: 0; right: 0; top: 0.65rem; height: 1px; background: var(--sy-greige); }
+.sy-step__no { position: relative; display: flex; justify-content: space-between; align-items: center; margin: 0 0 1.25rem; padding-top: 0; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--sy-green); }
+.sy-step__no .sy-num { background: var(--sy-base); padding-right: 0.75rem; position: relative; }
+.sy-step__no .sy-num::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--sy-green); margin-right: 0.6rem; vertical-align: 1px; }
+.sy-step__time { background: var(--sy-base); padding-left: 0.75rem; position: relative; color: var(--sy-sub); letter-spacing: 0.1em; }
+.sy-step__photo { margin: 0 0 1.25rem; aspect-ratio: 3 / 4; overflow: hidden; border-radius: var(--sy-radius-s); }
+.sy-step__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sy-step__title { margin: 0; font-size: 2rem; line-height: 1.3; }
+.sy-step__en { margin: 0.25rem 0 0.75rem; font-family: var(--sy-latin); font-size: 0.6875rem; letter-spacing: 0.24em; color: var(--sy-sub); }
+.sy-step__body p:last-child { margin: 0; font-size: 0.9375rem; color: var(--sy-sub); }
+@media (max-width: 1023px) { .sy-steps { grid-template-columns: repeat(2, 1fr); row-gap: 3rem; } .sy-steps::before { display: none; } }
+@media (max-width: 599px) {
+	.sy-steps { grid-template-columns: 1fr; row-gap: 2rem; }
+	.sy-step { display: grid; grid-template-columns: 38% 1fr; gap: 0 1.25rem; align-items: start; }
+	.sy-step__no { grid-column: 1 / -1; }
+	.sy-step__photo { margin: 0; aspect-ratio: 3 / 4; }
+	.sy-step__title { font-size: 1.75rem; }
+}
+
+/* ---------- 05 茶室一隅：不對稱三張 ---------- */
+.sy-room__grid { display: grid; grid-template-columns: 58fr 8fr 34fr; grid-template-rows: auto auto auto; column-gap: 0; row-gap: 0; padding-right: max(var(--wp--preset--spacing--50), calc(50% - 620px)); }
+.sy-room__grid > * { margin: 0 !important; }
+.sy-room__a { grid-column: 1; grid-row: 1 / 3; aspect-ratio: 4 / 3; border-radius: 0 var(--sy-radius) var(--sy-radius) 0; }
+.sy-room__text { grid-column: 3; grid-row: 1; align-self: end; padding-bottom: 2.5rem; }
+.sy-room__title { font-size: var(--wp--preset--font-size--x-large); margin: 0.75rem 0 1.25rem; line-height: 1.6; }
+.sy-room__text p:not(.sy-head__en) { color: var(--sy-sub); }
+.sy-room__b { grid-column: 3; grid-row: 2 / 4; width: 72%; margin-top: 1rem !important; aspect-ratio: 4 / 5; border-radius: var(--sy-radius-s); justify-self: start; position: relative; z-index: 2; }
+.sy-room__c { grid-column: 1; grid-row: 3; width: 44%; aspect-ratio: 3 / 2; margin: 3rem 0 0 18% !important; border-radius: var(--sy-radius-s); position: relative; z-index: 2; }
+.sy-room__grid figure { overflow: hidden; }
+.sy-room__grid figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 781px) {
+	.sy-room__grid { grid-template-columns: 1fr; padding: 0; }
+	.sy-room__a { grid-row: auto; width: 92%; }
+	.sy-room__text { grid-column: 1; grid-row: auto; padding: 2.5rem var(--wp--preset--spacing--50) 2rem; }
+	.sy-room__b { grid-column: 1; grid-row: auto; width: 56%; margin-left: var(--wp--preset--spacing--50) !important; }
+	.sy-room__c { grid-column: 1; grid-row: auto; width: 62%; margin: -4rem var(--wp--preset--spacing--50) 0 auto !important; }
+}
+
+/* ---------- 06 專欄卡 ---------- */
+.sy-posts__list { gap: clamp(1.25rem, 2.4vw, 2.5rem) !important; }
+.sy-post { position: relative; }
+.sy-post > * { margin-top: 0 !important; }
+.sy-post__photo { margin-bottom: 1.1rem !important; overflow: hidden; border-radius: var(--sy-radius-s); }
+.sy-post__photo img { display: block; }
+.sy-post__meta { gap: 1rem; font-size: 0.8125rem; color: var(--sy-sub); margin-bottom: 0.4rem !important; }
+.sy-post__cat a { color: var(--sy-green); text-decoration: none; position: relative; z-index: 2; }
+.sy-post__date { letter-spacing: 0.1em; }
+.sy-post__title { font-family: inherit; font-size: 1.0625rem; font-weight: 500; line-height: 1.8; letter-spacing: 0.06em; }
+.sy-post__title a { color: inherit; text-decoration: none; }
+.sy-post__title a::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.sy-post__title a:focus-visible { outline: none; }
+.sy-post:has(.sy-post__title a:focus-visible) { outline: 2px solid var(--sy-green); outline-offset: 6px; border-radius: var(--sy-radius-s); }
+.sy-post:hover .sy-post__title a { color: var(--sy-green); }
+@media (max-width: 781px) { .sy-posts__list { grid-template-columns: 1fr !important; } }
+
+/* ---------- 07 常見問題 ---------- */
+.sy-faq__grid { display: grid; grid-template-columns: 1fr 3fr; gap: 2rem 4rem; align-items: start; }
+.sy-faq__grid > * { margin: 0 !important; }
+.sy-faq__side { position: sticky; top: 2rem; }
+.sy-faq__side .sy-head__title { font-size: var(--wp--preset--font-size--x-large); margin: 0.75rem 0 1.5rem; }
+.sy-faq__list { border-bottom: 1px solid var(--sy-greige); }
+.sy-faq__list > * { margin: 0 !important; }
+.sy-qa { border-top: 1px solid var(--sy-greige); }
+.sy-qa summary { list-style: none; cursor: pointer; position: relative; padding: 1.5rem 3rem 1.5rem 2.5rem; font-weight: 500; letter-spacing: 0.08em; }
+.sy-qa summary::-webkit-details-marker { display: none; }
+.sy-qa summary::before { content: "Q"; position: absolute; left: 0.2rem; top: 1.45rem; font-size: 1.0625rem; font-weight: 500; color: var(--sy-green); }
+.sy-qa summary::after { content: ""; position: absolute; right: 0.5rem; top: 50%; width: 14px; height: 14px; translate: 0 -50%; background: linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat, linear-gradient(currentColor, currentColor) center / 1px 100% no-repeat; }
+.sy-qa[open] summary::after { background: linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat; }
+.sy-qa summary:hover { color: var(--sy-green); }
+.sy-qa > p { margin: 0 !important; padding: 0 3rem 1.75rem 2.5rem; color: var(--sy-sub); }
+@media (prefers-reduced-motion: no-preference) {
+	.sy-qa summary::after { transition: rotate 0.4s var(--sy-ease); }
+	.sy-qa[open] summary::after { rotate: 180deg; }
+	.sy-qa[open] > p { animation: sy-rise 0.6s var(--sy-ease) both; }
+}
+@media (max-width: 781px) { .sy-faq__grid { grid-template-columns: 1fr; } .sy-faq__side { position: static; } }
+
+/* ---------- 頁尾前 CTA ---------- */
+.sy-cta { position: relative; overflow: hidden; padding: clamp(5rem, 10vw, 8rem) var(--wp--preset--spacing--50) !important; margin-top: var(--sy-gap-section) !important; }
+.sy-band + .sy-cta, .sy-cta:first-child { margin-top: 0 !important; }
+.sy-cta__en { color: var(--sy-green); margin-bottom: 1rem; }
+.sy-cta__title { font-size: var(--wp--preset--font-size--xx-large); margin: 0 0 1.5rem; }
+.sy-cta__lead { color: var(--sy-sub); margin-bottom: 2.5rem; }
+.sy-cta .wp-block-buttons { gap: 1rem; }
+.sy-cta__steam { position: absolute; left: 50%; top: clamp(1rem, 3vw, 2rem); width: 26px; translate: -50% 0; color: var(--sy-tan); opacity: 0.7; }
+@media (prefers-reduced-motion: no-preference) { .sy-cta__steam svg { animation: sy-sway 5s ease-in-out infinite alternate; } }
+
+/* =====================================================================
+   階段 4：內頁（2026-11-24）
+   ===================================================================== */
+/* ---------- 頁首區：左文字、右照片貼右邊（只圓左側），沒有精選圖片時文字單欄 ---------- */
+.sy-pagehead { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(2rem, 5vw, 5rem); padding: clamp(2.5rem, 5vw, 4rem) 0 0 max(var(--wp--preset--spacing--50), calc(50% - 620px)) !important; margin: 0 !important; }
+.sy-pagehead > * { margin: 0 !important; }
+.sy-pagehead:not(:has(.sy-pagehead__photo)) { grid-template-columns: 1fr; padding-right: max(var(--wp--preset--spacing--50), calc(50% - 620px)) !important; }
+.sy-pagehead__text { padding: 2rem 0 3rem; }
+.sy-pagehead__text > * { margin-top: 0; }
+.sy-pagehead__en { margin: 1.75rem 0 1rem !important; padding: 0 !important; }
+.sy-pagehead__title { font-size: var(--wp--preset--font-size--xx-large); line-height: 1.5; margin: 0 0 1.5rem !important; }
+.sy-pagehead__title--event, .sy-pagehead__title--post { font-size: clamp(1.75rem, 3vw, 2.5rem); }
+.sy-pagehead__lead { color: var(--sy-sub); max-width: 34rem; margin: 0 !important; }
+.sy-pagehead__lead p { margin: 0; }
+.sy-pagehead__photo { aspect-ratio: 4 / 3; max-height: 560px; width: 100%; overflow: hidden; border-radius: var(--sy-radius) 0 0 var(--sy-radius); }
+.sy-pagehead__photo img { width: 100%; height: 100% !important; object-fit: cover; display: block; }
+.sy-crumb ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.25rem 0.6rem; font-size: 0.8125rem; color: var(--sy-sub); }
+.sy-crumb li + li::before { content: "/"; margin-right: 0.6rem; color: var(--sy-greige); }
+.sy-crumb a { color: inherit; text-decoration: none; }
+.sy-crumb a:hover { color: var(--sy-green); text-decoration: underline; }
+.blog .sy-only-archive, .archive .sy-only-home { display: none; }
+@media (max-width: 781px) {
+	.sy-pagehead { grid-template-columns: 1fr; padding-right: 0 !important; gap: 0; }
+	.sy-pagehead__text { padding: 1rem var(--wp--preset--spacing--50) 2.5rem 0; }
+	.sy-pagehead__photo { width: 88%; margin-left: auto !important; aspect-ratio: 16 / 10; }
+}
+
+/* ---------- 內容區通用 ---------- */
+.sy-content { padding-top: clamp(4rem, 8vw, 7rem); padding-bottom: 0; }
+.sy-content > * { margin-block-start: 0; }
+.sy-content > * + * { margin-block-start: 1.5rem; }
+.sy-content > h2:not(.sy-head__title) { font-size: 1.5rem; margin-top: 3.5rem; }
+.sy-content > .wp-block-list, .sy-content > p { color: var(--sy-text); }
+.sy-lead { font-size: 1.0625rem; }
+.sy-small { font-size: 0.8125rem; color: var(--sy-sub); }
+.sy-block { margin-top: clamp(4.5rem, 9vw, 7rem) !important; }
+.sy-content > .sy-block:first-child { margin-top: 0 !important; }
+.sy-head--page { grid-template-columns: 1fr; margin-bottom: 2rem; gap: 0.75rem; }
+.sy-head--page .sy-head__en { padding-bottom: 0; }
+.sy-note { margin-top: clamp(4rem, 8vw, 6rem) !important; padding: 2rem 2.25rem; background: var(--sy-light); border-radius: var(--sy-radius-s); }
+.sy-note > * { margin: 0 0 0.5rem; }
+.sy-note > *:last-child { margin-bottom: 0; }
+.sy-note__title { font-family: inherit; font-size: 1rem; font-weight: 500; letter-spacing: 0.12em; }
+.sy-quote { border: 0; margin: 2.5rem 0; padding: 1.5rem 0 1.5rem 1.75rem; border-left: 2px solid var(--sy-tan); color: var(--sy-sub); }
+.sy-quote p { margin: 0; }
+p.sy-quote { font-size: 1.0625rem; }
+
+/* 資訊表（課程欄位、場次資訊、交通） */
+.sy-facts { margin: 1.75rem 0; border-top: 1px solid var(--sy-greige); }
+.sy-facts > div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--sy-greige); }
+.sy-facts dt { color: var(--sy-sub); font-size: 0.875rem; letter-spacing: 0.12em; }
+.sy-facts dd { margin: 0; }
+.sy-facts__price { color: var(--sy-tan-dark); font-size: 1.125rem; }
+.sy-facts--wide > div { grid-template-columns: 10rem 1fr; }
+@media (max-width: 599px) { .sy-facts > div, .sy-facts--wide > div { grid-template-columns: 1fr; gap: 0.2rem; } }
+
+/* 篩選、錨點用的小膠囊 */
+.sy-chip { display: inline-block; padding: 0.55rem 1.25rem; border: 1px solid var(--sy-greige); border-radius: 999px; background: transparent; color: var(--sy-text); font: inherit; font-size: 0.875rem; letter-spacing: 0.1em; text-decoration: none; cursor: pointer; transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
+.sy-chip:hover { border-color: var(--sy-green); color: var(--sy-green); }
+.sy-chip[aria-pressed="true"], .sy-chip[aria-current="page"] { background: var(--sy-green); border-color: var(--sy-green); color: #fff; }
+.sy-anchors ul, .sy-catnav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.sy-anchors a { display: inline-block; padding: 0.55rem 1.25rem; border: 1px solid var(--sy-greige); border-radius: 999px; color: var(--sy-text); text-decoration: none; font-size: 0.875rem; letter-spacing: 0.1em; }
+.sy-anchors a:hover { border-color: var(--sy-green); color: var(--sy-green); }
+html { scroll-padding-top: 2rem; }
+
+/* ---------- 課程介紹 ---------- */
+.sy-course { display: grid; grid-template-columns: 50fr 50fr; align-items: center; gap: clamp(2rem, 5vw, 5rem); margin-top: clamp(4.5rem, 9vw, 8rem) !important; padding-right: max(var(--wp--preset--spacing--50), calc(50% - 620px)); }
+.sy-course > * { margin: 0 !important; }
+.sy-course__photo { aspect-ratio: 5 / 4; border-radius: 0 var(--sy-radius) var(--sy-radius) 0; overflow: hidden; }
+.sy-course__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sy-course.is-flip { padding-right: 0; padding-left: max(var(--wp--preset--spacing--50), calc(50% - 620px)); }
+.sy-course.is-flip .sy-course__photo { order: 2; border-radius: var(--sy-radius) 0 0 var(--sy-radius); }
+.sy-course__en { color: var(--sy-green); margin: 0 0 0.5rem !important; }
+.sy-course__title { font-size: var(--wp--preset--font-size--x-large); margin: 0 !important; }
+.sy-course__sub { color: var(--sy-sub); margin: 0.25rem 0 1.25rem !important; }
+.sy-course__body .wp-block-buttons { margin-top: 1.75rem; }
+@media (max-width: 781px) {
+	.sy-course, .sy-course.is-flip { grid-template-columns: 1fr; padding: 0; }
+	.sy-course__photo { width: 92%; }
+	.sy-course.is-flip .sy-course__photo { order: 0; margin-left: auto !important; }
+	.sy-course__body { padding: 0 var(--wp--preset--spacing--50); }
+}
+
+/* ---------- 開課日程 ---------- */
+.sy-filter { margin-bottom: 3rem; }
+.sy-filter__btns { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.sy-filter__count { margin: 1rem 0 0; font-size: 0.875rem; color: var(--sy-sub); }
+.sy-month { margin-top: 3.5rem !important; }
+.sy-month:first-of-type { margin-top: 0 !important; }
+.sy-month[hidden] { display: none; }
+.sy-month__title { display: flex; align-items: baseline; gap: 0.6rem; margin: 0 0 1rem; font-family: inherit; font-size: 1rem; font-weight: 500; }
+.sy-month__title > .sy-num { font-size: 3rem; line-height: 1; color: var(--sy-green); }
+.sy-month__title small { order: -1; font-size: 0.875rem; color: var(--sy-sub); letter-spacing: 0.2em; }
+.sy-session[hidden] { display: none; }
+.sy-session__title a { color: inherit; text-decoration: none; }
+.sy-session__title a:hover { color: var(--sy-green); text-decoration: underline; }
+.sy-page .sy-sessions { margin: 0 !important; }
+
+/* ---------- 單一場次 ---------- */
+.sy-ev .sy-facts { margin-top: 0; }
+.sy-seat.is-few { color: var(--sy-tan-dark); font-weight: 500; }
+.sy-seat.is-full { color: var(--sy-sub); }
+.sy-facts dd small { color: var(--sy-sub); margin-left: 0.25rem; }
+.sy-ev__notes { margin: 2.5rem 0 !important; }
+.sy-ev__h { font-size: 1.5rem; margin: 0 0 1rem; }
+.sy-ev__booking { margin-top: 4rem !important; padding: clamp(1.75rem, 4vw, 3rem); background: var(--sy-light); border-radius: var(--sy-radius-s); }
+.sy-ev__hint { color: var(--sy-sub); font-size: 0.9375rem; margin: 0 0 1.75rem; }
+.sy-ev__policy { margin-top: 4rem !important; }
+.sy-ev__policy ul { padding-left: 1.25rem; }
+/* Events Manager 報名表（關掉 EM 的樣式後自己寫） */
+.sy-ev .em-booking-form, .sy-ev .em-booking-form-details { display: block; }
+.sy-ev .em-booking-form label, .sy-ev .em-booking-form .em-booking-form-section-title { display: block; font-size: 0.875rem; letter-spacing: 0.08em; margin-bottom: 0.4rem; font-weight: 500; }
+.sy-ev .em-booking-form p, .sy-ev .em-booking-form .input-group { margin: 0 0 1.25rem; }
+.sy-ev .em-booking-form input[type="text"], .sy-ev .em-booking-form input[type="email"], .sy-ev .em-booking-form input[type="tel"], .sy-ev .em-booking-form textarea, .sy-ev .em-booking-form select {
+	width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--sy-greige); border-radius: 6px; background: var(--sy-base); color: var(--sy-text); font: inherit;
+}
+.sy-ev .em-booking-form select { width: auto; min-width: 6rem; }
+.sy-ev .em-booking-form input:focus-visible, .sy-ev .em-booking-form textarea:focus-visible, .sy-ev .em-booking-form select:focus-visible { outline: 2px solid var(--sy-green); outline-offset: 2px; border-color: var(--sy-green); }
+.sy-ev .em-booking-form textarea { min-height: 7rem; }
+.sy-ev .em-booking-form input[type="submit"], .sy-ev .em-booking-form button[type="submit"], .sy-ev .em-booking-submit { appearance: none; border: 0; background: var(--sy-green); color: #fff; font: inherit; font-weight: 500; letter-spacing: 0.15em; padding: 1rem 2.5rem; cursor: pointer; transition: background-color 0.3s ease; }
+.sy-ev .em-booking-form input[type="submit"]:hover, .sy-ev .em-booking-submit:hover { background: var(--sy-text); }
+.sy-ev .em-tickets, .sy-ev .em-ticket-select table { width: 100%; border-collapse: collapse; }
+.sy-ev .em-tickets th, .sy-ev .em-tickets td { text-align: left; padding: 0.6rem 0; border-bottom: 1px solid var(--sy-greige); }
+.sy-ev .em-booking-message, .sy-ev .em-notice { padding: 1rem 1.25rem; border-radius: 6px; background: var(--sy-base); border-left: 3px solid var(--sy-green); margin-bottom: 1.25rem; }
+.sy-ev .em-booking-message-error, .sy-ev .em-notice-error { border-left-color: var(--sy-tan-dark); }
+
+/* ---------- 茶葉 ---------- */
+.sy-teas { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(2rem, 4vw, 3.5rem) clamp(1.25rem, 2.4vw, 2.5rem); margin-top: clamp(3.5rem, 7vw, 5rem) !important; }
+.sy-teas > * { margin: 0 !important; }
+.sy-tea > * { margin: 0; }
+.sy-tea__photo { aspect-ratio: 1; overflow: hidden; border-radius: var(--sy-radius-s); margin-bottom: 1.25rem !important; }
+.sy-tea__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sy-tea__tags { display: flex; gap: 0.5rem; margin: 0 0 0.6rem !important; font-size: 0.75rem; letter-spacing: 0.1em; color: var(--sy-sub); }
+.sy-tea__tags span { padding: 0.2rem 0.7rem; border: 1px solid var(--sy-greige); border-radius: 999px; }
+.sy-tea__name { font-family: inherit; font-size: 1.25rem; font-weight: 500; letter-spacing: 0.1em; margin: 0 0 0.5rem !important; }
+.sy-tea__flavor { font-size: 0.9375rem; color: var(--sy-sub); min-height: 3.4em; }
+.sy-tea__price-row { display: flex; justify-content: space-between; align-items: baseline; margin: 1rem 0 !important; padding-top: 0.9rem; border-top: 1px solid var(--sy-greige); color: var(--sy-sub); }
+.sy-tea__price { color: var(--sy-tan-dark); font-size: 1.375rem; }
+.sy-tea .wp-block-button, .sy-tea .wp-block-button__link { width: 100%; text-align: center; }
+@media (max-width: 1023px) { .sy-teas { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 599px) { .sy-teas { grid-template-columns: 1fr; } }
+
+/* ---------- 關於：左右交錯 ---------- */
+.sy-split { display: grid; grid-template-columns: 50fr 50fr; align-items: center; gap: clamp(2rem, 5vw, 5rem); padding-right: max(var(--wp--preset--spacing--50), calc(50% - 620px)); margin-top: clamp(4.5rem, 9vw, 7rem) !important; }
+.sy-content > .sy-split:first-child { margin-top: 0 !important; }
+.sy-split > * { margin: 0 !important; }
+.sy-split__photo { aspect-ratio: 5 / 4; border-radius: 0 var(--sy-radius) var(--sy-radius) 0; overflow: hidden; }
+.sy-split__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sy-split.is-flip { grid-template-columns: 55fr 45fr; padding-right: 0; padding-left: max(var(--wp--preset--spacing--50), calc(50% - 620px)); }
+.sy-split.is-flip .sy-split__photo { border-radius: var(--sy-radius) 0 0 var(--sy-radius); }
+.sy-split__photo.is-portrait { aspect-ratio: 4 / 5; max-height: 640px; }
+.sy-gallery { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: clamp(1rem, 2vw, 1.5rem); }
+.sy-gallery > * { margin: 0 !important; overflow: hidden; border-radius: var(--sy-radius-s); }
+.sy-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sy-gallery__a { grid-row: 1 / 3; aspect-ratio: 4 / 3; }
+@media (max-width: 781px) {
+	.sy-split, .sy-split.is-flip { grid-template-columns: 1fr; padding: 0; }
+	.sy-split__photo { width: 92%; }
+	.sy-split.is-flip .sy-split__photo { order: 2; margin-left: auto !important; }
+	.sy-split__body { padding: 0 var(--wp--preset--spacing--50); }
+	.sy-gallery { grid-template-columns: 1fr 1fr; }
+	.sy-gallery__a { grid-column: 1 / -1; grid-row: auto; }
+}
+
+/* ---------- 報名須知：步驟 ---------- */
+.sy-flowsteps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; counter-reset: sy-fs; }
+.sy-flowsteps li { counter-increment: sy-fs; position: relative; padding: 1.75rem 1.5rem; background: var(--sy-light); border-radius: var(--sy-radius-s); }
+.sy-flowsteps li::before { content: counter(sy-fs, decimal-leading-zero); display: block; font-family: var(--sy-latin); font-size: 1.75rem; color: var(--sy-green); margin-bottom: 0.75rem; }
+.sy-flowsteps h3 { font-family: inherit; font-size: 1.0625rem; font-weight: 500; letter-spacing: 0.1em; margin: 0 0 0.4rem; }
+.sy-flowsteps p { margin: 0; font-size: 0.9375rem; color: var(--sy-sub); }
+.sy-flowsteps.is-small { grid-template-columns: 1fr; gap: 0.75rem; }
+.sy-flowsteps.is-small li { display: grid; grid-template-columns: 3rem 1fr; padding: 1.1rem 1.25rem; background: transparent; border: 1px solid var(--sy-greige); }
+.sy-flowsteps.is-small li::before { grid-row: 1 / 3; font-size: 1.25rem; margin: 0; }
+@media (max-width: 1023px) { .sy-flowsteps { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 599px) { .sy-flowsteps { grid-template-columns: 1fr; } }
+
+/* ---------- 聯絡與包場 ---------- */
+.sy-contact { list-style: none; margin: 0 auto; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.5rem); max-width: 1240px; }
+.sy-content > .sy-contact { max-width: 1240px !important; }
+.sy-contact li { padding: 2rem 1.75rem; border: 1px solid var(--sy-greige); border-radius: var(--sy-radius-s); }
+.sy-contact li > * { margin: 0 0 0.6rem; }
+.sy-contact li > *:last-child { margin: 1.25rem 0 0; }
+.sy-contact__en { font-family: var(--sy-latin); font-size: 0.75rem; letter-spacing: 0.3em; color: var(--sy-green); }
+.sy-contact__title { font-family: inherit; font-size: 1.125rem !important; font-weight: 500; letter-spacing: 0.12em; }
+.sy-contact li p:not(.sy-contact__en) { font-size: 0.9375rem; color: var(--sy-sub); }
+.sy-form { display: grid; grid-template-columns: 2fr 3fr; gap: clamp(2rem, 5vw, 5rem); align-items: start; margin-top: clamp(4.5rem, 9vw, 7rem) !important; }
+.sy-form > * { margin: 0 !important; }
+.sy-form__main { padding: clamp(1.75rem, 4vw, 3rem); background: var(--sy-light); border-radius: var(--sy-radius-s); }
+@media (max-width: 1023px) { .sy-contact { grid-template-columns: 1fr; } }
+@media (max-width: 781px) { .sy-form { grid-template-columns: 1fr; } }
+/* WPForms 欄位 */
+.sy-form .wpforms-container { margin: 0 !important; }
+.sy-form .wpforms-field { padding: 0 0 1.4rem !important; }
+.sy-form .wpforms-field-label { font-weight: 500 !important; font-size: 0.875rem !important; letter-spacing: 0.08em; color: var(--sy-text) !important; margin-bottom: 0.5rem !important; }
+.sy-form .wpforms-required-label { color: var(--sy-tan-dark) !important; }
+.sy-form input[type="text"], .sy-form input[type="email"], .sy-form select, .sy-form textarea { width: 100% !important; max-width: none !important; padding: 0.8rem 1rem !important; height: auto !important; border: 1px solid var(--sy-greige) !important; border-radius: 6px !important; background: var(--sy-base) !important; color: var(--sy-text) !important; font: inherit !important; box-shadow: none !important; }
+.sy-form input:focus-visible, .sy-form select:focus-visible, .sy-form textarea:focus-visible { outline: 2px solid var(--sy-green) !important; outline-offset: 2px; border-color: var(--sy-green) !important; }
+.sy-form .wpforms-field-description { font-size: 0.8125rem !important; color: var(--sy-sub) !important; }
+.sy-form .wpforms-submit { background: var(--sy-green) !important; color: #fff !important; border: 0 !important; border-radius: 0 !important; padding: 1rem 2.75rem !important; height: auto !important; font: inherit !important; font-weight: 500 !important; letter-spacing: 0.15em !important; transition: background-color 0.3s ease; }
+.sy-form .wpforms-submit:hover { background: var(--sy-text) !important; }
+.sy-form .wpforms-confirmation-container-full { background: var(--sy-base) !important; border: 1px solid var(--sy-green) !important; color: var(--sy-text) !important; border-radius: 6px; }
+.sy-form label.wpforms-error, .sy-form em.wpforms-error { color: #9b3d2c !important; }
+
+/* ---------- 專欄 ---------- */
+.sy-blog__body { padding-top: clamp(3rem, 6vw, 5rem); padding-bottom: var(--sy-gap-section); }
+.sy-catnav { margin-bottom: 3rem; }
+.sy-post__excerpt { font-size: 0.875rem; color: var(--sy-sub); margin-top: 0.5rem !important; }
+.sy-post__excerpt p { margin: 0; }
+.sy-pagination { margin-top: 4rem !important; gap: 0.5rem; font-family: var(--sy-latin); }
+.sy-pagination a, .sy-pagination span { padding: 0.4rem 0.8rem; text-decoration: none; color: var(--sy-text); }
+.sy-pagination .current { background: var(--sy-green); color: #fff; border-radius: 999px; }
+.sy-pagehead--post { display: block; padding: clamp(2.5rem, 5vw, 4rem) var(--wp--preset--spacing--50) 2.5rem !important; }
+.sy-pagehead--post > * { margin-left: auto !important; margin-right: auto !important; }
+.sy-pagehead--post .sy-crumb { margin-bottom: 2rem; }
+.sy-pagehead--post .sy-post__meta { margin-bottom: 1rem !important; }
+.sy-single__photo { margin: 0 auto !important; border-radius: var(--sy-radius-s); overflow: hidden; max-width: min(1240px, calc(100% - 2 * var(--wp--preset--spacing--50))) !important; }
+.sy-article { padding-top: clamp(3rem, 6vw, 5rem); }
+.sy-article > p { line-height: 2.1; }
+.sy-article > h2 { font-family: inherit; font-size: 1.375rem !important; font-weight: 500; letter-spacing: 0.1em; margin-top: 3.5rem !important; padding-left: 1rem; border-left: 2px solid var(--sy-green); line-height: 1.6; }
+.sy-article-foot { padding-top: 3rem; padding-bottom: var(--sy-gap-section); }
+.sy-related-course { display: grid; grid-template-columns: 9rem 1fr; gap: 1.5rem; align-items: center; padding: 1.5rem; border: 1px solid var(--sy-greige); border-radius: var(--sy-radius-s); }
+.sy-related-course figure { margin: 0; aspect-ratio: 1; overflow: hidden; border-radius: 12px; }
+.sy-related-course img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sy-related-course p { margin: 0 0 0.35rem; }
+.sy-related-course .sy-en { color: var(--sy-green); font-size: 0.6875rem; }
+.sy-related-course__name { font-size: 1.125rem; font-weight: 500; letter-spacing: 0.1em; }
+.sy-related-course__name small { display: block; font-size: 0.875rem; font-weight: 400; color: var(--sy-sub); letter-spacing: 0.04em; }
+.sy-related-course__meta { font-size: 0.875rem; color: var(--sy-tan-dark); }
+.sy-related { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.25rem, 2.4vw, 2.5rem); }
+.sy-related .sy-post__photo { margin: 0 0 1.1rem; aspect-ratio: 3 / 2; }
+.sy-related .sy-post__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sy-related .sy-post__meta { display: flex; }
+.sy-related .sy-post__cat { color: var(--sy-green); }
+@media (max-width: 781px) { .sy-related { grid-template-columns: 1fr; } .sy-related-course { grid-template-columns: 6rem 1fr; } }
+.sy-404 { padding: clamp(6rem, 14vw, 10rem) var(--wp--preset--spacing--50) !important; }
+.sy-404 > * + * { margin-top: 1.5rem; }
+/* EM 7.6 報名表的實際結構（2026-11-24 量過）：section > h3.em-booking-section-title ＋ p > label＋input */
+.sy-ev .em-booking-form section { margin: 0 0 1.75rem; }
+.sy-ev .em-booking-section-title { font-family: inherit !important; font-size: 0.8125rem !important; font-weight: 500; letter-spacing: 0.2em; color: var(--sy-green); margin: 0 0 1rem !important; padding-bottom: 0.6rem; border-bottom: 1px solid var(--sy-greige); }
+.sy-ev .em-booking-form .ticket-price { display: flex; gap: 1rem; align-items: baseline; }
+.sy-ev .em-booking-form .ticket-price label { margin: 0; color: var(--sy-sub); font-weight: 400; }
+.sy-ev .em-booking-form .ticket-price strong { font-family: var(--sy-latin); font-size: 1.25rem; font-weight: 400; color: var(--sy-tan-dark); }
+.sy-ev .em-booking-form .em-tickets-spaces { display: flex; gap: 1rem; align-items: center; }
+.sy-ev .em-booking-form .em-tickets-spaces label { margin: 0; }
+.sy-ev .em-booking-form .em-consent-checkbox label { display: flex; gap: 0.6rem; align-items: flex-start; font-weight: 400; letter-spacing: 0; font-size: 0.875rem; line-height: 1.8; }
+.sy-ev .em-booking-form input[type="checkbox"] { width: 1.1rem; height: 1.1rem; margin-top: 0.3rem; accent-color: var(--sy-green); flex: none; }
+.sy-ev .em-booking-summary { font-size: 0.9375rem; }
+.sy-ev .em-bs-row { display: grid; grid-template-columns: 3rem 1fr auto; gap: 0.5rem; padding: 0.5rem 0; }
+.sy-ev .em-bs-row-total { grid-template-columns: 1fr auto; border-top: 1px solid var(--sy-greige); margin-top: 0.25rem; padding-top: 0.9rem; font-weight: 500; }
+.sy-ev .em-bs-cell-price { font-family: var(--sy-latin); color: var(--sy-tan-dark); }
+.sy-ev .em-bs-row-total .em-bs-cell-price { font-size: 1.25rem; }
+.sy-ev .em-booking-summary-skeleton, .sy-ev template { display: none; }
+.sy-ev .em-booking-buttons { margin-top: 0.5rem; }
+.sy-ev .em-booking-form input.em-booking-submit { width: 100%; }
+@media (min-width: 600px) { .sy-ev .em-booking-form input.em-booking-submit { width: auto; } }
+.sy-pagehead--post .sy-pagehead__lead { max-width: none; }
+.sy-pagehead--post .sy-crumb { margin-bottom: 2.5rem !important; }
+/* WPForms 會把焦點外框拿掉，補回來（焦點掃描 2026-11-24） */
+.sy-form a:focus-visible, .sy-form .wpforms-submit:focus-visible, .sy-form input[type="checkbox"]:focus-visible, .sy-form input[type="radio"]:focus-visible { outline: 2px solid var(--sy-green) !important; outline-offset: 3px !important; }
+/* 焙茶深 #8A5D44 在淺灰米 #ECE4DC 上只有 4.48:1（不到 4.5），淺灰米底上的價格改用內文色 */
+.sy-ev__booking .ticket-price strong, .sy-ev__booking .em-bs-cell-price { color: var(--sy-text); }
+.sy-hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
