@@ -4,10 +4,10 @@ PRODID:-//wp-events-plugin.com//7.6//EN
 TZID:Asia/Taipei
 X-WR-TIMEZONE:Asia/Taipei
 BEGIN:VEVENT
-UID:152@localhost
+UID:217@localhost
 DTSTART;TZID=Asia/Taipei:20261220T140000
 DTEND;TZID=Asia/Taipei:20261220T160000
-DTSTAMP:20261124T025225Z
+DTSTAMP:20261125T065133Z
 URL:https://cooper35211-max.github.io/seiyu/events/beauty-20261220/
 SUMMARY:東方美人與紅茶｜蜜香的由來
 DESCRIPTION:\n小綠葉蟬咬過的茶葉會帶出蜂蜜般的香氣。從
@@ -16,7 +16,7 @@ DESCRIPTION:\n小綠葉蟬咬過的茶葉會帶出蜂蜜般的香氣。從
  茶室準備，結束後每位帶一包今天喝到的茶回家。請提
  早 5–10 分鐘到，先喝一杯迎賓茶。\n
 ATTACH;FMTTYPE=image/jpeg:https://cooper35211-max.github.io/seiyu/wp-content/uploads/2026/11
- /course-black.jpg
+ /course-black.webp
 CATEGORIES:東方美人與紅茶
 END:VEVENT
 BEGIN:VTIMEZONE

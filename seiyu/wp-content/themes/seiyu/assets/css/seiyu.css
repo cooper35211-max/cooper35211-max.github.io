@@ -26,7 +26,8 @@ html.sy-intro { --sy-intro: calc(var(--sy-lt) + 0.1s); }
 .screen-reader-text { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* 焦點：Twenty Twenty-Five 在任何聚焦（含滑鼠點擊）都畫貼著文字的框；改成只有鍵盤聚焦才顯示、留間距（禾沐踩過） */
-:where(.wp-site-blocks *:focus) { outline: none; }
+/* 要有權重：Twenty Twenty-Five 的 :where(.wp-site-blocks :focus){outline-style:solid} 是內嵌樣式、排在這支檔案後面，權重同為 0 會蓋掉 outline:none（2026-11-25 驗收時滑鼠按下仍有框） */
+:where(.wp-site-blocks *):focus:not(:focus-visible) { outline: none; }
 :where(.wp-site-blocks) :focus-visible { outline: 2px solid var(--sy-green); outline-offset: 4px; }
 .sy-footer :focus-visible { outline-color: var(--sy-base); }
 .skip-link.screen-reader-text:focus-visible { outline: 2px solid var(--sy-green); outline-offset: 2px; background: var(--sy-base); color: var(--sy-text); }
@@ -112,16 +113,18 @@ html.sy-intro { --sy-intro: calc(var(--sy-lt) + 0.1s); }
 	/* a：首屏照片慢慢放大 */
 	.sy-hero__photo img { animation: sy-slowzoom 9s cubic-bezier(0.25, 0.1, 0.25, 1) var(--sy-intro) both; }
 	@keyframes sy-slowzoom { from { scale: 1; } to { scale: 1.07; } }
-	/* b：第一次進站，載入畫面掀開後照片由下往上揭開 */
-	html.sy-intro .sy-hero__photo { animation: sy-unveil 1.3s cubic-bezier(0.76, 0, 0.24, 1) calc(var(--sy-lt) + 0.15s) both; }
-	html.sy-intro .sy-hero__photo--r { animation-delay: calc(var(--sy-lt) + 0.35s); }
+	/* b：第一次進站，載入畫面掀開後照片由下往上揭開。
+	   用底色色塊往上收（::after），不用 clip-path 裁照片：照片一載入就已經畫在底下，Lighthouse 的 LCP 不必等動畫結束
+	  （2026-11-25 驗收：clip-path 版 LCP 5.3 秒、繪製延遲 4 秒）。看起來一樣是由下往上露出 */
+	html.sy-intro .sy-hero__photo::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: var(--sy-base); transform-origin: top; animation: sy-curtain-up 1.3s cubic-bezier(0.76, 0, 0.24, 1) calc(var(--sy-lt) + 0.15s) both; }
+	html.sy-intro .sy-hero__photo--r::after { animation-delay: calc(var(--sy-lt) + 0.35s); }
+	@keyframes sy-curtain-up { from { scale: 1 1; } to { scale: 1 0; } }
 	/* 中間欄：英文小標→（標語逐字）→說明→按鈕，依序浮上來 */
 	html.sy-intro .sy-hero__en, html.sy-intro .sy-hero__lead, html.sy-intro .sy-hero__cta { animation: sy-rise 1s var(--sy-ease) calc(var(--sy-lt) + 0.2s) both; }
 	html.sy-intro .sy-hero__lead { animation-delay: calc(var(--sy-lt) + 1.1s); }
 	html.sy-intro .sy-hero__cta { animation-delay: calc(var(--sy-lt) + 1.35s); }
 	@keyframes sy-rise { from { opacity: 0; translate: 0 16px; } to { opacity: 1; translate: 0 0; } }
 }
-@keyframes sy-unveil { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
 .sy-hero__center { min-height: 0; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; padding: 2rem 1rem; text-align: center; }
 .sy-hero__en { color: var(--sy-green); margin: 0; }
 .sy-hero__title { writing-mode: vertical-rl; margin: 0; font-size: clamp(2.25rem, 3.2vw, 3.25rem); line-height: 1.6; letter-spacing: 0.32em; display: flex; flex-direction: column; gap: 0.5em; } /* 直排時 column＝由右往左排：第一行（為自己）在最右邊 */
@@ -498,7 +501,6 @@ html.sy-split-on .is-in .sy-ch, html.sy-split-on .sy-ch-wrap.is-in .sy-ch { opac
 .sy-crumb li + li::before { content: "/"; margin-right: 0.6rem; color: var(--sy-greige); }
 .sy-crumb a { color: inherit; text-decoration: none; }
 .sy-crumb a:hover { color: var(--sy-green); text-decoration: underline; }
-.blog .sy-only-archive, .archive .sy-only-home { display: none; }
 @media (max-width: 781px) {
 	.sy-pagehead { grid-template-columns: 1fr; padding-right: 0 !important; gap: 0; }
 	.sy-pagehead__text { padding: 1rem var(--wp--preset--spacing--50) 2.5rem 0; }
@@ -520,6 +522,7 @@ html.sy-split-on .is-in .sy-ch, html.sy-split-on .sy-ch-wrap.is-in .sy-ch { opac
 .sy-note { margin-top: clamp(4rem, 8vw, 6rem) !important; padding: 2rem 2.25rem; background: var(--sy-light); border-radius: var(--sy-radius-s); }
 .sy-note > * { margin: 0 0 0.5rem; }
 .sy-note > *:last-child { margin-bottom: 0; }
+.sy-note a { white-space: nowrap; } /* 「包場」這類短連結不要斷成兩行（焦點外框會跨行） */
 .sy-note__title { font-family: inherit; font-size: 1rem; font-weight: 500; letter-spacing: 0.12em; }
 .sy-quote { border: 0; margin: 2.5rem 0; padding: 1.5rem 0 1.5rem 1.75rem; border-left: 2px solid var(--sy-tan); color: var(--sy-sub); }
 .sy-quote p { margin: 0; }
@@ -592,7 +595,7 @@ html { scroll-padding-top: 2rem; }
 .sy-ev .em-booking-form label, .sy-ev .em-booking-form .em-booking-form-section-title { display: block; font-size: 0.875rem; letter-spacing: 0.08em; margin-bottom: 0.4rem; font-weight: 500; }
 .sy-ev .em-booking-form p, .sy-ev .em-booking-form .input-group { margin: 0 0 1.25rem; }
 .sy-ev .em-booking-form input[type="text"], .sy-ev .em-booking-form input[type="email"], .sy-ev .em-booking-form input[type="tel"], .sy-ev .em-booking-form textarea, .sy-ev .em-booking-form select {
-	width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--sy-greige); border-radius: 6px; background: var(--sy-base); color: var(--sy-text); font: inherit;
+	width: 100%; box-sizing: border-box; padding: 0.8rem 1rem; border: 1px solid var(--sy-greige); border-radius: 6px; background: var(--sy-base); color: var(--sy-text); font: inherit;
 }
 .sy-ev .em-booking-form select { width: auto; min-width: 6rem; }
 .sy-ev .em-booking-form input:focus-visible, .sy-ev .em-booking-form textarea:focus-visible, .sy-ev .em-booking-form select:focus-visible { outline: 2px solid var(--sy-green); outline-offset: 2px; border-color: var(--sy-green); }
@@ -676,7 +679,7 @@ html { scroll-padding-top: 2rem; }
 .sy-form input[type="text"], .sy-form input[type="email"], .sy-form select, .sy-form textarea { width: 100% !important; max-width: none !important; padding: 0.8rem 1rem !important; height: auto !important; border: 1px solid var(--sy-greige) !important; border-radius: 6px !important; background: var(--sy-base) !important; color: var(--sy-text) !important; font: inherit !important; box-shadow: none !important; }
 .sy-form input:focus-visible, .sy-form select:focus-visible, .sy-form textarea:focus-visible { outline: 2px solid var(--sy-green) !important; outline-offset: 2px; border-color: var(--sy-green) !important; }
 .sy-form .wpforms-field-description { font-size: 0.8125rem !important; color: var(--sy-sub) !important; }
-.sy-form .wpforms-submit { background: var(--sy-green) !important; color: #fff !important; border: 0 !important; border-radius: 0 !important; padding: 1rem 2.75rem !important; height: auto !important; font: inherit !important; font-weight: 500 !important; letter-spacing: 0.15em !important; transition: background-color 0.3s ease; }
+.sy-form .wpforms-submit { background: var(--sy-green) !important; color: #fff !important; border: 0 !important; border-radius: 0 !important; padding: 1rem 2.75rem !important; height: auto !important; font: inherit !important; font-weight: 500 !important; letter-spacing: 0.15em !important; transition: background-color 0.3s ease !important; } /* WPForms 預設 transition: all，焦點外框會從白色漸變成綠色 */
 .sy-form .wpforms-submit:hover { background: var(--sy-text) !important; }
 .sy-form .wpforms-confirmation-container-full { background: var(--sy-base) !important; border: 1px solid var(--sy-green) !important; color: var(--sy-text) !important; border-radius: 6px; }
 .sy-form label.wpforms-error, .sy-form em.wpforms-error { color: #9b3d2c !important; }
@@ -719,7 +722,7 @@ html { scroll-padding-top: 2rem; }
 .sy-ev .em-booking-section-title { font-family: inherit !important; font-size: 0.8125rem !important; font-weight: 500; letter-spacing: 0.2em; color: var(--sy-green); margin: 0 0 1rem !important; padding-bottom: 0.6rem; border-bottom: 1px solid var(--sy-greige); }
 .sy-ev .em-booking-form .ticket-price { display: flex; gap: 1rem; align-items: baseline; }
 .sy-ev .em-booking-form .ticket-price label { margin: 0; color: var(--sy-sub); font-weight: 400; }
-.sy-ev .em-booking-form .ticket-price strong { font-family: var(--sy-latin); font-size: 1.25rem; font-weight: 400; color: var(--sy-tan-dark); }
+.sy-ev .em-booking-form .ticket-price strong { font-family: var(--sy-latin); font-size: 1.5rem; /* 24px 以上算大字，焙茶色在米色卡片上 4.48:1 才合格（2026-11-25 驗收） */ font-weight: 400; color: var(--sy-tan-dark); }
 .sy-ev .em-booking-form .em-tickets-spaces { display: flex; gap: 1rem; align-items: center; }
 .sy-ev .em-booking-form .em-tickets-spaces label { margin: 0; }
 .sy-ev .em-booking-form .em-consent-checkbox label { display: flex; gap: 0.6rem; align-items: flex-start; font-weight: 400; letter-spacing: 0; font-size: 0.875rem; line-height: 1.8; }
@@ -737,6 +740,14 @@ html { scroll-padding-top: 2rem; }
 .sy-pagehead--post .sy-crumb { margin-bottom: 2.5rem !important; }
 /* WPForms 會把焦點外框拿掉，補回來（焦點掃描 2026-11-24） */
 .sy-form a:focus-visible, .sy-form .wpforms-submit:focus-visible, .sy-form input[type="checkbox"]:focus-visible, .sy-form input[type="radio"]:focus-visible { outline: 2px solid var(--sy-green) !important; outline-offset: 3px !important; }
+/* WPForms 送出鈕聚焦時另外用 ::after 畫一圈藍框（#066aab，不是品牌色），跟上面的外框疊成兩圈：拿掉（2026-11-25 驗收） */
+.sy-form .wpforms-submit:focus::after { display: none !important; }
 /* 焙茶深 #8A5D44 在淺灰米 #ECE4DC 上只有 4.48:1（不到 4.5），淺灰米底上的價格改用內文色 */
 .sy-ev__booking .ticket-price strong, .sy-ev__booking .em-bs-cell-price { color: var(--sy-text); }
 .sy-hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* 加入行事曆：連結裡的螢幕報讀文字固定在連結左上角，不要凸出焦點外框 */
+.sy-ev__cal a { position: relative; }
+.sy-ev__cal .screen-reader-text { top: 0; left: 0; }
+/* WPForms 單選項目文字、下拉選項預設 rgba(0,0,0,.85)／.7，不是色票顏色 */
+.sy-form .wpforms-field-label-inline, .sy-form option { color: var(--sy-text) !important; }
