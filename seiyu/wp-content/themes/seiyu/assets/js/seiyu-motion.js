@@ -3,7 +3,7 @@
  * 1. 捲動進場：.sy-head、.sy-session、.sy-unveil（照片揭開）。一般是淡入＋往上浮，開了「減少動態效果」只淡入（CSS 決定）。
  *    載入時已經在畫面裡的元素不做進場（承澤的經驗：Lighthouse 會在淡入途中量到半透明顏色，判對比不足）。
  * 2. 標題逐字浮現：.sy-hero__title、.sy-head__title 拆成一個字一個 span（螢幕報讀用 aria-label 念整句）。
- * 3. 視差：[data-sy-px] 依捲動位置上下移動，數值是速度（負數＝比捲動慢）。開了減少動態效果時不做。
+ * 3. 視差：[data-sy-px] 依捲動位置上下移動，數值是速度（負數＝比捲動慢）；以最近的 .sy-pxbox（沒有就父層）為基準。開了減少動態效果時不做。
  * 沒有 JavaScript 時：隱藏狀態只在本程式加上 html.sy-reveal-on／sy-split-on 後才生效，內容照常顯示。
  */
 ( function () {
@@ -104,7 +104,7 @@
 	function update() {
 		ticking = false;
 		px.forEach( function ( el ) {
-			var box = el.closest( '[data-sy-px-box]' ) || el.parentElement;
+			var box = el.closest( '.sy-pxbox' ) || el.parentElement;
 			var r = box.getBoundingClientRect();
 			if ( r.bottom < -200 || r.top > innerHeight + 200 ) { return; }
 			var max = parseFloat( el.dataset.syPxMax || 9999 );

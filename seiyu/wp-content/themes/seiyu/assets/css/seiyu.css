@@ -583,7 +583,7 @@ html { scroll-padding-top: 2rem; }
 /* ---------- 單一場次 ---------- */
 .sy-ev .sy-facts { margin-top: 0; }
 .sy-seat.is-few { color: var(--sy-tan-dark); font-weight: 500; }
-.sy-seat.is-full { color: var(--sy-sub); }
+.sy-seat.is-full, .sy-seat.is-cancelled { color: var(--sy-sub); }
 .sy-facts dd small { color: var(--sy-sub); margin-left: 0.25rem; }
 .sy-ev__notes { margin: 2.5rem 0 !important; }
 .sy-ev__h { font-size: 1.5rem; margin: 0 0 1rem; }
@@ -754,3 +754,21 @@ html { scroll-padding-top: 2rem; }
 .sy-ev__cal .screen-reader-text { top: 0; left: 0; }
 /* WPForms 單選項目文字、下拉選項預設 rgba(0,0,0,.85)／.7，不是色票顏色 */
 .sy-form .wpforms-field-label-inline, .sy-form option { color: var(--sy-text) !important; }
+
+/* ---------- 背景音樂開關（右下角，2026-11-26）---------- */
+.sy-music { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); z-index: 9000; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 1px solid var(--sy-sub); border-radius: 50%; background: var(--sy-base); color: var(--sy-green); cursor: pointer; box-shadow: 0 2px 10px rgb(46 51 38 / 0.12); transition: background-color 0.3s ease, color 0.3s ease; }
+.sy-music:hover { background: var(--sy-green); color: var(--sy-base); }
+.sy-music:focus-visible { outline: 2px solid var(--sy-green); outline-offset: 3px; }
+.sy-music__slash { opacity: 0; }
+.sy-music.is-off { color: var(--sy-sub); }
+.sy-music.is-off .sy-music__slash { opacity: 1; }
+.sy-music.is-off .sy-music__bars { opacity: 0.45; }
+.sy-music__bars rect { transform-box: fill-box; transform-origin: center bottom; }
+@media (prefers-reduced-motion: no-preference) {
+	.sy-music.is-playing .sy-music__bars rect { animation: sy-eq 1.6s ease-in-out infinite alternate; }
+	.sy-music.is-playing .sy-music__bars rect:nth-child(2) { animation-duration: 1.2s; animation-delay: -0.4s; }
+	.sy-music.is-playing .sy-music__bars rect:nth-child(3) { animation-duration: 1.9s; animation-delay: -0.9s; }
+	@keyframes sy-eq { from { scale: 1 0.45; } to { scale: 1 1; } }
+}
+html.sy-loading .sy-music { visibility: hidden; }
+@media print { .sy-music { display: none; } }

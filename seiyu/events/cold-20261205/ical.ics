@@ -4,10 +4,10 @@ PRODID:-//wp-events-plugin.com//7.6//EN
 TZID:Asia/Taipei
 X-WR-TIMEZONE:Asia/Taipei
 BEGIN:VEVENT
-UID:212@localhost
+UID:330@localhost
 DTSTART;TZID=Asia/Taipei:20261205T140000
 DTEND;TZID=Asia/Taipei:20261205T151500
-DTSTAMP:20261125T065133Z
+DTSTAMP:20261125T172451Z
 URL:https://cooper35211-max.github.io/seiyu/events/cold-20261205/
 SUMMARY:冷泡茶｜在家也能泡的四季冷泡
 DESCRIPTION:\n冷泡不苦不澀、放冰箱就好。試喝四款冷泡，

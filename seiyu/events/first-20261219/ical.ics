@@ -4,10 +4,10 @@ PRODID:-//wp-events-plugin.com//7.6//EN
 TZID:Asia/Taipei
 X-WR-TIMEZONE:Asia/Taipei
 BEGIN:VEVENT
-UID:216@localhost
+UID:334@localhost
 DTSTART;TZID=Asia/Taipei:20261219T140000
 DTEND;TZID=Asia/Taipei:20261219T153000
-DTSTAMP:20261125T065133Z
+DTSTAMP:20261125T172451Z
 URL:https://cooper35211-max.github.io/seiyu/events/first-20261219/
 SUMMARY:初次品茶｜三款台灣茶的第一堂課
 DESCRIPTION:\n從最清香的包種喝到焙火烏龍、再到紅茶，一
