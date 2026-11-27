@@ -1,0 +1,73 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"meta": {
+		"title": "青嶼茶室 課程報名網站（作品集示意）",
+		"description": "WordPress 區塊佈景主題＋Events Manager 報名＋WPForms 包場詢問。店名、地址、課程、帳號皆為虛構。",
+		"author": "cooper35211-max"
+	},
+	"landingPage": "/",
+	"preferredVersions": {
+		"php": "8.3",
+		"wp": "latest"
+	},
+	"steps": [
+		{
+			"step": "importWordPressFiles",
+			"wordPressFilesZip": {
+				"resource": "url",
+				"url": "https://cooper35211-max.github.io/seiyu-playground/seiyu-site.zip"
+			}
+		},
+		{
+			"step": "installTheme",
+			"themeData": {
+				"resource": "wordpress.org/themes",
+				"slug": "twentytwentyfive"
+			},
+			"options": {
+				"activate": false
+			}
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "wordpress.org/plugins",
+				"slug": "events-manager"
+			},
+			"options": {
+				"activate": true
+			}
+		},
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "wordpress.org/plugins",
+				"slug": "wpforms-lite"
+			},
+			"options": {
+				"activate": true
+			}
+		},
+		{
+			"step": "setSiteLanguage",
+			"language": "zh_TW"
+		},
+		{
+			"step": "writeFile",
+			"path": "/wordpress/seiyu-fix-urls.php",
+			"data": {
+				"resource": "url",
+				"url": "https://cooper35211-max.github.io/seiyu-playground/fix-urls.php.txt"
+			}
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php require '/wordpress/seiyu-fix-urls.php';"
+		},
+		{
+			"step": "login",
+			"username": "seiyu-admin",
+			"password": "seiyu-demo-2026"
+		}
+	]
+}
