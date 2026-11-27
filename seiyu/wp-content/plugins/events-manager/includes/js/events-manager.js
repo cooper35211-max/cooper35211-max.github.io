@@ -2399,7 +2399,7 @@ async function em_maps_load_location(el){
 	let marker = em_map_create_marker(AdvancedMarkerElement, maps[map_id], marker_options, map_id);
 	maps_markers[map_id] = marker;
 	let content = jQuery('#em-location-map-info-'+map_id + ' .em-map-balloon-content').get(0);
-	em_map_InfoWindow( map_title, content, marker, true );
+	let infoWindow = em_map_InfoWindow( map_title, content, marker, true );
 
 	//JS Hook for handling map after instantiation
 	//Example hook, which you can add elsewhere in your theme's JS - jQuery(document).on('em_maps_location_hook', function(){ alert('hi');} );

@@ -1,13 +1,13 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//wp-events-plugin.com//7.6//EN
+PRODID:-//wp-events-plugin.com//7.7.1//EN
 TZID:Asia/Taipei
 X-WR-TIMEZONE:Asia/Taipei
 BEGIN:VEVENT
-UID:352@localhost
+UID:90@localhost
 DTSTART;TZID=Asia/Taipei:20270116T140000
 DTEND;TZID=Asia/Taipei:20270116T160000
-DTSTAMP:20261126T031809Z
+DTSTAMP:20261127T133627Z
 URL:https://cooper35211-max.github.io/seiyu/events/beauty-20270116/
 SUMMARY:東方美人與紅茶｜蜜香的由來
 DESCRIPTION:\n小綠葉蟬咬過的茶葉會帶出蜂蜜般的香氣。從

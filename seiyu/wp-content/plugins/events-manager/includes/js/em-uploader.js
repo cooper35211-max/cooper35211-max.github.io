@@ -623,4 +623,19 @@ document.addEventListener('em_uploader_ready', function(e) {
 	document.addEventListener('em_setup_ui_elements', ( e ) => {
 		setup_em_uploader( e.detail.container );
 	});
+	// a container about to be cloned or stored, such as an attendee form template, gets its plain inputs back, since a copy of a live uploader is not attached to its script
+	document.addEventListener('em_unsetup_ui_elements', ( e ) => {
+		const container = e.detail.container;
+		if ( !container || !script ) return;
+		const roots = Array.from( container.querySelectorAll('.filepond--root') );
+		if ( container.matches && container.matches('.filepond--root') ) {
+			roots.unshift( container );
+		}
+		roots.forEach( root => {
+			const pond = FilePond.find( root );
+			if ( pond ) {
+				pond.destroy();
+			}
+		});
+	});
 })

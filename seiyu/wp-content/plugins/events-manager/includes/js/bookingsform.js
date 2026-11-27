@@ -103,6 +103,17 @@ var em_init_booking_recurring_form = function( container ) {
 			}
 		}
 
+		// a time belongs to the date it was chosen on, so choosing another date takes away the booking form of the time chosen before, which would otherwise book the date left behind
+		let clearBookingForm = function(){
+			if ( recurrenceBooking && recurrenceBooking.dataset.event ) {
+				// the places the earlier time's form holds go with it
+				em_booking_form_abandon_intent( recurrenceBooking.querySelector('form.em-booking-form') );
+				recurrenceBooking.innerHTML = '';
+				delete recurrenceBooking.dataset.event;
+				recurrenceBooking.dispatchEvent( new CustomEvent( 'em_booking_recurrence_form_cleared', { bubbles: true } ) );
+			}
+		}
+
 		// catch clicks to the calendar so that we load up dates on the side
 		let gettingRecurrences;
 		recurringBooking.addEventListener('click', function( e ){
@@ -114,12 +125,21 @@ var em_init_booking_recurring_form = function( container ) {
 					if ( date && recurrenceDates.dataset.date !== date?.dataset.date ) {
 						// select this date, all others no
 						date.closest('.em-cal-body').querySelectorAll('.em-cal-day-date').forEach( calDate => calDate.classList.toggle( 'selected', calDate === date ) );
+						clearBookingForm();
 						gettingRecurrences = getDateRecurrences( date?.dataset.date ).finally( () => { gettingRecurrences = null } );
 					}
 				}
 			}
 		});
 		let getDateRecurrences = function( date = false ){
+			// the booking form goes whenever another date is loaded, from the calendar or from a link to a date, and the placeholder of a form still on its way counts as the form shown so it is taken away too
+			if ( date !== recurrenceDates.dataset.date ) {
+				if ( recurrenceBooking && !recurrenceBooking.dataset.event && recurrenceDates.dataset.selectedEvent && recurrenceBooking.firstElementChild ) {
+					recurrenceBooking.dataset.event = recurrenceDates.dataset.selectedEvent;
+				}
+				clearBookingForm();
+				delete recurrenceDates.dataset.selectedEvent;
+			}
 			// prepare data
 			let data = {
 				action: 'booking_recurrences',
@@ -128,6 +148,11 @@ var em_init_booking_recurring_form = function( container ) {
 				nonce: nonces.booking_recurrences,
 				timezone: recurringBooking.querySelector('.em-calendar')?.dataset.timezone || '',
 			}
+			// a booking flow can add to the request in detail.data, such as the booking checkout asking for its own markup
+			recurringBooking.dispatchEvent( new CustomEvent( 'em_booking_recurrences_loading', {
+				bubbles: true,
+				detail: { data: data, date: date },
+			} ) );
 			// Check for skeleton template
 			let skeleton = recurringBooking.querySelector('.em-booking-recurrences-skeleton')?.content.cloneNode(true);
 			if ( skeleton ) {
@@ -218,7 +243,14 @@ var em_init_booking_recurring_form = function( container ) {
 					event_id: event_id,
 					nonce: nonces.booking_form,
 				}
+				// a booking flow can add to the request in detail.data, such as the booking checkout asking for its own booking form
+				recurringBooking.dispatchEvent( new CustomEvent( 'em_booking_recurrence_form_loading', {
+					bubbles: true,
+					detail: { data: data, event_id: event_id },
+				} ) );
 
+				// the places the form of the time chosen before holds go as another time's form replaces it
+				em_booking_form_abandon_intent( recurrenceBooking.querySelector('form.em-booking-form') );
 				// Check for skeleton template
 				let skeleton = recurringBooking.querySelector('.em-booking-summary-skeleton')?.content.cloneNode(true);
 				if ( skeleton ) {
@@ -242,6 +274,8 @@ var em_init_booking_recurring_form = function( container ) {
 				// Fetch the booking form
 				fetchEM ( new URLSearchParams(data) )
 					.then(function(html) {
+						// an answer that arrives after another time or date was chosen would put the form of the choice left behind back
+						if ( recurrenceDates && recurrenceDates.dataset.selectedEvent !== event_id ) return;
 						// Initialize the new booking form
 						recurrenceBooking.innerHTML = html;
 						recurrenceBooking.dataset.event = event_id;
@@ -345,6 +379,59 @@ var em_booking_form_count_spaces = function( booking_form ){
 };
 
 /**
+ * Sets up the stepper ticket list (forms/bookingform/tickets-stepper.php) in a booking form. Each stepper button moves its ticket's em-ticket-select one option and dispatches a bubbling change on it, which the booking form and anything else listening react to as if the select were used. Anything that changes a select itself should dispatch a bubbling change on it too, so the steppers follow.
+ * @param {HTMLFormElement} booking_form
+ */
+var em_booking_form_init_steppers = function( booking_form ){
+	let lists = booking_form.querySelectorAll('.em-tickets-stepper');
+	if( lists.length === 0 ) return;
+	lists.forEach( function( list ){
+		list.addEventListener('click', function( e ){
+			let button = e.target.closest('.em-ticket-stepper-button');
+			if( !button || button.disabled ) return;
+			let stepper = button.closest('.em-ticket-stepper');
+			let select = button.closest('.em-ticket').querySelector('select.em-ticket-select');
+			let index = select.selectedIndex + parseInt(button.dataset.step);
+			if( index < 0 || index >= select.options.length ) return;
+			select.selectedIndex = index;
+			select.dispatchEvent( new Event('change', { bubbles : true }) );
+			// a button disabled under the pointer would drop focus to the page
+			if( button.disabled ) {
+				stepper.querySelector('.em-ticket-stepper-button:not([disabled])')?.focus();
+			}
+		});
+		list.classList.add('ready');
+	});
+	booking_form.addEventListener('change', function( e ){
+		if( e.target.matches('.em-tickets-stepper .em-ticket-select') ){
+			em_booking_form_update_steppers( booking_form );
+		}
+	});
+	em_booking_form_update_steppers( booking_form );
+};
+
+/**
+ * Shows each stepper's ticket spaces from its select, and disables its buttons at either end of the select or once the booking holds the most spaces one booking can take (data-max-spaces).
+ * @param {HTMLFormElement} booking_form
+ */
+var em_booking_form_update_steppers = function( booking_form ){
+	booking_form.querySelectorAll('.em-tickets-stepper').forEach( function( list ){
+		let max = parseInt(list.dataset.maxSpaces) || 0;
+		let chosen = 0;
+		list.querySelectorAll('.em-ticket-select').forEach( select => chosen += parseInt(select.value) || 0 );
+		list.querySelectorAll('.em-ticket-stepper').forEach( function( stepper ){
+			let select = stepper.closest('.em-ticket').querySelector('select.em-ticket-select');
+			if( !select ) return;
+			let next = select.options[ select.selectedIndex + 1 ];
+			let step = next ? ( parseInt(next.value || next.text) || 0 ) - ( parseInt(select.value) || 0 ) : 0;
+			stepper.querySelector('.em-ticket-stepper-count').textContent = select.value;
+			stepper.querySelector('.em-ticket-stepper-button[data-step="-1"]').disabled = select.selectedIndex <= 0;
+			stepper.querySelector('.em-ticket-stepper-button[data-step="1"]').disabled = !next || ( max > 0 && chosen + step > max );
+		});
+	});
+};
+
+/**
  * The form action whose fresh nonce belongs in this form's _wpnonce, or false if the payload has none for it.
  * The wp-admin single-booking editor reuses this markup but submits booking_save with a
  * booking_save_{id} nonce in the same input, so refreshing it there swaps a valid nonce for
@@ -385,6 +472,7 @@ var em_booking_form_init = function( booking_form ){
 			booking_form.dispatchEvent( new CustomEvent('em_booking_form_updated') );
 		}
 	});
+	em_booking_form_init_steppers( booking_form );
 
 	let em_booking_form_updated_listener; // prevents double-check due to jQuery listener
 	/**
@@ -759,6 +847,30 @@ var em_booking_form_release_intent = function( booking_form ){
 		delete intent.dataset.expires;
 	});
 }
+
+/**
+ * Lets go of the places a booking form holds (its booking intent) as the form is set aside, such as when the date or time it was for changes or the visitor leaves a checkout: a summary refresh with no spaces, which releases the intent on the server. Sent so that it still goes as the page is left.
+ * @param {HTMLFormElement|null} booking_form
+ * @return {boolean} whether there was a hold to let go of
+ */
+var em_booking_form_abandon_intent = function( booking_form ){
+	if ( !booking_form || !booking_form.querySelector('input.em-booking-intent-token') ) {
+		return false;
+	}
+	let data = new FormData( booking_form );
+	for ( const name of Array.from( data.keys() ) ) {
+		if ( /^em_tickets\[\d+\]\[spaces\]$/.test( name ) ) {
+			data.set( name, '0' );
+		}
+	}
+	data.set( 'action', 'booking_form_summary' );
+	booking_form.querySelector('input.em-booking-intent-token').remove();
+	if ( navigator.sendBeacon && navigator.sendBeacon( EM.bookingajaxurl, data ) ) {
+		return true;
+	}
+	fetch( EM.bookingajaxurl, { method: 'POST', body: data, keepalive: true } ).catch( () => {} );
+	return true;
+};
 
 var em_booking_summary_ajax_promise;
 var em_booking_summary_ajax = async function ( booking_form ){
